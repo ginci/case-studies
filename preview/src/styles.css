@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif&family=Outfit:wght@500&display=swap");
+
+:root {
+  --ink: #0a0a0a;
+  --muted: #737373;
+  --line: #e5e5e5;
+  --paper: #ffffff;
+  --accent: #059669;
+  --serif: "Instrument Serif", Georgia, serif;
+  --sans: "Geist", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.6; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.wrap { width: min(720px, 100% - 48px); margin-inline: auto; }
+.wrap-wide { width: min(1120px, 100% - 48px); margin-inline: auto; }
+.mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); line-height: 1.4; }
+.display { font-family: var(--serif); font-weight: 400; letter-spacing: -0.02em; }
+.ph { color: var(--muted); border-bottom: 1px dashed #a3a3a3; }
+
+.topbar { display: flex; justify-content: space-between; padding: 28px 0; }
+
+.hero { padding: 72px 0 56px; }
+.eyebrow { display: flex; align-items: center; gap: 12px; }
+.hero h1 { font-size: clamp(56px, 11vw, 120px); line-height: 0.95; margin: 20px 0 32px; }
+.outcome { font-size: clamp(22px, 3vw, 28px); line-height: 1.35; letter-spacing: -0.01em; margin: 0; max-width: 30ch; }
+.result { margin: 16px 0 0; font-size: 15px; }
+.meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; margin: 48px 0 0; padding-top: 24px; border-top: 1px solid var(--line); }
+.meta dd { margin: 6px 0 0; font-size: 15px; }
+
+.cover { margin: 0 auto 96px; }
+
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 40px 24px; padding: 0 0 96px; }
+.stat { font-size: 56px; line-height: 1; margin-bottom: 10px; color: var(--ink); }
+.stats > div:nth-child(3) .stat { color: var(--accent); }
+
+.prose { padding-bottom: 72px; }
+.block { display: grid; gap: 12px; padding: 32px 0; border-top: 1px solid var(--line); }
+.block p { margin: 0; font-size: 19px; line-height: 1.6; }
+@media (min-width: 900px) {
+  .block { grid-template-columns: 0 1fr; column-gap: 0; }
+  .block > .mono { position: relative; left: -180px; width: 160px; padding-top: 6px; }
+}
+.scope { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 32px; }
+.scope li { display: flex; gap: 12px; align-items: baseline; padding: 6px 0; break-inside: avoid; }
+.scope .mono { letter-spacing: 0.06em; }
+
+.chapter { padding: 96px 0; border-top: 1px solid var(--line); }
+.h2 { font-size: clamp(36px, 5.5vw, 56px); line-height: 1.05; margin: 18px 0 20px; }
+.lede { font-size: 21px; line-height: 1.5; margin: 0; letter-spacing: -0.005em; }
+.body { color: #404040; margin: 24px 0 0; }
+.decisions { list-style: none; padding: 0; margin: 28px 0 0; }
+.decisions li { padding: 12px 0 12px 28px; border-bottom: 1px solid #f0f0f0; position: relative; }
+.decisions li::before { content: ""; position: absolute; left: 0; top: 23px; width: 14px; height: 1.5px; background: var(--accent); }
+.badge { font-size: 10px; letter-spacing: 0.14em; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; }
+.soon { padding: 72px 0; }
+.soon .h2, .soon .lede { color: #a3a3a3; }
+
+.demo-row { display: grid; gap: 48px; margin-top: 64px; align-items: start; }
+@media (min-width: 960px) { .demo-row { grid-template-columns: 1.1fr 0.9fr; } }
+.demo-label { margin-bottom: 14px; color: var(--accent); }
+.shot { margin: 34px 0 0; }
+
+.next { padding: 72px 0 120px; border-top: 1px solid var(--line); }
+.next a { display: inline-block; }
+.next a:hover { color: var(--accent); }
+
+@media (max-width: 600px) {
+  .scope { columns: 1; }
+  .chapter { padding: 72px 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

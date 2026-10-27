@@ -1,0 +1,130 @@
+[
+  {
+    "slug": "tranzakt",
+    "status": "live",
+    "title": "Tranzakt Finance",
+    "client": "Tranzakt (Tenece Professional Services)",
+    "category": "B2B Fintech · Product & Design Systems",
+    "role": "[Product / UX Designer]",
+    "timeline": "[2026 – present]",
+    "team": "[1 designer, X engineers, 1 PM]",
+    "accent": "#059669",
+    "outcomeLine": "One login for 30+ Nigerian bank accounts, and the 268-variant design system that keeps it coherent across eight product surfaces.",
+    "outcomeResult": "[Add a business result here when available, e.g. onboarding time, adoption, support tickets]",
+    "coverImage": "/assets/tranzakt/cover.png",
+    "stats": [
+      {
+        "value": "30+",
+        "label": "Banks under one login"
+      },
+      {
+        "value": "8",
+        "label": "Product surfaces"
+      },
+      {
+        "value": "268",
+        "label": "Component variants"
+      },
+      {
+        "value": "33",
+        "label": "Core components"
+      },
+      {
+        "value": "9",
+        "label": "Treasury screens"
+      },
+      {
+        "value": "4",
+        "label": "Payment methods, web = mobile"
+      }
+    ],
+    "context": "Nigerian businesses run money across several banks — GTBank, Zenith, Access, UBA, FCMB and more — each with its own login, its own dashboard and its own idea of a balance. Tranzakt's promise is simple: one screen, all accounts, one login, at SME-grade pricing with enterprise-grade access control.",
+    "problem": "Eight products were being designed in parallel. Without a shared system, every surface would drift: competing greens, a growing font stack, and a new button for every screen. The real problem wasn't any single flow. It was keeping the whole platform coherent while it was still being invented.",
+    "scope": [
+      "KYC/KYB onboarding",
+      "Treasury management",
+      "Wallet & Payout",
+      "Payment Gateway checkout",
+      "Tranzpay Transfer",
+      "Merchant AI",
+      "Admin Analytics",
+      "Marketing website & Careers"
+    ],
+    "sections": [
+      {
+        "id": "design-system",
+        "status": "live",
+        "eyebrow": "01 — The spine",
+        "heading": "A design system built to stop variant explosion",
+        "summary": "33 components and 268 variants across atoms, molecules and organisms — structured so the system grows by composition, not by duplication.",
+        "body": "Instead of giant variant matrices, components are assembled from small building-block sub-components. A button doesn't get a variant for every icon and size combination; it gets slots. Spacing runs on an 8pt system. Type follows one rule: labels and headers in Outfit, anything a person reads or types in Avenir. One icon library — Vuesax — and nothing hand-drawn. Responsive versions reflow with real auto-layout; scaled-down desktop frames were rejected outright.",
+        "decisions": [
+          "Building-block sub-components over variant matrices",
+          "8pt spacing system across every surface",
+          "Outfit for labels, Avenir for read and typed text",
+          "Responsive = real reflow, never scaled frames"
+        ],
+        "demo": "ComponentExplorer",
+        "image": "/assets/tranzakt/design-system.png",
+        "imageDevice": "laptop"
+      },
+      {
+        "id": "payment-gateway",
+        "status": "live",
+        "eyebrow": "02 — Checkout",
+        "heading": "A checkout that only shows the fee you'll actually pay",
+        "summary": "Card, Transfer, USSD and Bank — identical on web and mobile, with fees revealed only for the method you choose.",
+        "body": "Customers see the base amount until they pick a method. Then a small info icon opens a breakdown of that one transaction: base amount plus that channel's fee. No intimidating table of every channel's charges up front. The copy button beside the amount appears only on USSD and Transfer — the two methods where people genuinely need to copy a number into another app.",
+        "decisions": [
+          "Base amount first; fee revealed per chosen method",
+          "Tooltip shows the current transaction only",
+          "Copy affordance only where copying happens",
+          "Four methods, matched across web and mobile"
+        ],
+        "demo": "MiniCheckout",
+        "image": "/assets/tranzakt/checkout.png",
+        "imageDevice": "phone"
+      },
+      {
+        "id": "kyc",
+        "status": "coming-soon",
+        "eyebrow": "03 — Onboarding",
+        "heading": "One verification module for every product and user type",
+        "summary": "KYC/KYB for Personal, Business and Government users — six sections, every state mapped, one module shared across the platform.",
+        "body": "The verification module serves every Tranzakt product, so its copy never names one. Six onboarding sections specify Nigerian compliance data — BVN, NIN, CAC, SCUML — field by field. Progress-tracking widgets were removed to cut clutter, and failed documents get one clear message rather than per-document admin notes, which keeps review scalable. Each user type is mapped through success, failed submission, in review, action required, edge cases, and save & quit. Mobile uses exactly the same fields as web.",
+        "decisions": [
+          "One generic module serving every product",
+          "Tracking widgets removed",
+          "One clear failure message, not per-document notes",
+          "Mobile fields identical to web"
+        ],
+        "demo": "KycStateSwitcher",
+        "image": "/assets/tranzakt/kyc.png",
+        "imageDevice": "laptop"
+      },
+      {
+        "id": "merchant-ai",
+        "status": "coming-soon",
+        "eyebrow": "04 — Exploration",
+        "heading": "Merchant AI: explain, recommend, execute",
+        "summary": "Five AI pillars for merchants under one interaction model — and a rule that every insight must come with a decision.",
+        "body": "Onboarding, natural-language payment setup, tracking and insights, forecasting, and collections all follow one pattern: the AI explains what's happening, recommends what to do, and executes only when the merchant agrees. Actionable items sit above analytics; no decorative data without a decision attached. The direction is backed by a pattern study of Stripe, Mercury, Ramp, Cleo, Intuit, Lorikeet and Revolut.",
+        "decisions": [
+          "Explain → Recommend → Execute, every time",
+          "Actions above analytics",
+          "No decorative data",
+          "Grounded in a 7-product pattern study"
+        ],
+        "demo": "ExplainRecommendExecute",
+        "image": "/assets/tranzakt/merchant-ai.png",
+        "imageDevice": "laptop"
+      }
+    ],
+    "nextSteps": [
+      "Reconcile design-system docs with ratified tokens — one canonical brand green, one confirmed font stack",
+      "Finish the remaining navigation organisms: page header, sidebar, topbar, command menu",
+      "Ship the responsive marketing site"
+    ],
+    "nextCaseStudy": "[Dado Foods — coming soon]"
+  }
+]
