@@ -26,7 +26,7 @@ writeFileSync(
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tranzakt Finance — Case study</title>
+<title>Case studies — Ginci Designs</title>
 <style>${css}</style>
 </head>
 <body>

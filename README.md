@@ -1,6 +1,6 @@
 # Case studies — Ginci Designs
 
-Interactive portfolio case studies built to move into Framer. First up: **Tranzakt Finance**.
+Interactive portfolio case studies built to move into Framer: **Tranzakt Finance**, **Dado Foods** and **NSIA**.
 
 Framer is the final host. This repo is where the content and interactive demos are written, versioned and previewed.
 
@@ -11,16 +11,19 @@ Framer is the final host. This repo is where the content and interactive demos a
 | `content/case-studies.json` | All case-study copy. The source of truth. One object per case study. |
 | `content/case-studies.csv` | The same content, flattened for **Framer CMS → Import CSV**. Generated, don't hand-edit. |
 | `framer-components/` | The interactive demos as Framer code components (React `.tsx`). |
-| `preview/index.html` | A single-file preview of the full page. Open it in any browser. Generated. |
+| `preview/index.html` | A single-file preview of the full page. Open it in any browser; switch case studies from the top nav. Generated. |
 | `preview/src/` | Preview source (layout + styles). |
 | `scripts/` | Build scripts. |
 
 ### The demos
 
+- **TreasuryOverview** (Tranzakt): consolidated balance across banks; toggle accounts and the KPIs and distribution update. *Sample balances.*
 - **ComponentExplorer**: design-system button with size / hierarchy / state / icon-slot toggles and live 8pt token readouts.
 - **MiniCheckout**: payment gateway; fee appears only for the chosen method, copy button on USSD and Transfer only. *Sample fees.*
 - **KycStateSwitcher**: Personal / Business / Government × In review, Action required, Failed, Save & quit, Success.
 - **ExplainRecommendExecute**: Merchant AI collections moment in three steps. *Sample data.*
+- **OrderTracker** (Dado Foods): Enugu/Lagos toggle, order steps from placed to delivered. *Concept demo, sample data.*
+- **SupplyChainFlow** (NSIA): development → sourcing → supply → distribution, each stage framed around its team's main question. *Concept demo, placeholder figures.*
 - **DeviceMockup**: laptop / phone / browser frame. Shows a labelled placeholder until you drop in a screenshot.
 
 ## Editing content
@@ -48,6 +51,9 @@ Framer doesn't sync from GitHub, so when a component changes here, paste the new
 
 ### Fonts
 The preview uses Instrument Serif (display), Geist (text), Geist Mono (labels) and Outfit (button labels, per the Tranzakt type rule). All are on Google Fonts and available in Framer.
+
+## Placeholder accents
+Dado Foods (`#E4572E`) and NSIA (`#4D7C0F`) use placeholder accent colours. Swap them for each brand's real colour in `content/case-studies.json` and in each component's colour control in Framer.
 
 ## Adding the next case study
 Add a new object to `content/case-studies.json` with the same shape, run `npm run build`, and re-import the CSV.

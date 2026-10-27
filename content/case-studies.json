@@ -69,9 +69,26 @@
         "imageDevice": "laptop"
       },
       {
+        "id": "treasury",
+        "status": "live",
+        "eyebrow": "02 — Treasury",
+        "heading": "A treasury command centre for every account at once",
+        "summary": "Nine screens (dashboard, wallets, liquidity, transactions, payments, reconciliation, insights, reports and settings) built around one consolidated view of money across banks.",
+        "body": "The dashboard opens on the five numbers a finance team checks first: total balance, liquidity ratio, 24-hour inflows and outflows, and net position. Each has a trend line and its change since the last period. From there, every module follows one interaction model. A KPI card opens a drill-down drawer, and a transaction row opens a detail panel on the right. Anything that creates something, like a payment or a report, happens in a full-screen guided modal. Learn it once and it works the same on all nine screens.",
+        "decisions": [
+          "Five KPIs first: balance, liquidity, inflows, outflows, net",
+          "One interaction model across all nine screens",
+          "Inspect in a side drawer, create in a full-screen modal",
+          "Every insight card carries an action"
+        ],
+        "demo": "TreasuryOverview",
+        "image": "/assets/tranzakt/treasury.png",
+        "imageDevice": "laptop"
+      },
+      {
         "id": "payment-gateway",
         "status": "live",
-        "eyebrow": "02 — Checkout",
+        "eyebrow": "03 — Checkout",
         "heading": "A checkout that only shows the fee you'll actually pay",
         "summary": "Card, Transfer, USSD and Bank — identical on web and mobile, with fees revealed only for the method you choose.",
         "body": "Customers see the base amount until they pick a method. Then a small info icon opens a breakdown of that one transaction: base amount plus that channel's fee. No intimidating table of every channel's charges up front. The copy button beside the amount appears only on USSD and Transfer — the two methods where people genuinely need to copy a number into another app.",
@@ -88,7 +105,7 @@
       {
         "id": "kyc",
         "status": "coming-soon",
-        "eyebrow": "03 — Onboarding",
+        "eyebrow": "04 — Onboarding",
         "heading": "One verification module for every product and user type",
         "summary": "KYC/KYB for Personal, Business and Government users — six sections, every state mapped, one module shared across the platform.",
         "body": "The verification module serves every Tranzakt product, so its copy never names one. Six onboarding sections specify Nigerian compliance data — BVN, NIN, CAC, SCUML — field by field. Progress-tracking widgets were removed to cut clutter, and failed documents get one clear message rather than per-document admin notes, which keeps review scalable. Each user type is mapped through success, failed submission, in review, action required, edge cases, and save & quit. Mobile uses exactly the same fields as web.",
@@ -105,7 +122,7 @@
       {
         "id": "merchant-ai",
         "status": "coming-soon",
-        "eyebrow": "04 — Exploration",
+        "eyebrow": "05 — Exploration",
         "heading": "Merchant AI: explain, recommend, execute",
         "summary": "Five AI pillars for merchants under one interaction model — and a rule that every insight must come with a decision.",
         "body": "Onboarding, natural-language payment setup, tracking and insights, forecasting, and collections all follow one pattern: the AI explains what's happening, recommends what to do, and executes only when the merchant agrees. Actionable items sit above analytics; no decorative data without a decision attached. The direction is backed by a pattern study of Stripe, Mercury, Ramp, Cleo, Intuit, Lorikeet and Revolut.",
@@ -125,6 +142,171 @@
       "Finish the remaining navigation organisms: page header, sidebar, topbar, command menu",
       "Ship the responsive marketing site"
     ],
-    "nextCaseStudy": "[Dado Foods — coming soon]"
+    "nextCaseStudy": "Dado Foods",
+    "nextSlug": "dado-foods"
+  },
+  {
+    "slug": "dado-foods",
+    "status": "live",
+    "title": "Dado Foods",
+    "client": "Dado Foods (dado.ng)",
+    "category": "Food delivery · [Product / Web / Brand design]",
+    "role": "[Product Designer]",
+    "timeline": "[Year]",
+    "team": "[Team]",
+    "accent": "#E4572E",
+    "accentNote": "[Placeholder accent. Swap for Dado's brand colour]",
+    "outcomeLine": "Food delivery across Enugu and Lagos, designed so customers [order in fewer steps] and always know where their food is.",
+    "outcomeResult": "[Add a result, e.g. orders per week, repeat customers, checkout completion]",
+    "coverImage": "/assets/dado/cover.png",
+    "stats": [
+      {
+        "value": "2",
+        "label": "Cities: Enugu & Lagos"
+      },
+      {
+        "value": "[X]",
+        "label": "Screens designed"
+      },
+      {
+        "value": "[X]",
+        "label": "Orders per month"
+      },
+      {
+        "value": "[X]",
+        "label": "Menu items"
+      }
+    ],
+    "context": "Dado Foods is a food delivery service in Nigeria, with a base in Enugu and Lagos. [Add who orders, what they order, and how they ordered before your work.]",
+    "problem": "[What wasn't working before, e.g. ordering friction, no delivery visibility, or a brand that didn't match the food.]",
+    "scope": [
+      "[Customer ordering flow]",
+      "[Order tracking]",
+      "[Website: dado.ng]",
+      "[Brand / visual identity]"
+    ],
+    "sections": [
+      {
+        "id": "ordering",
+        "status": "live",
+        "eyebrow": "01 — Ordering",
+        "heading": "Two cities, one way to order",
+        "summary": "Enugu and Lagos share one ordering experience. Only the delivery areas and times change by city.",
+        "body": "[Describe the ordering flow you designed: menu, cart, checkout, payment, and the decisions behind it. The demo shows the tracking concept: one estimate and one plain-language status at each step. Confirm or replace it with what you actually shipped.]",
+        "decisions": [
+          "[Key decision 1]",
+          "[Key decision 2]",
+          "[Key decision 3]"
+        ],
+        "demo": "OrderTracker",
+        "image": "/assets/dado/ordering.png",
+        "imageDevice": "phone"
+      },
+      {
+        "id": "website",
+        "status": "coming-soon",
+        "eyebrow": "02 — Web",
+        "heading": "[The dado.ng website]",
+        "summary": "[One line on what the site does for customers]",
+        "body": "",
+        "decisions": [],
+        "demo": "",
+        "image": "/assets/dado/website.png",
+        "imageDevice": "browser"
+      },
+      {
+        "id": "brand",
+        "status": "coming-soon",
+        "eyebrow": "03 — Brand",
+        "heading": "[Brand & visual identity]",
+        "summary": "[One line on the look and feel, and why]",
+        "body": "",
+        "decisions": [],
+        "demo": "",
+        "image": "/assets/dado/brand.png",
+        "imageDevice": "laptop"
+      }
+    ],
+    "nextSteps": [
+      "[What you'd improve next]"
+    ],
+    "nextCaseStudy": "NSIA",
+    "nextSlug": "nsia"
+  },
+  {
+    "slug": "nsia",
+    "status": "live",
+    "title": "NSIA",
+    "client": "NSIA",
+    "category": "Supply chain · Agriculture",
+    "role": "[Product Designer]",
+    "timeline": "[Year]",
+    "team": "[Team]",
+    "accent": "#4D7C0F",
+    "accentNote": "[Placeholder accent. Swap for NSIA's brand colour]",
+    "outcomeLine": "Fertiliser from development to the farm, followed on one platform [add the outcome].",
+    "outcomeResult": "[Add a result, e.g. delivery visibility, stock-out reduction, reporting time saved]",
+    "coverImage": "/assets/nsia/cover.png",
+    "stats": [
+      {
+        "value": "[X]",
+        "label": "User roles"
+      },
+      {
+        "value": "[X]",
+        "label": "Screens designed"
+      },
+      {
+        "value": "[X]",
+        "label": "Warehouses / distributors"
+      },
+      {
+        "value": "[X]",
+        "label": "Regions covered"
+      }
+    ],
+    "context": "NSIA works across the fertiliser supply chain, covering the development, sourcing, and supply and distribution of fertilisers. [Add who uses the product and how they tracked this before.]",
+    "problem": "[What wasn't working, e.g. no single view of stock, slow reporting between teams, or no proof of delivery.]",
+    "scope": [
+      "[Supply-chain dashboard]",
+      "[Sourcing / procurement]",
+      "[Warehouse & stock]",
+      "[Distribution tracking]"
+    ],
+    "sections": [
+      {
+        "id": "supply-chain",
+        "status": "live",
+        "eyebrow": "01 — The chain",
+        "heading": "Every stage of the chain, one view",
+        "summary": "Development, sourcing, supply and distribution, each answering the one question that stage's team asks most.",
+        "body": "[Describe what you designed for each stage and who uses it. The demo frames each stage around its team's main question. Confirm or replace that framing and the placeholder figures with the real ones.]",
+        "decisions": [
+          "[Key decision 1]",
+          "[Key decision 2]",
+          "[Key decision 3]"
+        ],
+        "demo": "SupplyChainFlow",
+        "image": "/assets/nsia/dashboard.png",
+        "imageDevice": "laptop"
+      },
+      {
+        "id": "reporting",
+        "status": "coming-soon",
+        "eyebrow": "02 — Reporting",
+        "heading": "[Reporting & insights]",
+        "summary": "[One line on how teams report progress]",
+        "body": "",
+        "decisions": [],
+        "demo": "",
+        "image": "/assets/nsia/reporting.png",
+        "imageDevice": "laptop"
+      }
+    ],
+    "nextSteps": [
+      "[What you'd improve next]"
+    ],
+    "nextCaseStudy": "[MyGreenBlock: coming soon]",
+    "nextSlug": ""
   }
 ]

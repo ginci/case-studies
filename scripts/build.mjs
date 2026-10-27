@@ -8,7 +8,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const studies = JSON.parse(readFileSync(join(root, "content/case-studies.json"), "utf8"));
 
 const MAX_STATS = 6;
-const MAX_SECTIONS = 4;
+const MAX_SECTIONS = Math.max(5, ...studies.map((s) => s.sections?.length ?? 0));
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const ul = (items) => (items?.length ? `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : "");
 
@@ -49,6 +49,7 @@ const rows = studies.map((s) => {
   }
   r["Next Steps"] = ul(s.nextSteps);
   r["Next Case Study"] = s.nextCaseStudy ?? "";
+  r["Next Slug"] = s.nextSlug ?? "";
   return r;
 });
 
