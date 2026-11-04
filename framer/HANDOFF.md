@@ -69,8 +69,9 @@ Don't mix the two: `sync` overwrites the CMS text fields with what's in content.
 - **Locked projects:** CMS field `Locked` (on/off). A locked project shows the "Project locked" card on hover and, on its page, the
   "Locked panel" (Under NDA, Request access → email). Keep its sections empty: everything in the CMS is public in the page source, so the
   real case study is shared privately (password-protected page or PDF) after a request. Framer's page password works per page, not per CMS item.
-- `[Confidential project]` (slug `confidential`) is a placeholder locked entry: rename it and fill Kicker/Index line.
-- MyGreenBlock uses the "coming soon" card as Preview and Cover. `mockups/cards.cjs` renders both card types.
+- **MyGreenBlock is locked** (Gift, 2026-11-04): locked cards, sections emptied. The `[Confidential project]` placeholder was removed.
+- **Content Scribe uses the "coming soon" card** as Preview and Cover. `mockups/cards.cjs` renders both card types.
+- Tranzakt checkout lives in a separate "Payment Gateway" Figma file: link still needed.
 
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).

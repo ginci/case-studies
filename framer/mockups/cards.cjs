@@ -26,17 +26,17 @@ const soon = (u, acc, name) => `
   <div class="title" style="font-size:${30 * u}px;margin-bottom:${10 * u}px">Case study coming soon</div>
   <div class="sub" style="font-size:${11 * u}px;margin-bottom:${22 * u}px">Being written up now</div>
   <div class="bars" style="--g:${7 * u}px;--w:${150 * u}px;--h:${5 * u}px;--acc:${acc}"><i style="--p:78%"></i><i style="--p:52%"></i><i style="--p:30%"></i></div>`
-const locked = u => `
-  <div class="eyebrow" style="--e:${11 * u}px;margin-bottom:${18 * u}px">Under NDA</div>
+const locked = (u, name = "") => `
+  <div class="eyebrow" style="--e:${11 * u}px;margin-bottom:${18 * u}px">${name ? name + " · " : ""}Under NDA</div>
   <div class="badge" style="width:${64 * u}px;height:${64 * u}px;margin-bottom:${20 * u}px">${LOCK(26 * u)}</div>
   <div class="title" style="font-size:${30 * u}px;margin-bottom:${10 * u}px">Project locked</div>
   <div class="sub" style="font-size:${11 * u}px;margin-bottom:${20 * u}px">Password required to view</div>
   <div class="pill" style="font-size:${12.5 * u}px;padding:${9 * u}px ${16 * u}px">Request access →</div>`
 const cards = {
-  "mygreenblock-preview": { w: 380, h: 285, dpr: 3, bg: ["rgba(78,138,46,.55)", "rgba(78,138,46,.28)", "#16240f"], html: soon(1, "#7FC458", "MyGreenBlock") },
-  "mygreenblock-cover": { w: 1120, h: 760, dpr: 2, bg: ["rgba(78,138,46,.5)", "rgba(78,138,46,.25)", "#16240f"], html: soon(2.1, "#7FC458", "MyGreenBlock") },
-  "locked-preview": { w: 380, h: 285, dpr: 3, bg: ["rgba(154,152,144,.35)", "rgba(154,152,144,.18)", "#1b1b19"], html: locked(1) },
-  "locked-cover": { w: 1120, h: 760, dpr: 2, bg: ["rgba(154,152,144,.3)", "rgba(154,152,144,.15)", "#1b1b19"], html: locked(2.1) },
+  "contentscribe-preview": { w: 380, h: 285, dpr: 3, bg: ["rgba(140,124,240,.5)", "rgba(140,124,240,.25)", "#1a1630"], html: soon(1, "#A99BFF", "Content Scribe") },
+  "contentscribe-cover": { w: 1120, h: 760, dpr: 2, bg: ["rgba(140,124,240,.45)", "rgba(140,124,240,.22)", "#1a1630"], html: soon(2.1, "#A99BFF", "Content Scribe") },
+  "mygreenblock-locked-preview": { w: 380, h: 285, dpr: 3, bg: ["rgba(78,138,46,.4)", "rgba(78,138,46,.18)", "#141c10"], html: locked(1, "MyGreenBlock") },
+  "mygreenblock-locked-cover": { w: 1120, h: 760, dpr: 2, bg: ["rgba(78,138,46,.38)", "rgba(78,138,46,.16)", "#141c10"], html: locked(2.1, "MyGreenBlock") },
 }
 ;(async () => {
   const b = await chromium.launch()
