@@ -45,6 +45,24 @@ Don't mix the two: `sync` overwrites the CMS text fields with what's in content.
 5. Framer plan limits found: no branching, no redirects.
 6. Tickets queued: logo-hover switcher for Ginci Designs / GNC Merch / GNC Scenes; hero photo of Gift.
 
+## Tranzakt mockups (2026-11-04)
+- Built from current Figma screens (Treasury `ra8HHfBAgq0D6OrDsoNU2Z`, Merchants `TzCgD5SXWEIjB1AseKxHt6`):
+  Treasury dashboard 1244:10571 · KYB status hub 38670:424180 · merchant dashboard 37388:619580 · mobile KYB 37848:10076, 37824:10076.
+- `mockups/mock.cjs` composes them (browser + phone on a Tranzakt-green backdrop) at 2× (preview 3×). Export screens with the Figma MCP
+  `get_screenshot` into the same folder as `treasury@1x.png` etc., run `node mock.cjs`, then upload to the CMS.
+- In CMS: Cover, Preview, S06 (Treasury), S08 (KYC/KYB), S09 (merchant dashboard). **S07 (checkout) has no image yet**: the checkout frames
+  weren't found (Treasury "Payment Gateway" frames are hidden).
+- **Fix in Figma:** the Treasury dashboard's "Net flow today" says +₦87.85B; 184,293,000 − 96,441,500 = **₦87.85M**. The mockups were
+  corrected (B→M patched in the export); fix the source so future exports match.
+
+## Copy (2026-11-04)
+- Home rewritten for a senior product designer: kicker (title, 6+ years, Enugu), headline "I make complex financial and operational
+  products feel calm.", scope-and-ownership lede, About keeps the Enugu story and adds how Gift leads, Contact "Have a complex product to
+  untangle? Let's talk.", footer status "Designing at Tranzakt". About pill: "Senior product designer · Enugu, Nigeria".
+- Tranzakt: role Senior Product Designer; Overview = challenge / my role / outcome; Context names the four products correctly
+  (Tranzpay = **payroll**); Problem frames constraints; Treasury leads with the decision; KYC adds the status hub; merchant dashboard
+  rewritten from the real first-run screen. Still open: Outcome numbers, process steps, checkout image.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
