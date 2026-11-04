@@ -1,0 +1,844 @@
+import {
+    forwardRef,
+    useEffect,
+    useRef,
+    useState,
+    type ComponentType,
+} from "react"
+import { createPortal } from "react-dom"
+
+// Ginci site behaviour: theme toggle, hover effects, tablet/phone layout,
+// CMS-driven accents and the project preview that follows the cursor.
+// Layers are targeted by their Framer layer names (data-framer-name).
+// Rename a layer in Framer and its rule here stops applying.
+//
+// CMS hooks (hidden 1×1 layers whose fill is bound to a CMS field):
+//   "Accent swatch"       in each "Row / …" (Home) and in the case-study "Header"
+//   "Next accent swatch"  in the case-study "Next project (…)" block
+//   "Preview swatch"      in each "Row / …" (bound to the Preview image)
+
+const KEY = "ginci-theme"
+const ARROW_LIGHT =
+    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23F4F3EE' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m13 6 6 6-6 6'/%3E%3C/svg%3E\")"
+const ARROW_DARK =
+    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23121211' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m13 6 6 6-6 6'/%3E%3C/svg%3E\")"
+const N = (name: string) => `[data-framer-name="${name}"]`
+const S = (prefix: string) => `[data-framer-name^="${prefix}"]`
+const EASE = "cubic-bezier(0.16, 1, 0.3, 1)"
+const ROW = S("Row / ")
+const NEXT = S("Next project (")
+const LIGHT = `html[data-ginci-theme="light"]`
+
+const CSS = `
+/* ---------- Theme ----------
+   Light = the whole page inverted once at the root (images flipped back).
+   The root, not #main, so it also covers the preview, grain and rails. */
+html { background: #121211; }
+/* Slide-in reveals start off to the side: never let them cause sideways scroll. */
+#main { overflow-x: clip; }
+${LIGHT} { filter: invert(1) hue-rotate(180deg); background: #EDEDEE; }
+${LIGHT} img, ${LIGHT} video, ${LIGHT} picture { filter: invert(1) hue-rotate(180deg); }
+${N("Theme toggle")} { cursor: pointer; }
+${N("Theme toggle")}:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 3px; }
+@media (prefers-reduced-motion: no-preference) { html { transition: filter 0.3s ease; } }
+
+/* ---------- Nav ---------- */
+${N("Nav (fixed)")} { background: #121211 !important; z-index: 20 !important; }
+
+/* ---------- Work list: page background at rest, project surface on hover ---------- */
+${N("03 Work (index)")} { background-color: #121211 !important; }
+${ROW} {
+  --g-accent: #F4F3EE; cursor: pointer; position: relative !important;
+  background-color: transparent !important; border-radius: 14px;
+  margin-left: -20px !important; margin-right: -20px !important;
+  padding-left: 20px !important; padding-right: 20px !important;
+  width: calc(100% + 40px) !important; box-sizing: border-box !important;
+}
+${ROW}::after {
+  content: ""; position: absolute; left: 20px; right: 20px; bottom: 0; height: 1px;
+  background: #2A2A27; pointer-events: none;
+}
+${ROW}:hover, ${ROW}:focus-visible {
+  background-color: color-mix(in srgb, var(--g-accent) 9%, #161615) !important; outline: none;
+}
+${ROW}:hover::after { opacity: 0; }
+${ROW} ${N("Name")} * { color: #F4F3EE !important; }
+${ROW} ${N("Arrow")} * { color: #85847E !important; }
+${ROW}:hover ${N("Name")} *, ${ROW}:hover ${N("Arrow")} * { color: var(--g-accent, #F4F3EE) !important; }
+${N("Accent swatch")}, ${N("Next accent swatch")}, ${N("Preview swatch")} { pointer-events: none !important; }
+
+/* ---------- Contact: socials sit with the email, not the footer ---------- */
+${N("Email underline")} { width: min(1170px, 100%) !important; transform-origin: left center; transform: scaleX(0); background-color: #F4F3EE !important; }
+${N("05 Contact")}:has(${S("Email (")}:hover) ${N("Email underline")} { transform: scaleX(1); }
+${S("Email (")} { cursor: pointer; }
+${N("Socials")} a, ${N("Socials")} [data-framer-name] { cursor: pointer; }
+${N("Socials")} *:hover { color: #F4F3EE !important; }
+
+/* ---------- CTAs ---------- */
+${S("CTA / Email")} { background-color: #F4F3EE !important; border-color: #F4F3EE !important; }
+${S("CTA / Email")} * { color: #121211 !important; }
+
+/* ---------- Case study: CMS accent, TOC, rich text ---------- */
+${N("Header")} ${N("Title")}, ${N("Header")} ${N("Title")} * { white-space: normal !important; }
+${N("Header")} ${N("Title")} { max-width: 100% !important; }
+${N("Facts")} > * { min-width: 0 !important; }
+${N("Facts")} > * > *, ${N("Facts")} > * > * * { white-space: normal !important; max-width: 100% !important; }
+${N("Header")} ${N("Title")} * { font-size: min(128px, 10.5vw) !important; }
+${N("Crumb title")} { cursor: pointer; }
+${N("TOC marker")} { display: none !important; }
+${S("TOC / ")} { position: relative !important; cursor: pointer; }
+${S("TOC / ")}::before {
+  content: ""; position: absolute; left: -14px; top: 50%; width: 2px; height: 14px; margin-top: -7px;
+  border-radius: 2px; background: var(--g-page-accent, #F4F3EE); opacity: 0;
+}
+${S("TOC / ")}[data-g-current]::before { opacity: 1; }
+${S("TOC / ")} ${N("TOC label")} * { color: #85847E !important; }
+${S("TOC / ")}[data-g-current] ${N("TOC label")} *, ${S("TOC / ")}:hover ${N("TOC label")} * { color: #F4F3EE !important; }
+${N("Section body")} strong, ${N("Section body")} b { color: #F4F3EE !important; font-weight: 600; }
+${N("Section body")} ul, ${N("Section body")} ol { margin: 4px 0 0 !important; padding-left: 22px !important; }
+${N("Section body")} li { margin-bottom: 6px; }
+${N("Section body")} li::marker { color: var(--g-page-accent, #85847E); }
+${N("Section image")} { border-radius: 16px; }
+
+/* ---------- Next project: arrow fills with the next project's colour ---------- */
+${NEXT} { position: relative !important; cursor: pointer; overflow: hidden; --g-next-accent: #F4F3EE; }
+${NEXT}::after {
+  content: ""; position: absolute; right: 40px; top: 50%;
+  width: 88px; height: 88px; margin-top: -44px; border-radius: 999px;
+  border: 1.5px solid rgba(244, 243, 238, 0.55);
+  background: transparent ${ARROW_LIGHT} center / 32px no-repeat;
+}
+${NEXT}:hover::after {
+  background-color: var(--g-next-accent); border-color: var(--g-next-accent);
+  background-image: ${ARROW_DARK}; transform: translateX(8px);
+}
+${NEXT}:hover ${N("Next title")} { transform: translateX(16px); }
+${NEXT}:hover ${N("Next title")} * { color: var(--g-next-accent) !important; }
+${NEXT} > :not(${N("Next accent swatch")}) { max-width: calc(100% - 160px) !important; }
+${NEXT} ${N("Next title")}, ${NEXT} ${N("Next title")} * { white-space: normal !important; }
+
+/* ---------- Case study: Process as a numbered timeline ---------- */
+${N("Steps")} {
+  position: relative !important; counter-reset: g-step; gap: 32px !important;
+  padding-top: 56px !important; overflow: visible !important;
+}
+${N("Steps")}::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 15px; height: 1px;
+  background: rgba(244, 243, 238, 0.2);
+}
+${N("Steps")} > * {
+  position: relative !important; counter-increment: g-step; overflow: visible !important;
+  background: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
+  padding: 0 !important; gap: 8px !important;
+}
+${N("Steps")} > *::after { display: none !important; }
+${N("Steps")} > *::before {
+  content: counter(g-step, decimal-leading-zero); position: absolute; left: 0; top: -56px;
+  width: 30px; height: 30px; box-sizing: border-box; border-radius: 50%; display: grid; place-items: center;
+  background: #121211; border: 1px solid rgba(244, 243, 238, 0.3); color: #F4F3EE;
+  font: 500 11px/1 "Geist Mono", ui-monospace, monospace;
+}
+
+/* ---------- About: let the photo gallery pop out of its frames ---------- */
+${N("04 About")}, ${N("04 About")} > *, ${N("04 About")} > * > * { overflow: visible !important; }
+
+/* ---------- Sections: surfaces, hairline, spacing ---------- */
+${N("01 Hero")}, ${N("04 About")}, ${N("06 Footer")} { background-color: #121211 !important; }
+${N("05 Contact")} { background-color: #161615 !important; }
+${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")}, ${N("06 Footer")} {
+  border-top: 1px solid rgba(244, 243, 238, 0.1) !important;
+}
+@media (min-width: 1200px) {
+  ${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")} { padding-top: 160px !important; padding-bottom: 160px !important; }
+}
+
+/* ---------- Footer: muted meta, one clear action ---------- */
+${N("Now line")} > p::before {
+  content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 10px; border-radius: 50%;
+  vertical-align: 1px; background: #F4F3EE; box-shadow: 0 0 8px 1px rgba(244, 243, 238, 0.55);
+}
+${S("Back to top")} {
+  cursor: pointer; padding: 10px 18px !important; border: 1px solid rgba(244, 243, 238, 0.18);
+  border-radius: 999px;
+}
+${S("Back to top")} * { color: #F4F3EE !important; }
+${S("Back to top")}:hover, ${S("Back to top")}:focus-visible { background-color: #F4F3EE; outline: none; }
+${S("Back to top")}:hover *, ${S("Back to top")}:focus-visible * { color: #121211 !important; }
+
+/* ---------- Nav: becomes a floating pill once the page scrolls ---------- */
+${N("Nav (fixed)")} {
+  align-self: center !important; width: 100% !important; max-width: 100% !important;
+  border: 1px solid transparent !important; box-sizing: border-box !important;
+}
+html[data-g-scrolled] ${N("Nav (fixed)")} {
+  top: 14px !important; max-width: min(920px, calc(100% - 32px)) !important;
+  border-radius: 999px !important; padding: 10px 10px 10px 24px !important;
+  background-color: rgba(22, 22, 21, 0.8) !important; border-color: rgba(244, 243, 238, 0.12) !important;
+  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Motion (only when the visitor allows it) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  ${ROW} { transition: background-color 0.35s ease; }
+  ${ROW} ${N("Name")} *, ${ROW} ${N("Arrow")} * { transition: color 0.3s ease; }
+  ${ROW} ${N("Arrow")} { transition: transform 0.4s ${EASE}; }
+  ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
+  ${N("Email underline")} { transition: transform 0.7s ${EASE}; }
+  ${NEXT}::after { transition: background-color 0.35s ease, border-color 0.35s ease, transform 0.45s ${EASE}; }
+  ${NEXT} ${N("Next title")} { transition: transform 0.6s ${EASE}; }
+  ${NEXT} ${N("Next title")} * { transition: color 0.35s ease; }
+  ${S("TOC / ")}::before { transition: opacity 0.3s ease; }
+  ${S("Back to top")} { transition: background-color 0.3s ease; }
+  ${S("Back to top")} * { transition: color 0.3s ease; }
+  ${N("Nav (fixed)")} {
+    transition: max-width 0.7s ${EASE}, top 0.7s ${EASE}, border-radius 0.7s ${EASE}, padding 0.7s ${EASE},
+      background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.7s ease !important;
+  }
+  [data-g-rv] {
+    opacity: 0 !important;
+    transition: opacity 0.9s ${EASE}, transform 0.9s ${EASE} !important;
+    transition-delay: var(--g-d, 0ms) !important;
+  }
+  [data-g-rv="u"] { transform: translate3d(0, 32px, 0) !important; }
+  [data-g-rv="l"] { transform: translate3d(-56px, 0, 0) !important; }
+  [data-g-rv="r"] { transform: translate3d(56px, 0, 0) !important; }
+  [data-g-rv][data-g-in] { opacity: 1 !important; transform: none !important; }
+}
+
+/* ---------- Tablet (810–1199) ---------- */
+@media (max-width: 1199px) {
+  ${N("Nav (fixed)")} { padding: 20px 32px !important; }
+  ${N("01 Hero")} { padding: 72px 32px 96px !important; }
+  ${N("Headline (lines rise in)")} * { font-size: 60px !important; }
+  ${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")} { padding: 120px 32px !important; }
+  ${ROW} ${N("Name")} * { font-size: 52px !important; }
+  ${ROW} ${N("Meta")} { width: 220px !important; }
+  ${N("04 About")} { flex-direction: column !important; gap: 32px !important; }
+  ${N("04 About")} > * { width: 100% !important; }
+  ${N("Statement (word reveal on scroll)")} * { font-size: 34px !important; }
+  ${S("Email (")} * { font-size: 76px !important; }
+  ${N("06 Footer")} { padding: 24px 32px !important; }
+  ${N("Header")} { padding-left: 32px !important; padding-right: 32px !important; }
+  ${N("Header")} p, ${N("Header")} h1, ${N("Header")} *, ${N("Facts")} * { white-space: normal !important; }
+  ${N("Header")} > *, ${N("Header")} > * > * { max-width: 100% !important; }
+  ${N("Facts")} { flex-wrap: wrap !important; padding-left: 32px !important; padding-right: 32px !important; row-gap: 24px !important; column-gap: 24px !important; }
+  ${N("Facts")} > * { flex: 0 0 calc(50% - 12px) !important; min-width: 0 !important; }
+  ${N("Cover wrap")} { padding-left: 32px !important; padding-right: 32px !important; }
+  ${N("Body")} { padding-left: 32px !important; padding-right: 32px !important; }
+  ${S("TOC")} { display: none !important; }
+  ${N("Body")} > ${N("Main")} { flex: 1 1 100% !important; width: 100% !important; padding: 0 !important; }
+  ${N("Main")} > * { width: 100% !important; }
+  ${N("Main")} [data-framer-name], ${N("Main")} p, ${N("Main")} h1, ${N("Main")} h2, ${N("Main")} h3 { white-space: normal !important; max-width: 100% !important; }
+  ${N("Section title")} * { font-size: 34px !important; }
+  ${NEXT} { padding-left: 32px !important; padding-right: 32px !important; }
+  ${NEXT} ${N("Next title")} * { font-size: 64px !important; }
+  ${NEXT}::after { right: 32px; width: 72px; height: 72px; margin-top: -36px; background-size: 28px; }
+}
+
+/* ---------- Phone (up to 809) ---------- */
+@media (max-width: 809px) {
+  #main * { max-width: 100%; }
+  ${N("Nav (fixed)")} { padding: 16px 20px !important; }
+  ${N("Nav (fixed)")} ${N("Work")}, ${N("Nav (fixed)")} ${N("About")}, ${N("Nav (fixed)")} ${N("Contact")} { display: none !important; }
+  ${N("Nav (fixed)")} ${N("Frame")} { gap: 12px !important; }
+  html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 20px) !important; padding: 8px 8px 8px 16px !important; }
+  ${N("01 Hero")} { padding: 48px 20px 72px !important; gap: 24px !important; }
+  ${N("Headline (lines rise in)")} * { font-size: 40px !important; }
+  ${N("01 Hero")} > ${N("Frame")} { flex-direction: column !important; align-items: flex-start !important; gap: 24px !important; }
+  ${N("Lede")} { width: 100% !important; }
+  ${N("Lede")} * { font-size: 17px !important; }
+  ${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")} { padding: 88px 20px !important; }
+  ${ROW} { padding-top: 22px !important; padding-bottom: 22px !important; gap: 14px !important;
+    margin-left: -12px !important; margin-right: -12px !important; padding-left: 12px !important; padding-right: 12px !important; width: calc(100% + 24px) !important; }
+  ${ROW}::after { left: 12px; right: 12px; }
+  ${ROW} ${N("Name")} * { font-size: 30px !important; }
+  ${ROW} ${N("Name")} { flex: 1 1 auto !important; min-width: 0 !important; }
+  ${ROW} ${N("Meta")} { display: none !important; }
+  ${ROW} ${N("Num")} { width: 24px !important; flex: 0 0 24px !important; }
+  ${N("More work")} { padding-top: 32px !important; }
+  ${N("Statement (word reveal on scroll)")} * { font-size: 26px !important; }
+  ${S("Exp / ")} { flex-wrap: wrap !important; row-gap: 4px !important; }
+  ${S("Exp / ")} > :first-child { width: 100% !important; flex: 0 0 100% !important; }
+  ${S("Email (")} * { font-size: 30px !important; }
+  ${N("05 Contact")} > :first-child, ${N("05 Contact")} > :first-child * { white-space: normal !important; width: 100% !important; }
+  ${N("Socials")} { flex-wrap: wrap !important; row-gap: 12px !important; column-gap: 24px !important; }
+  ${N("06 Footer")} { padding: 32px 20px 40px !important; flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
+  ${N("Header")} { padding: 48px 20px 40px !important; }
+  ${N("Header")} > :first-child { flex-wrap: wrap !important; gap: 8px !important; }
+  ${N("Header")} ${N("Lede")} * { font-size: 18px !important; }
+  ${N("Facts")} { padding-left: 20px !important; padding-right: 20px !important; }
+  ${N("Cover wrap")} { padding: 24px 20px !important; }
+  ${S("Cover (")} { height: auto !important; aspect-ratio: 4 / 3; }
+  ${N("Body")} { padding-left: 20px !important; padding-right: 20px !important; }
+  ${N("Main")} { gap: 72px !important; }
+  ${N("Section title")} * { font-size: 28px !important; }
+  ${N("Section body")} * { font-size: 16px !important; }
+  ${N("Section image")} { height: auto !important; aspect-ratio: 4 / 3; }
+  ${N("Steps")} { flex-direction: column !important; padding-top: 0 !important; padding-left: 52px !important; gap: 32px !important; }
+  ${N("Steps")}::before { left: 15px; right: auto; top: 6px; bottom: 6px; width: 1px; height: auto; }
+  ${N("Steps")} > * { width: 100% !important; min-width: 0 !important; }
+  ${N("Steps")} > *::before { left: -52px; top: -6px; }
+  ${NEXT} { padding: 64px 20px 64px !important; }
+  ${NEXT} > :not(${N("Next accent swatch")}) { max-width: calc(100% - 76px) !important; }
+  ${NEXT} ${N("Next title")} * { font-size: 36px !important; }
+  ${NEXT}::after { top: 80px; margin-top: 0; right: 20px; width: 56px; height: 56px; background-size: 22px; }
+  #g-grid b:nth-child(1), #g-grid b:nth-child(3) { display: none; }
+  #g-grid b:nth-child(2) { left: 33.333%; }
+  #g-grid b:nth-child(4) { left: 66.666%; }
+}
+
+/* ---------- Texture: grain + vertical grid lines that grow with scroll ---------- */
+#g-grain {
+  position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+/* Signature rails: four hairline tracks; lines 1 and 3 draw down from the top,
+   2 and 4 draw up from the bottom, each led by a glowing point. Staggered. */
+#g-grid { position: fixed; inset: 0; z-index: 15; pointer-events: none; --g-ink: 244, 243, 238; }
+#g-grid b { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(var(--g-ink), 0.035); }
+#g-grid b:nth-child(1) { left: 20%; }
+#g-grid b:nth-child(2) { left: 40%; }
+#g-grid b:nth-child(3) { left: 60%; }
+#g-grid b:nth-child(4) { left: 80%; }
+#g-grid i {
+  position: absolute; left: 0; top: 0; width: 1px; height: 100%;
+  transform-origin: top center; transform: scaleY(var(--g-p, 0));
+  background: linear-gradient(to bottom, rgba(var(--g-ink), 0), rgba(var(--g-ink), 0.24));
+}
+#g-grid b:nth-child(even) i {
+  transform-origin: bottom center;
+  background: linear-gradient(to top, rgba(var(--g-ink), 0), rgba(var(--g-ink), 0.24));
+}
+#g-grid s {
+  position: absolute; left: -2px; top: -2px; width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(var(--g-ink), 0.95);
+  box-shadow: 0 0 6px 1px rgba(var(--g-ink), 0.7), 0 0 22px 5px rgba(var(--g-ink), 0.22);
+  transform: translateY(var(--g-y, 0px)); opacity: var(--g-o, 0); transition: opacity 0.3s ease;
+}
+#g-grid u {
+  position: absolute; left: -1px; width: 3px; height: 3px; border-radius: 50%;
+  background: rgba(var(--g-ink), 0.35); top: -1px;
+}
+#g-grid b:nth-child(even) u { top: auto; bottom: -1px; }
+@media (prefers-reduced-motion: no-preference) {
+  #g-grid s { animation: g-pulse 2.8s ease-in-out infinite; }
+  #g-grid b:nth-child(2) s { animation-delay: -0.7s; }
+  #g-grid b:nth-child(3) s { animation-delay: -1.4s; }
+  #g-grid b:nth-child(4) s { animation-delay: -2.1s; }
+}
+@keyframes g-pulse {
+  0%, 100% { box-shadow: 0 0 6px 1px rgba(var(--g-ink), 0.7), 0 0 22px 5px rgba(var(--g-ink), 0.22); }
+  50% { box-shadow: 0 0 9px 2px rgba(var(--g-ink), 0.9), 0 0 34px 9px rgba(var(--g-ink), 0.3); }
+}
+`
+
+function ensureStyle() {
+    if (typeof document === "undefined") return
+    let s = document.getElementById("ginci-site-css")
+    if (!s) {
+        s = document.createElement("style")
+        s.id = "ginci-site-css"
+        document.head.appendChild(s)
+    }
+    if (s.textContent !== CSS) s.textContent = CSS
+}
+
+// ---------- Theme ----------
+function readTheme() {
+    try {
+        return localStorage.getItem(KEY) === "light" ? "light" : "dark"
+    } catch (e) {
+        return "dark"
+    }
+}
+
+function applyTheme(theme: string) {
+    if (typeof document === "undefined") return
+    document.documentElement.dataset.ginciTheme = theme
+    document
+        .querySelectorAll('[data-framer-name="Theme toggle"]')
+        .forEach((el) => {
+            el.setAttribute(
+                "aria-label",
+                theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
+            )
+            el.setAttribute("aria-pressed", theme === "light" ? "true" : "false")
+        })
+}
+
+function toggleTheme() {
+    const next =
+        document.documentElement.dataset.ginciTheme === "light" ? "dark" : "light"
+    applyTheme(next)
+    try {
+        localStorage.setItem(KEY, next)
+    } catch (e) {}
+}
+
+// One document-level listener handles every Theme toggle on every page, so the
+// toggle works even if Framer doesn't pass a click handler through the override.
+function setupThemeToggle() {
+    const w = window as any
+    if (w.__gTheme) return
+    w.__gTheme = true
+    const hit = (e: Event) => {
+        const t = e.target as Element | null
+        return !!(t && t.closest && t.closest('[data-framer-name="Theme toggle"]'))
+    }
+    document.addEventListener("click", (e) => {
+        if (!hit(e)) return
+        e.preventDefault()
+        toggleTheme()
+    })
+    document.addEventListener("keydown", (e) => {
+        if (!hit(e) || (e.key !== "Enter" && e.key !== " ")) return
+        e.preventDefault()
+        toggleTheme()
+    })
+}
+
+// Apply to the Theme toggle in the nav (on every page). Also starts the site FX.
+export function withThemeToggle(Component: any): ComponentType {
+    return forwardRef((props: any, ref) => {
+        useEffect(() => {
+            ensureStyle()
+            setupThemeToggle()
+            applyTheme(readTheme())
+            setupFX()
+            const t1 = setTimeout(setupFX, 700)
+            const t2 = setTimeout(setupFX, 2000)
+            return () => {
+                clearTimeout(t1)
+                clearTimeout(t2)
+            }
+        }, [])
+        return (
+            <Component
+                ref={ref}
+                {...props}
+                role="button"
+                tabIndex={0}
+                aria-label="Switch colour theme"
+                style={{ ...props.style, cursor: "pointer" }}
+            />
+        )
+    })
+}
+
+// ---------- Project preview that follows the cursor (Home) ----------
+// Apply to the "Hover preview" layer. Reads everything from the hovered row:
+// its accent (Accent swatch), its name, and its Preview image (Preview swatch).
+// Rows without a Preview image show a placeholder card in the project colour.
+// Rendered into <body>, so it isn't clipped by the Work section.
+type PreviewData = { color: string; label: string; src: string | null }
+
+function rowData(row: Element): PreviewData {
+    const color =
+        getComputedStyle(row as HTMLElement).getPropertyValue("--g-accent").trim() ||
+        "#F4F3EE"
+    const name = row.querySelector('[data-framer-name="Name"]')
+    const img = row.querySelector(
+        '[data-framer-name="Preview swatch"] img'
+    ) as HTMLImageElement | null
+    return {
+        color,
+        label: (name && name.textContent ? name.textContent : "").trim(),
+        src: img ? img.currentSrc || img.src : null,
+    }
+}
+
+function PreviewPlaceholder({ color, label }: { color: string; label: string }) {
+    const bar = (w: string) => (
+        <div
+            style={{
+                height: 8,
+                width: w,
+                borderRadius: 4,
+                background: "rgba(244,243,238,0.16)",
+            }}
+        />
+    )
+    return (
+        <div
+            style={{
+                position: "absolute",
+                inset: 0,
+                background: color,
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "center",
+            }}
+        >
+            <span
+                style={{
+                    position: "absolute",
+                    left: 18,
+                    top: 16,
+                    font: "500 12px/1 'Geist Mono', ui-monospace, monospace",
+                    color: "#121211",
+                }}
+            >
+                {label}
+            </span>
+            <div
+                style={{
+                    width: "58%",
+                    height: "76%",
+                    background: "#121211",
+                    borderRadius: "18px 18px 0 0",
+                    padding: 16,
+                    boxSizing: "border-box",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 10,
+                }}
+            >
+                <div
+                    style={{
+                        height: 10,
+                        width: "42%",
+                        borderRadius: 4,
+                        background: "rgba(244,243,238,0.5)",
+                    }}
+                />
+                <div style={{ height: 64, borderRadius: 10, background: color }} />
+                {bar("86%")}
+                {bar("64%")}
+                {bar("74%")}
+                {bar("52%")}
+            </div>
+        </div>
+    )
+}
+
+export function withFollowPreview(Component: any): ComponentType {
+    return forwardRef((props: any, ref) => {
+        const [pos, setPos] = useState({ x: -1000, y: -1000 })
+        const [on, setOn] = useState(false)
+        const [data, setData] = useState<PreviewData | null>(null)
+        const [reduce, setReduce] = useState(false)
+        const [mounted, setMounted] = useState(false)
+
+        useEffect(() => {
+            ensureStyle()
+            if (typeof window === "undefined") return
+            setMounted(true)
+            setReduce(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+            const fine = window.matchMedia("(hover: hover) and (pointer: fine)")
+            if (!fine.matches) return
+            let last = { x: -1, y: -1 }
+            const check = (el: Element | null) => {
+                const row = el && el.closest ? el.closest('[data-framer-name^="Row / "]') : null
+                setOn(!!row)
+                if (row) setData(rowData(row))
+            }
+            const move = (e: MouseEvent) => {
+                last = { x: e.clientX, y: e.clientY }
+                setPos(last)
+                check(e.target as Element | null)
+            }
+            // Re-check on scroll, so a preview doesn't linger after its row scrolls away.
+            const onScroll = () => {
+                if (last.x < 0) return
+                check(document.elementFromPoint(last.x, last.y))
+            }
+            window.addEventListener("mousemove", move, { passive: true })
+            window.addEventListener("scroll", onScroll, { passive: true })
+            return () => {
+                window.removeEventListener("mousemove", move)
+                window.removeEventListener("scroll", onScroll)
+            }
+        }, [])
+
+        if (!mounted) return null
+        const ease = "cubic-bezier(0.16, 1, 0.3, 1)"
+        return createPortal(
+            <div
+                id="g-preview"
+                aria-hidden="true"
+                style={{
+                    position: "fixed",
+                    left: 0,
+                    top: 0,
+                    width: 380,
+                    height: 285,
+                    zIndex: 50,
+                    pointerEvents: "none",
+                    borderRadius: 14,
+                    overflow: "hidden",
+                    boxShadow: "0 24px 60px rgba(0,0,0,0.4)",
+                    opacity: on ? 1 : 0,
+                    transform: `translate3d(${pos.x + 28}px, ${pos.y - 150}px, 0) rotate(-3deg) scale(${on ? 1 : 0.92})`,
+                    transition: reduce
+                        ? "opacity 0.2s ease"
+                        : `opacity 0.25s ease, transform 0.45s ${ease}`,
+                }}
+            >
+                {data ? (
+                    <>
+                        <PreviewPlaceholder color={data.color} label={data.label} />
+                        {data.src ? (
+                            <img
+                                key={data.src}
+                                src={data.src}
+                                alt=""
+                                onError={(e) => {
+                                    e.currentTarget.style.display = "none"
+                                }}
+                                style={{
+                                    position: "absolute",
+                                    inset: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                }}
+                            />
+                        ) : null}
+                    </>
+                ) : null}
+            </div>,
+            document.body
+        )
+    })
+}
+
+// ---------- v3: grain, rails, floating nav, section reveal, CMS accents, TOC ----------
+// Runs from the nav's Theme toggle on every page. Sections are found by
+// layer name: any layer named like "03 Work (index)" or "04 Section"
+// (two digits + space), except "01 Hero", which has its own Framer text effect.
+const REVEAL_SKIP = ["Row / ", "Hover preview", "Email underline", "Hairline", "Accent swatch", "Next accent swatch"]
+let gridUpdate: null | (() => void) = null
+let tocUpdate: null | (() => void) = null
+let revealIO: IntersectionObserver | null = null
+let watcher: MutationObserver | null = null
+
+function swatchColor(el: Element | null) {
+    if (!el) return null
+    const c = getComputedStyle(el as HTMLElement).backgroundColor
+    return c && c !== "rgba(0, 0, 0, 0)" && c !== "transparent" ? c : null
+}
+
+// Copy CMS colours from the hidden swatches into CSS variables.
+function applyAccents() {
+    document.querySelectorAll('[data-framer-name^="Row / "]').forEach((row) => {
+        const c = swatchColor(row.querySelector('[data-framer-name="Accent swatch"]'))
+        if (c) (row as HTMLElement).style.setProperty("--g-accent", c)
+        row.setAttribute("tabindex", row.getAttribute("tabindex") || "0")
+    })
+    const page = swatchColor(
+        document.querySelector('[data-framer-name="Header"] [data-framer-name="Accent swatch"]')
+    )
+    if (page) document.documentElement.style.setProperty("--g-page-accent", page)
+    else document.documentElement.style.removeProperty("--g-page-accent")
+    document.querySelectorAll('[data-framer-name^="Next project ("]').forEach((n) => {
+        const c = swatchColor(n.querySelector('[data-framer-name="Next accent swatch"]'))
+        if (c) (n as HTMLElement).style.setProperty("--g-next-accent", c)
+    })
+}
+
+// Case study TOC: click to jump, and mark the section in view.
+function setupTOC() {
+    const items = Array.from(
+        document.querySelectorAll<HTMLElement>('[data-framer-name^="TOC / "]')
+    )
+    if (!items.length) {
+        tocUpdate = null
+        return
+    }
+    const section = (nn: string) =>
+        document.querySelector<HTMLElement>(
+            `[data-framer-name="Main"] > [data-framer-name="${nn} Section"]`
+        )
+    items.forEach((it) => {
+        if (it.hasAttribute("data-g-toc")) return
+        it.setAttribute("data-g-toc", "")
+        it.setAttribute("role", "link")
+        it.setAttribute("tabindex", "0")
+        const nn = (it.getAttribute("data-framer-name") || "").replace("TOC / ", "")
+        const go = (e: Event) => {
+            if (e instanceof KeyboardEvent && e.key !== "Enter") return
+            const s = section(nn)
+            if (!s) return
+            e.preventDefault()
+            const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            window.scrollTo({
+                top: s.getBoundingClientRect().top + window.scrollY - 110,
+                behavior: reduce ? "auto" : "smooth",
+            })
+        }
+        it.addEventListener("click", go)
+        it.addEventListener("keydown", go)
+    })
+    tocUpdate = () => {
+        const line = window.innerHeight * 0.35
+        let current: HTMLElement | null = null
+        items.forEach((it) => {
+            const nn = (it.getAttribute("data-framer-name") || "").replace("TOC / ", "")
+            const s = section(nn)
+            if (s && s.getBoundingClientRect().top <= line) current = it
+        })
+        if (!current) current = items[0]
+        items.forEach((it) => it.toggleAttribute("data-g-current", it === current))
+    }
+    tocUpdate()
+}
+
+function setupReveal() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    if (typeof IntersectionObserver === "undefined") return
+    if (!revealIO) {
+        revealIO = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((e) => {
+                    if (!e.isIntersecting) return
+                    ;(e.target as HTMLElement).setAttribute("data-g-in", "")
+                    revealIO && revealIO.unobserve(e.target)
+                })
+            },
+            { rootMargin: "0px 0px -10% 0px", threshold: 0.01 }
+        )
+    }
+    const sections = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-framer-name]")
+    ).filter((s) => {
+        const n = s.getAttribute("data-framer-name") || ""
+        return /^\d\d /.test(n) && !n.startsWith("01 Hero")
+    })
+    sections.forEach((sec, i) => {
+        if (sec.hasAttribute("data-g-sec")) return
+        sec.setAttribute("data-g-sec", "")
+        Array.from(sec.children).forEach((child, j) => {
+            const k = child as HTMLElement
+            const name = k.getAttribute("data-framer-name") || ""
+            if (REVEAL_SKIP.some((s) => name.startsWith(s))) return
+            k.setAttribute("data-g-rv", j === 0 ? (i % 2 ? "r" : "l") : "u")
+            k.style.setProperty("--g-d", Math.min(j, 6) * 80 + "ms")
+            revealIO!.observe(k)
+        })
+    })
+}
+
+function setupFX() {
+    if (typeof document === "undefined") return
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+    if (!document.getElementById("g-grain")) {
+        const g = document.createElement("div")
+        g.id = "g-grain"
+        g.setAttribute("aria-hidden", "true")
+        document.body.appendChild(g)
+    }
+    let grid = document.getElementById("g-grid")
+    if (!grid) {
+        grid = document.createElement("div")
+        grid.id = "g-grid"
+        grid.setAttribute("aria-hidden", "true")
+        document.body.appendChild(grid)
+    }
+    if (!grid.querySelector("b")) {
+        grid.innerHTML = "<b><u></u><i></i><s></s></b>".repeat(4)
+    }
+    const rails = Array.from(grid.querySelectorAll("b")) as HTMLElement[]
+    gridUpdate = () => {
+        const vh = window.innerHeight
+        const y = window.scrollY
+        const max = document.documentElement.scrollHeight - vh
+        const p = reduce || max <= 0 ? 1 : Math.min(1, Math.max(0, y / max))
+        rails.forEach((b, i) => {
+            const q = Math.min(1, Math.max(0, (p - i * 0.04) / 0.88))
+            const down = i % 2 === 0
+            b.style.setProperty("--g-p", q.toFixed(4))
+            b.style.setProperty("--g-y", ((down ? q : 1 - q) * vh).toFixed(1) + "px")
+            b.style.setProperty("--g-o", q > 0.002 ? "1" : "0")
+        })
+        document.documentElement.toggleAttribute("data-g-scrolled", y > 48)
+    }
+
+    const w = window as any
+    if (!w.__gFX) {
+        w.__gFX = true
+        const onScroll = () => {
+            gridUpdate && gridUpdate()
+            tocUpdate && tocUpdate()
+        }
+        window.addEventListener("scroll", onScroll, { passive: true })
+        window.addEventListener("resize", onScroll)
+        // Back to top (footer): a real button for mouse and keyboard.
+        const toTop = (e: Event) => {
+            const t = e.target as Element | null
+            if (!t || !t.closest || !t.closest('[data-framer-name^="Back to top"]')) return
+            if (e instanceof KeyboardEvent && e.key !== "Enter" && e.key !== " ") return
+            e.preventDefault()
+            window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" })
+        }
+        document.addEventListener("click", toTop)
+        document.addEventListener("keydown", toTop)
+    }
+    gridUpdate()
+    document.querySelectorAll('[data-framer-name^="Back to top"]').forEach((el) => {
+        el.setAttribute("role", "button")
+        el.setAttribute("tabindex", "0")
+    })
+
+    applyAccents()
+    setupTOC()
+    setupReveal()
+
+    // CMS lists and page changes add layers after first paint: re-run (debounced).
+    if (!watcher && typeof MutationObserver !== "undefined") {
+        let t: any = null
+        watcher = new MutationObserver(() => {
+            clearTimeout(t)
+            t = setTimeout(() => {
+                applyAccents()
+                setupTOC()
+                setupReveal()
+                gridUpdate && gridUpdate()
+            }, 120)
+        })
+        watcher.observe(document.body, { childList: true, subtree: true })
+    }
+}
+
+// Apply to the footer's "Now" text layer. Any "--:--" (or a previous time)
+// in its text is replaced with the live time in Enugu (WAT). Everything else
+// in the line stays editable on the canvas.
+export function withNowTime(Component: any): ComponentType {
+    return forwardRef((props: any, ref) => {
+        const local = useRef<HTMLElement | null>(null)
+        useEffect(() => {
+            if (typeof window === "undefined") return
+            const fmt = new Intl.DateTimeFormat("en-GB", {
+                timeZone: "Africa/Lagos",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+            })
+            const tick = () => {
+                const el = local.current
+                if (!el) return
+                const now = fmt.format(new Date())
+                const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT)
+                let n = walker.nextNode()
+                while (n) {
+                    const v = n.nodeValue || ""
+                    if (/--:--|\d{2}:\d{2}/.test(v))
+                        n.nodeValue = v.replace(/--:--|\d{2}:\d{2}/, now)
+                    n = walker.nextNode()
+                }
+            }
+            tick()
+            const id = setInterval(tick, 15000)
+            return () => clearInterval(id)
+        }, [])
+        const setRef = (node: HTMLElement | null) => {
+            local.current = node
+            if (typeof ref === "function") ref(node)
+            else if (ref) (ref as any).current = node
+        }
+        return <Component {...props} ref={setRef} />
+    })
+}
