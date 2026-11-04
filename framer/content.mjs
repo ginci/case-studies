@@ -74,7 +74,8 @@ export const PROJECTS = [
         + ul("Five KPIs first: balance, liquidity, inflows, outflows, net", "One interaction model across all nine screens", "Inspect in a side drawer, create in a full-screen modal", "Every insight card carries an action")],
       ["A checkout that only shows the fee you'll actually pay",
         p("Card, Transfer, USSD and Bank — identical on web and mobile, with fees revealed only for the method you choose.",
-          "Customers see the base amount until they pick a method. Then a small info icon opens a breakdown of that one transaction: base amount plus that channel's fee. No intimidating table of every channel's charges up front. The copy button beside the amount appears only on USSD and Transfer — the two methods where people genuinely need to copy a number into another app.")
+          "Customers see the base amount until they pick a method. Then a small info icon opens a breakdown of that one transaction: base amount plus that channel's fee. No intimidating table of every channel's charges up front. The copy button beside the amount appears only on USSD and Transfer — the two methods where people genuinely need to copy a number into another app.",
+          "Every method is designed end to end, from choosing it to the receipt, including the in-between states people usually see as a spinner: generating an account, confirming, confirmed. Transfer accounts are single-use and say so, with a visible 30-minute expiry.")
         + ul("Base amount first; fee revealed per chosen method", "Tooltip shows the current transaction only", "Copy affordance only where copying happens", "Four methods, matched across web and mobile")],
       ["One verification module for every product and user type",
         p("KYC/KYB for Personal, Business and Government users: six sections, every state mapped, one module shared across the platform.",

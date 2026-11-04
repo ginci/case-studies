@@ -24,6 +24,7 @@ body{background:#0a0f0c}
   box-shadow:0 50px 90px -20px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.10),inset 0 0 0 1.5px #2b2d2c}
 .phone .in{position:relative;border-radius:38px;overflow:hidden;background:#fff;height:100%}
 .phone .in img{display:block;width:100%}
+.phone .in{padding-top:var(--pt,0px)}
 .phone .island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:31%;height:24px;border-radius:14px;background:#0b0c0c;z-index:2}
 `
 const win = ({ x, y, w, h, src, url, crop = 0, zoom = 1, left = 0 }) => `
@@ -31,11 +32,13 @@ const win = ({ x, y, w, h, src, url, crop = 0, zoom = 1, left = 0 }) => `
   <div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">${url}</div><span style="width:44px"></span></div>
   <div style="height:${h - 34}px;overflow:hidden"><img class="scr" src="${src}" style="margin-top:-${crop}px;width:${zoom * 100}%;max-width:none;margin-left:-${left}px"></div>
 </div>`
-const phone = ({ x, y, w, src, crop = 0 }) => {
+const phone = ({ x, y, w, src, crop = 0, island = true, pt = 0 }) => {
   const h = Math.round(w * 844 / 390)
-  return `<div class="phone" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"><div class="in"><span class="island"></span>
+  return `<div class="phone" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"><div class="in" style="--pt:${pt}px">${island ? `<span class="island" style="height:${Math.round(w * 0.082)}px;top:${Math.round(w * 0.035)}px;width:${Math.round(w * 0.29)}px"></span>` : ""}
     <img src="${src}" style="margin-top:-${crop}px"></div></div>`
 }
+const card = ({ x, y, h, src }) => `<img src="${src}" style="position:absolute;left:${x}px;top:${y}px;height:${h}px;border-radius:18px;box-shadow:0 50px 100px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08)">`
+const PW = img("pg-modal@1x.png"), PT = img("pg-tip-crop@1x.png"), PX = img("pg-transfer-crop@1x.png")
 const T = img("treasury-fixed@1x.png"), M = img("merchant@1x.png"), K = img("kychub@1x.png"), MR = img("m-review@1x.png"), MI = img("m-info@1x.png")
 const scenes = {
   cover: { w: 1120, h: 760, dpr: 2, html:
@@ -48,6 +51,10 @@ const scenes = {
     phone({ x: 646, y: 52, w: 188, src: MI }) },
   merchant: { w: 880, h: 460, dpr: 2, html:
     win({ x: 70, y: 46, w: 740, h: 460, src: M, url: "merchant.tranzakt.finance/<b>dashboard</b>" }) },
+  checkout: { w: 880, h: 460, dpr: 2, html:
+    card({ x: 64, y: 40, h: 380, src: PW }) +
+    phone({ x: 470, y: 58, w: 170, src: PT, pt: 30 }) +
+    phone({ x: 664, y: 34, w: 170, src: PX, pt: 30 }) },
   preview: { w: 380, h: 285, dpr: 3, html:
     win({ x: 30, y: 30, w: 420, h: 300, src: T, url: "app.tranzakt.finance/<b>overview</b>", zoom: 1.45, crop: 44, left: 96 }) },
 }

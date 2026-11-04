@@ -50,8 +50,7 @@ Don't mix the two: `sync` overwrites the CMS text fields with what's in content.
   Treasury dashboard 1244:10571 · KYB status hub 38670:424180 · merchant dashboard 37388:619580 · mobile KYB 37848:10076, 37824:10076.
 - `mockups/mock.cjs` composes them (browser + phone on a Tranzakt-green backdrop) at 2× (preview 3×). Export screens with the Figma MCP
   `get_screenshot` into the same folder as `treasury@1x.png` etc., run `node mock.cjs`, then upload to the CMS.
-- In CMS: Cover, Preview, S06 (Treasury), S08 (KYC/KYB), S09 (merchant dashboard). **S07 (checkout) has no image yet**: the checkout frames
-  weren't found (Treasury "Payment Gateway" frames are hidden).
+- In CMS: Cover, Preview, S06 (Treasury), S08 (KYC/KYB), S09 (merchant dashboard). S07 (checkout) from the Payment Gateway file.
 - **Fix in Figma:** the Treasury dashboard's "Net flow today" says +₦87.85B; 184,293,000 − 96,441,500 = **₦87.85M**. The mockups were
   corrected (B→M patched in the export); fix the source so future exports match.
 
@@ -71,7 +70,7 @@ Don't mix the two: `sync` overwrites the CMS text fields with what's in content.
   real case study is shared privately (password-protected page or PDF) after a request. Framer's page password works per page, not per CMS item.
 - **MyGreenBlock is locked** (Gift, 2026-11-04): locked cards, sections emptied. The `[Confidential project]` placeholder was removed.
 - **Content Scribe uses the "coming soon" card** as Preview and Cover. `mockups/cards.cjs` renders both card types.
-- Tranzakt checkout lives in a separate "Payment Gateway" Figma file: link still needed.
+- Tranzakt checkout: Payment Gateway UI Explorations 1.0 `2jRfbKXNAV3EqqBCFluTCX`, page V2 (web 6007:114030, mobile 6007:112659 and 6007:109291). Mockup in S07.
 
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
