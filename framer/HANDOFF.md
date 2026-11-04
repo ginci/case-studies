@@ -63,6 +63,15 @@ Don't mix the two: `sync` overwrites the CMS text fields with what's in content.
   (Tranzpay = **payroll**); Problem frames constraints; Treasury leads with the decision; KYC adds the status hub; merchant dashboard
   rewritten from the real first-run screen. Still open: Outcome numbers, process steps, checkout image.
 
+## Outcomes, coming soon, locked projects (2026-11-04)
+- **Outcome lines** describe what the design solved instead of numbers (Tranzakt, Dado). `Result` holds the one-liner; the Overview has
+  "What the design solved". NSIA, Content Scribe and MyGreenBlock carry a bracketed prompt in the same style.
+- **Locked projects:** CMS field `Locked` (on/off). A locked project shows the "Project locked" card on hover and, on its page, the
+  "Locked panel" (Under NDA, Request access → email). Keep its sections empty: everything in the CMS is public in the page source, so the
+  real case study is shared privately (password-protected page or PDF) after a request. Framer's page password works per page, not per CMS item.
+- `[Confidential project]` (slug `confidential`) is a placeholder locked entry: rename it and fill Kicker/Index line.
+- MyGreenBlock uses the "coming soon" card as Preview and Cover. `mockups/cards.cjs` renders both card types.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

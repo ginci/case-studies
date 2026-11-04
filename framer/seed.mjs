@@ -64,7 +64,7 @@ try {
     str("Title"), { type: "number", name: "Order" }, str("Index line"), { type: "color", name: "Accent" },
     str("Case study label"), str("Read time"), str("Kicker"), str("Lede"), str("Result"),
     str("Client"), str("Role"), str("Timeline"), str("Team"), str("Platforms"), rich("Stats"),
-    { type: "image", name: "Cover" }, { type: "image", name: "Preview" },
+    { type: "image", name: "Cover" }, { type: "image", name: "Preview" }, { type: "boolean", name: "Locked" },
     ...SECTION_NAMES.flatMap((_, i) => [str(`S${nn(i)} label`), str(`S${nn(i)} title`), rich(`S${nn(i)} body`)]),
     ...[5, 6, 7, 8].map(i => ({ type: "image", name: `S${nn(i)} image` })),
     ...[1, 2, 3, 4].flatMap(i => [str(`Step ${i} label`), str(`Step ${i} title`), str(`Step ${i} line`)]),
@@ -75,9 +75,15 @@ try {
     for (const k of ["Title", "Index line", "Case study label", "Read time", "Kicker", "Lede", "Result", "Client", "Role", "Timeline", "Team", "Platforms"])
       fd[id[k]] = v("string", pr[k])
     fd[id.Order] = v("number", pr.Order)
+    fd[id.Locked] = v("boolean", !!pr.Locked)
     fd[id.Accent] = v("color", pr.Accent)
     fd[id.Stats] = v("formattedText", pr.Stats)
     const labels = sectionLabels(pr)
+    SECTION_NAMES.forEach((_, i) => {
+      fd[id[`S${nn(i)} label`]] = v("string", "")
+      fd[id[`S${nn(i)} title`]] = v("string", "")
+      fd[id[`S${nn(i)} body`]] = v("formattedText", "")
+    })
     pr.sections.forEach(([t, b], i) => {
       fd[id[`S${nn(i)} label`]] = v("string", labels[i])
       fd[id[`S${nn(i)} title`]] = v("string", t)
