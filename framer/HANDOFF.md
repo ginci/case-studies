@@ -72,6 +72,15 @@ Don't mix the two: `sync` overwrites the CMS text fields with what's in content.
 - **Content Scribe uses the "coming soon" card** as Preview and Cover. `mockups/cards.cjs` renders both card types.
 - Tranzakt checkout: Payment Gateway UI Explorations 1.0 `2jRfbKXNAV3EqqBCFluTCX`, page V2 (web 6007:114030, mobile 6007:112659 and 6007:109291). Mockup in S07.
 
+## Breakpoints (2026-11-07)
+- Home and the Case study page now have real **Tablet (810)** and **Phone (390)** breakpoints, so the canvas shows what visitors get.
+  Overrides set on them: section padding, type sizes (headline 60/40, row names 52/30, case title 88/44, section titles 34/28),
+  hero/About/footer stacking, nav links hidden on phone, TOC hidden below desktop, facts in two columns, image heights, crumb stacked on phone.
+- ThemeToggle.tsx still carries matching media-query rules (with !important) from before the breakpoints existed. They agree with the
+  canvas today; if a canvas edit at tablet/phone doesn't show in Preview, a CSS rule is overriding it: remove that rule.
+- **Case-study background lightened** to #20201E (nav, header, page), with #2A2A27 for the Next project block and the locked panel.
+  Root frame renamed "Case study page" (ThemeToggle uses it for the nav colour).
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

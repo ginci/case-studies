@@ -44,6 +44,9 @@ ${N("Theme toggle")}:focus-visible { outline: 2px solid #F4F3EE; outline-offset:
 
 /* ---------- Nav ---------- */
 ${N("Nav (fixed)")} { background: #121211 !important; z-index: 20 !important; }
+/* Case studies sit on a lighter surface (#20201E); the nav matches it there. */
+${N("Case study page")} ${N("Nav (fixed)")} { background: #20201E !important; }
+html[data-g-scrolled] ${N("Case study page")} ${N("Nav (fixed)")} { background-color: rgba(32, 32, 30, 0.85) !important; }
 
 /* ---------- Work list: page background at rest, project surface on hover ---------- */
 ${N("03 Work (index)")} { background-color: #121211 !important; }
