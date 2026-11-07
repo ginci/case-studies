@@ -81,6 +81,18 @@ Don't mix the two: `sync` overwrites the CMS text fields with what's in content.
 - **Case-study background lightened** to #20201E (nav, header, page), with #2A2A27 for the Next project block and the locked panel.
   Root frame renamed "Case study page" (ThemeToggle uses it for the nav colour).
 
+## Publish-prep pass (2026-11-07)
+- Hero: "Gift Njom — Senior Product Designer" / "I design fintech and B2B products people trust." / lede on six years across payments,
+  treasury, delivery and supply chain. Section labels lost their numbers (Selected work, About, Contact). Contact: "Building something
+  complex? Let's talk." Button: "More work on Dribbble ↗".
+- **Portrait section** ("02 Portrait") between hero and Selected work: portrait tile + intro + "More about me ↓" (→ #about).
+  **Needs Gift's photo:** select "Portrait (set Fill → Image to your photo)", set its fill to the photo, delete the "GN" monogram.
+- About photo pill (AboutPill) **hidden**, not deleted (its gallery was empty and the resume had no file).
+- Case studies: section labels and TOC unnumbered; a label is hidden when it equals its heading (Overview/Context/Scope/Process).
+- Hover effects (row tint, colour change, Next project arrow) only on devices with a mouse; on phones/tablets a tap just opens the project.
+- CMS text is no longer synced from content.mjs by default: Gift edits the CMS directly now (e.g. Title "Tranzakt"). Run `sync` only after
+  pulling those edits into content.mjs, or it overwrites them.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

@@ -61,13 +61,10 @@ ${ROW}::after {
   content: ""; position: absolute; left: 20px; right: 20px; bottom: 0; height: 1px;
   background: #2A2A27; pointer-events: none;
 }
-${ROW}:hover, ${ROW}:focus-visible {
-  background-color: color-mix(in srgb, var(--g-accent) 9%, #161615) !important; outline: none;
-}
-${ROW}:hover::after { opacity: 0; }
+
 ${ROW} ${N("Name")} * { color: #F4F3EE !important; }
 ${ROW} ${N("Arrow")} * { color: #85847E !important; }
-${ROW}:hover ${N("Name")} *, ${ROW}:hover ${N("Arrow")} * { color: var(--g-accent, #F4F3EE) !important; }
+
 ${N("Accent swatch")}, ${N("Next accent swatch")}, ${N("Preview swatch")} { pointer-events: none !important; }
 
 /* ---------- Contact: socials sit with the email, not the footer ---------- */
@@ -111,12 +108,7 @@ ${NEXT}::after {
   border: 1.5px solid rgba(244, 243, 238, 0.55);
   background: transparent ${ARROW_LIGHT} center / 32px no-repeat;
 }
-${NEXT}:hover::after {
-  background-color: var(--g-next-accent); border-color: var(--g-next-accent);
-  background-image: ${ARROW_DARK}; transform: translateX(8px);
-}
-${NEXT}:hover ${N("Next title")} { transform: translateX(16px); }
-${NEXT}:hover ${N("Next title")} * { color: var(--g-next-accent) !important; }
+
 ${NEXT} > :not(${N("Next accent swatch")}) { max-width: calc(100% - 160px) !important; }
 ${NEXT} ${N("Next title")}, ${NEXT} ${N("Next title")} * { white-space: normal !important; }
 
@@ -187,7 +179,7 @@ html[data-g-scrolled] ${N("Nav (fixed)")} {
   ${ROW} { transition: background-color 0.35s ease; }
   ${ROW} ${N("Name")} *, ${ROW} ${N("Arrow")} * { transition: color 0.3s ease; }
   ${ROW} ${N("Arrow")} { transition: transform 0.4s ${EASE}; }
-  ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
+
   ${N("Email underline")} { transition: transform 0.7s ${EASE}; }
   ${NEXT}::after { transition: background-color 0.35s ease, border-color 0.35s ease, transform 0.45s ${EASE}; }
   ${NEXT} ${N("Next title")} { transition: transform 0.6s ${EASE}; }
@@ -208,6 +200,24 @@ html[data-g-scrolled] ${N("Nav (fixed)")} {
   [data-g-rv="l"] { transform: translate3d(-56px, 0, 0) !important; }
   [data-g-rv="r"] { transform: translate3d(56px, 0, 0) !important; }
   [data-g-rv][data-g-in] { opacity: 1 !important; transform: none !important; }
+}
+
+
+/* ---------- Hover effects only where a real pointer hovers (no sticky hover after a tap on phones/tablets) ---------- */
+${ROW}:focus-visible { background-color: color-mix(in srgb, var(--g-accent) 9%, #161615) !important; outline: none; }
+@media (hover: hover) and (pointer: fine) {
+${ROW}:hover {
+  background-color: color-mix(in srgb, var(--g-accent) 9%, #161615) !important; outline: none;
+}
+${ROW}:hover::after { opacity: 0; }
+${ROW}:hover ${N("Name")} *, ${ROW}:hover ${N("Arrow")} * { color: var(--g-accent, #F4F3EE) !important; }
+${NEXT}:hover::after {
+  background-color: var(--g-next-accent); border-color: var(--g-next-accent);
+  background-image: ${ARROW_DARK}; transform: translateX(8px);
+}
+${NEXT}:hover ${N("Next title")} { transform: translateX(16px); }
+${NEXT}:hover ${N("Next title")} * { color: var(--g-next-accent) !important; }
+${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 }
 
 /* ---------- Tablet (810–1199) ---------- */
