@@ -93,6 +93,18 @@ Don't mix the two: `sync` overwrites the CMS text fields with what's in content.
 - CMS text is no longer synced from content.mjs by default: Gift edits the CMS directly now (e.g. Title "Tranzakt"). Run `sync` only after
   pulling those edits into content.mjs, or it overwrites them.
 
+## Polish pass (2026-11-08)
+- Gift's canvas edits kept: hero/contact copy rewritten by Gift (3 typos fixed), kicker removed, portrait moved after Selected work,
+  photo pill visible again, page wrapped in "Page content column".
+- Projects: **MyGreenBlock set to draft** (hidden, kept). **"Mobile app" placeholder** added 4th (slug `mobile`, blue accent #5B8DEF,
+  coming-soon cards). Next links: Content Scribe → Mobile app → Dado. These were written straight to the CMS; content.mjs does not
+  have the mobile item yet, so don't run `sync` without adding it.
+- Nav: #0B0B0A in dark (scrolled pill rgba(11,11,10,.92)); in light the scrolled pill is pure white.
+- Section hairlines removed except above the footer.
+- Vertical rails ~40% fainter and clipped to start 75% down the hero (or the case-study header), following scroll.
+- Case study process steps are cards (#2A2A27, 14px radius); step text styles restored.
+- Light theme case study: near-white page (#0D0D0C before invert) and darker body/label text for contrast.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

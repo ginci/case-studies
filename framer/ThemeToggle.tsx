@@ -43,10 +43,8 @@ ${N("Theme toggle")}:focus-visible { outline: 2px solid #F4F3EE; outline-offset:
 @media (prefers-reduced-motion: no-preference) { html { transition: filter 0.3s ease; } }
 
 /* ---------- Nav ---------- */
-${N("Nav (fixed)")} { background: #121211 !important; z-index: 20 !important; }
-/* Case studies sit on a lighter surface (#20201E); the nav matches it there. */
-${N("Case study page")} ${N("Nav (fixed)")} { background: #20201E !important; }
-html[data-g-scrolled] ${N("Case study page")} ${N("Nav (fixed)")} { background-color: rgba(32, 32, 30, 0.85) !important; }
+/* Nav sits darker than the page so it always reads as its own layer. */
+${N("Nav (fixed)")} { background: #0B0B0A !important; z-index: 20 !important; }
 
 /* ---------- Work list: page background at rest, project surface on hover ---------- */
 ${N("03 Work (index)")} { background-color: #121211 !important; }
@@ -121,16 +119,17 @@ ${N("Steps")}::before {
   content: ""; position: absolute; left: 0; right: 0; top: 15px; height: 1px;
   background: rgba(244, 243, 238, 0.2);
 }
+${N("Steps")} { align-items: stretch !important; }
 ${N("Steps")} > * {
   position: relative !important; counter-increment: g-step; overflow: visible !important;
-  background: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
-  padding: 0 !important; gap: 8px !important;
+  background: #2A2A27 !important; border: 1px solid rgba(244, 243, 238, 0.08) !important; border-radius: 14px !important;
+  box-shadow: none !important; padding: 20px !important; gap: 8px !important; height: auto !important;
 }
 ${N("Steps")} > *::after { display: none !important; }
 ${N("Steps")} > *::before {
   content: counter(g-step, decimal-leading-zero); position: absolute; left: 0; top: -56px;
   width: 30px; height: 30px; box-sizing: border-box; border-radius: 50%; display: grid; place-items: center;
-  background: #121211; border: 1px solid rgba(244, 243, 238, 0.3); color: #F4F3EE;
+  background: #20201E; border: 1px solid rgba(244, 243, 238, 0.3); color: #F4F3EE;
   font: 500 11px/1 "Geist Mono", ui-monospace, monospace;
 }
 
@@ -140,12 +139,23 @@ ${N("04 About")}, ${N("04 About")} > *, ${N("04 About")} > * > * { overflow: vis
 /* ---------- Sections: surfaces, hairline, spacing ---------- */
 ${N("01 Hero")}, ${N("04 About")}, ${N("06 Footer")} { background-color: #121211 !important; }
 ${N("05 Contact")} { background-color: #161615 !important; }
-${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")}, ${N("06 Footer")} {
-  border-top: 1px solid rgba(244, 243, 238, 0.1) !important;
-}
+${N("03 Work (index)")}, ${N("02 Portrait")}, ${N("04 About")}, ${N("05 Contact")} { border-top: 0 !important; }
+${N("06 Footer")} { border-top: 1px solid rgba(244, 243, 238, 0.1) !important; }
 @media (min-width: 1200px) {
   ${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")} { padding-top: 160px !important; padding-bottom: 160px !important; }
 }
+
+/* Light theme: the scrolled nav pill is pure white (black before the page-wide invert). */
+html[data-ginci-theme="light"][data-g-scrolled] ${N("Nav (fixed)")} {
+  background-color: #000 !important; border-color: rgba(244, 243, 238, 0.14) !important;
+  box-shadow: 0 12px 40px rgba(255, 255, 255, 0.10) !important;
+}
+
+/* Light theme case studies: near-white page (dark before the invert) and stronger body text. */
+${LIGHT} ${N("Case study page")}, ${LIGHT} ${N("Case study page")} ${N("Header")} { background-color: #0D0D0C !important; }
+${LIGHT} ${N("Section body")} *:not(strong):not(b), ${LIGHT} ${N("Next line")} *, ${LIGHT} ${N("Locked body")} *,
+${LIGHT} ${N("Section label")} *, ${LIGHT} ${S("TOC / ")} ${N("TOC label")} *, ${LIGHT} ${N("Facts")} * { color: #ABAAA4 !important; }
+${LIGHT} ${N("Facts")} [data-framer-name$="value"] * { color: #F4F3EE !important; }
 
 /* ---------- Footer: muted meta, one clear action ---------- */
 ${N("Now line")} > p::before {
@@ -168,7 +178,7 @@ ${N("Nav (fixed)")} {
 html[data-g-scrolled] ${N("Nav (fixed)")} {
   top: 14px !important; max-width: min(920px, calc(100% - 32px)) !important;
   border-radius: 999px !important; padding: 10px 10px 10px 24px !important;
-  background-color: rgba(22, 22, 21, 0.8) !important; border-color: rgba(244, 243, 238, 0.12) !important;
+  background-color: rgba(11, 11, 10, 0.92) !important; border-color: rgba(244, 243, 238, 0.12) !important;
   backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
 }
@@ -292,7 +302,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   ${N("Steps")} { flex-direction: column !important; padding-top: 0 !important; padding-left: 52px !important; gap: 32px !important; }
   ${N("Steps")}::before { left: 15px; right: auto; top: 6px; bottom: 6px; width: 1px; height: auto; }
   ${N("Steps")} > * { width: 100% !important; min-width: 0 !important; }
-  ${N("Steps")} > *::before { left: -52px; top: -6px; }
+  ${N("Steps")} > *::before { left: -52px; top: 16px; }
   ${NEXT} { padding: 64px 20px 64px !important; }
   ${NEXT} > :not(${N("Next accent swatch")}) { max-width: calc(100% - 76px) !important; }
   ${NEXT} ${N("Next title")} * { font-size: 36px !important; }
@@ -311,7 +321,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 /* Signature rails: four hairline tracks; lines 1 and 3 draw down from the top,
    2 and 4 draw up from the bottom, each led by a glowing point. Staggered. */
 #g-grid { position: fixed; inset: 0; z-index: 15; pointer-events: none; --g-ink: 244, 243, 238; }
-#g-grid b { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(var(--g-ink), 0.035); }
+#g-grid b { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(var(--g-ink), 0.022); }
 #g-grid b:nth-child(1) { left: 20%; }
 #g-grid b:nth-child(2) { left: 40%; }
 #g-grid b:nth-child(3) { left: 60%; }
@@ -319,21 +329,21 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 #g-grid i {
   position: absolute; left: 0; top: 0; width: 1px; height: 100%;
   transform-origin: top center; transform: scaleY(var(--g-p, 0));
-  background: linear-gradient(to bottom, rgba(var(--g-ink), 0), rgba(var(--g-ink), 0.24));
+  background: linear-gradient(to bottom, rgba(var(--g-ink), 0), rgba(var(--g-ink), 0.14));
 }
 #g-grid b:nth-child(even) i {
   transform-origin: bottom center;
-  background: linear-gradient(to top, rgba(var(--g-ink), 0), rgba(var(--g-ink), 0.24));
+  background: linear-gradient(to top, rgba(var(--g-ink), 0), rgba(var(--g-ink), 0.14));
 }
 #g-grid s {
   position: absolute; left: -2px; top: -2px; width: 5px; height: 5px; border-radius: 50%;
-  background: rgba(var(--g-ink), 0.95);
-  box-shadow: 0 0 6px 1px rgba(var(--g-ink), 0.7), 0 0 22px 5px rgba(var(--g-ink), 0.22);
+  background: rgba(var(--g-ink), 0.6);
+  box-shadow: 0 0 6px 1px rgba(var(--g-ink), 0.4), 0 0 22px 5px rgba(var(--g-ink), 0.12);
   transform: translateY(var(--g-y, 0px)); opacity: var(--g-o, 0); transition: opacity 0.3s ease;
 }
 #g-grid u {
   position: absolute; left: -1px; width: 3px; height: 3px; border-radius: 50%;
-  background: rgba(var(--g-ink), 0.35); top: -1px;
+  background: rgba(var(--g-ink), 0.22); top: -1px;
 }
 #g-grid b:nth-child(even) u { top: auto; bottom: -1px; }
 @media (prefers-reduced-motion: no-preference) {
@@ -343,8 +353,8 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   #g-grid b:nth-child(4) s { animation-delay: -2.1s; }
 }
 @keyframes g-pulse {
-  0%, 100% { box-shadow: 0 0 6px 1px rgba(var(--g-ink), 0.7), 0 0 22px 5px rgba(var(--g-ink), 0.22); }
-  50% { box-shadow: 0 0 9px 2px rgba(var(--g-ink), 0.9), 0 0 34px 9px rgba(var(--g-ink), 0.3); }
+  0%, 100% { box-shadow: 0 0 6px 1px rgba(var(--g-ink), 0.4), 0 0 22px 5px rgba(var(--g-ink), 0.12); }
+  50% { box-shadow: 0 0 9px 2px rgba(var(--g-ink), 0.55), 0 0 34px 9px rgba(var(--g-ink), 0.18); }
 }
 `
 
@@ -767,6 +777,14 @@ function setupFX() {
             b.style.setProperty("--g-y", ((down ? q : 1 - q) * vh).toFixed(1) + "px")
             b.style.setProperty("--g-o", q > 0.002 ? "1" : "0")
         })
+        const top = document.querySelector<HTMLElement>(
+            '[data-framer-name="01 Hero"], [data-framer-name="Header"]'
+        )
+        if (top) {
+            const r = top.getBoundingClientRect()
+            const start = Math.max(0, r.top + r.height * 0.75)
+            grid!.style.clipPath = `inset(${start.toFixed(0)}px 0 0 0)`
+        } else grid!.style.clipPath = ""
         document.documentElement.toggleAttribute("data-g-scrolled", y > 48)
     }
 

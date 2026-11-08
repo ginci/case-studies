@@ -33,10 +33,8 @@ const locked = (u, name = "") => `
   <div class="sub" style="font-size:${11 * u}px;margin-bottom:${20 * u}px">Password required to view</div>
   <div class="pill" style="font-size:${12.5 * u}px;padding:${9 * u}px ${16 * u}px">Request access →</div>`
 const cards = {
-  "contentscribe-preview": { w: 380, h: 285, dpr: 3, bg: ["rgba(140,124,240,.5)", "rgba(140,124,240,.25)", "#1a1630"], html: soon(1, "#A99BFF", "Content Scribe") },
-  "contentscribe-cover": { w: 1120, h: 760, dpr: 2, bg: ["rgba(140,124,240,.45)", "rgba(140,124,240,.22)", "#1a1630"], html: soon(2.1, "#A99BFF", "Content Scribe") },
-  "mygreenblock-locked-preview": { w: 380, h: 285, dpr: 3, bg: ["rgba(78,138,46,.4)", "rgba(78,138,46,.18)", "#141c10"], html: locked(1, "MyGreenBlock") },
-  "mygreenblock-locked-cover": { w: 1120, h: 760, dpr: 2, bg: ["rgba(78,138,46,.38)", "rgba(78,138,46,.16)", "#141c10"], html: locked(2.1, "MyGreenBlock") },
+  "mobile-preview": { w: 380, h: 285, dpr: 3, bg: ["rgba(91,141,239,.5)", "rgba(91,141,239,.24)", "#121a2b"], html: soon(1, "#8DB0F5", "Mobile app") },
+  "mobile-cover": { w: 1120, h: 760, dpr: 2, bg: ["rgba(91,141,239,.45)", "rgba(91,141,239,.2)", "#121a2b"], html: soon(2.1, "#8DB0F5", "Mobile app") },
 }
 ;(async () => {
   const b = await chromium.launch()
