@@ -105,6 +105,14 @@ Don't mix the two: `sync` overwrites the CMS text fields with what's in content.
 - Case study process steps are cards (#2A2A27, 14px radius); step text styles restored.
 - Light theme case study: near-white page (#0D0D0C before invert) and darker body/label text for contrast.
 
+## Mobile menu (2026-11-08)
+- Phone nav: logo + hamburger ("Menu button", override `withMobileMenu`) on Home and the Case study page. The theme toggle and
+  "Get in touch" are hidden on the Phone breakpoint; Tablet and Desktop keep the full nav.
+- The sidebar is drawn by ThemeToggle.tsx (`MobileMenu`): Work / About / Contact, a Dark/Light switch, "Get in touch" (mailto) and the
+  email. Closes on ✕, the dimmed backdrop, Escape, or choosing a link; locks page scroll and keeps keyboard focus inside while open.
+  Edit the links or email in `MENU_LINKS` / `MENU_EMAIL` at the top of that block.
+- The old "nav links" component (projects/notes/about/contact, from an earlier iteration) is unused; safe to delete.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

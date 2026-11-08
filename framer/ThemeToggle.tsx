@@ -39,6 +39,9 @@ html { background: #121211; }
 ${LIGHT} { filter: invert(1) hue-rotate(180deg); background: #EDEDEE; }
 ${LIGHT} img, ${LIGHT} video, ${LIGHT} picture { filter: invert(1) hue-rotate(180deg); }
 ${N("Theme toggle")} { cursor: pointer; }
+${N("Menu button")} { cursor: pointer; }
+@media (min-width: 810px) { ${N("Nav (fixed)")} ${N("Menu button")} { display: none !important; } }
+${LIGHT} #g-menu > div:first-child { background: rgba(255,255,255,0.55) !important; }
 ${N("Theme toggle")}:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 3px; }
 @media (prefers-reduced-motion: no-preference) { html { transition: filter 0.3s ease; } }
 
@@ -265,6 +268,8 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   #main * { max-width: 100%; }
   ${N("Nav (fixed)")} { padding: 16px 20px !important; }
   ${N("Nav (fixed)")} ${N("Work")}, ${N("Nav (fixed)")} ${N("About")}, ${N("Nav (fixed)")} ${N("Contact")} { display: none !important; }
+  ${N("Nav (fixed)")} ${N("Theme toggle")}, ${N("Nav (fixed)")} ${S("CTA / Email")} { display: none !important; }
+  ${N("Nav (fixed)")} ${N("Menu button")} { display: flex !important; }
   ${N("Nav (fixed)")} ${N("Frame")} { gap: 12px !important; }
   html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 20px) !important; padding: 8px 8px 8px 16px !important; }
   ${N("01 Hero")} { padding: 48px 20px 72px !important; gap: 24px !important; }
@@ -447,6 +452,111 @@ export function withThemeToggle(Component: any): ComponentType {
                 aria-label="Switch colour theme"
                 style={{ ...props.style, cursor: "pointer" }}
             />
+        )
+    })
+}
+
+// ---------- Mobile menu (Phone breakpoint) ----------
+// Apply to the "Menu button" layer in the nav. Opens a sidebar with the page
+// links, the theme switch and the contact button. Rendered into <body>.
+const MENU_LINKS = [
+    { label: "Work", href: "/#work" },
+    { label: "About", href: "/#about" },
+    { label: "Contact", href: "/#contact" },
+]
+const MENU_EMAIL = "hello@njomgift.com"
+
+function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+    const [theme, setTheme] = useState("dark")
+    const panel = useRef<HTMLDivElement | null>(null)
+    useEffect(() => {
+        if (!open) return
+        setTheme(document.documentElement.dataset.ginciTheme === "light" ? "light" : "dark")
+        const prev = document.body.style.overflow
+        document.body.style.overflow = "hidden"
+        const key = (e: KeyboardEvent) => {
+            if (e.key === "Escape") onClose()
+            if (e.key === "Tab" && panel.current) {
+                const f = Array.from(panel.current.querySelectorAll<HTMLElement>("a,button"))
+                if (!f.length) return
+                const first = f[0], last = f[f.length - 1]
+                if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+                else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+            }
+        }
+        document.addEventListener("keydown", key)
+        setTimeout(() => panel.current?.querySelector<HTMLElement>("button")?.focus(), 50)
+        return () => { document.body.style.overflow = prev; document.removeEventListener("keydown", key) }
+    }, [open])
+    const reduce = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const ease = "cubic-bezier(0.16, 1, 0.3, 1)"
+    const mono = "500 11px/1 'Geist Mono', ui-monospace, monospace"
+    const setT = (t: string) => {
+        applyTheme(t)
+        try { localStorage.setItem(KEY, t) } catch (e) {}
+        setTheme(t)
+    }
+    const pill = (active: boolean) => ({
+        flex: 1, height: 40, borderRadius: 999, cursor: "pointer",
+        border: "1px solid " + (active ? "#F4F3EE" : "rgba(244,243,238,0.16)"),
+        background: active ? "#F4F3EE" : "transparent", color: active ? "#121211" : "#F4F3EE",
+        font: "500 14px/1 Outfit, sans-serif",
+    })
+    return (
+        <div id="g-menu" aria-hidden={!open} style={{ position: "fixed", inset: 0, zIndex: 60, pointerEvents: open ? "auto" : "none" }}>
+            <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)", opacity: open ? 1 : 0, transition: reduce ? "none" : "opacity 0.3s ease" }} />
+            <div ref={panel} role="dialog" aria-modal="true" aria-label="Menu"
+                style={{
+                    position: "absolute", top: 0, right: 0, bottom: 0, width: "min(86vw, 360px)", boxSizing: "border-box",
+                    background: "#0B0B0A", borderLeft: "1px solid rgba(244,243,238,0.1)", padding: "18px 24px 28px",
+                    display: "flex", flexDirection: "column", color: "#F4F3EE",
+                    transform: open ? "translateX(0)" : "translateX(100%)", transition: reduce ? "none" : `transform 0.45s ${ease}`,
+                }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: 44 }}>
+                    <span style={{ font: mono, letterSpacing: "0.08em", textTransform: "uppercase", color: "#85847E" }}>Menu</span>
+                    <button onClick={onClose} aria-label="Close menu"
+                        style={{ width: 44, height: 44, borderRadius: 999, border: "1px solid rgba(244,243,238,0.16)", background: "transparent", color: "#F4F3EE", fontSize: 18, cursor: "pointer" }}>✕</button>
+                </div>
+                <nav style={{ display: "flex", flexDirection: "column", marginTop: 32 }}>
+                    {MENU_LINKS.map((l) => (
+                        <a key={l.href} href={l.href} onClick={onClose}
+                            style={{ font: "500 34px/1.1 Outfit, sans-serif", letterSpacing: "-0.02em", color: "#F4F3EE", textDecoration: "none", padding: "14px 0", borderBottom: "1px solid rgba(244,243,238,0.08)" }}>
+                            {l.label}
+                        </a>
+                    ))}
+                </nav>
+                <div style={{ marginTop: 32 }}>
+                    <div style={{ font: mono, letterSpacing: "0.08em", textTransform: "uppercase", color: "#85847E", marginBottom: 12 }}>Theme</div>
+                    <div role="group" aria-label="Theme" style={{ display: "flex", gap: 8 }}>
+                        <button aria-pressed={theme === "dark"} onClick={() => setT("dark")} style={pill(theme === "dark")}>Dark</button>
+                        <button aria-pressed={theme === "light"} onClick={() => setT("light")} style={pill(theme === "light")}>Light</button>
+                    </div>
+                </div>
+                <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: 14 }}>
+                    <a href={`mailto:${MENU_EMAIL}`} onClick={onClose}
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 52, borderRadius: 999, background: "#F4F3EE", color: "#121211", font: "500 16px/1 Outfit, sans-serif", textDecoration: "none" }}>
+                        Get in touch
+                    </a>
+                    <span style={{ font: mono, color: "#85847E", textAlign: "center" }}>{MENU_EMAIL}</span>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export function withMobileMenu(Component: any): ComponentType {
+    return forwardRef((props: any, ref) => {
+        const [open, setOpen] = useState(false)
+        const [mounted, setMounted] = useState(false)
+        useEffect(() => { ensureStyle(); setMounted(true) }, [])
+        return (
+            <>
+                <Component ref={ref} {...props} role="button" tabIndex={0} aria-label="Open menu" aria-expanded={open}
+                    onClick={() => setOpen(true)}
+                    onKeyDown={(e: any) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen(true) } }}
+                    style={{ ...props.style, cursor: "pointer" }} />
+                {mounted ? createPortal(<MobileMenu open={open} onClose={() => setOpen(false)} />, document.body) : null}
+            </>
         )
     })
 }
