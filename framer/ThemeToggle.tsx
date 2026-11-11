@@ -38,11 +38,28 @@ html { background: #121211; }
 #main { overflow-x: clip; }
 ${LIGHT} { filter: invert(1) hue-rotate(180deg); background: #EDEDEE; }
 ${LIGHT} img, ${LIGHT} video, ${LIGHT} picture { filter: invert(1) hue-rotate(180deg); }
-${N("Theme toggle")} { cursor: pointer; }
-${N("Menu button")} { cursor: pointer; }
-@media (min-width: 810px) { ${N("Nav (fixed)")} ${N("Menu button")} { display: none !important; } }
+${N("Menu button")} { display: none !important; }
+.g-pill-btn:hover { color: #F4F3EE !important; }
+.g-pill-btn:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 1px; }
+
+/* ---------- About: collapsed until "More about me" ---------- */
+${N("04 About")} { overflow: hidden !important; max-height: 2400px; }
+html:not([data-g-about]) ${N("04 About")} {
+  max-height: 0 !important; opacity: 0; padding-top: 0 !important; padding-bottom: 0 !important;
+  border: 0 !important; pointer-events: none; visibility: hidden;
+}
+@media (prefers-reduced-motion: no-preference) {
+  ${N("04 About")} { transition: max-height 0.6s ${EASE}, opacity 0.45s ease, padding 0.6s ${EASE}, visibility 0s linear 0s !important; }
+  html:not([data-g-about]) ${N("04 About")} { transition: max-height 0.5s ${EASE}, opacity 0.25s ease, padding 0.5s ${EASE}, visibility 0s linear 0.5s !important; }
+}
+${N("About toggle")} { position: relative !important; }
+${N("About toggle")}::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 0;
+  border-top: 1px dashed rgba(244, 243, 238, 0.16); pointer-events: none;
+}
+${N("About toggle")} > * { position: relative; z-index: 1; }
 ${LIGHT} #g-menu > div:first-child { background: rgba(255,255,255,0.55) !important; }
-${N("Theme toggle")}:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 3px; }
+
 @media (prefers-reduced-motion: no-preference) { html { transition: filter 0.3s ease; } }
 
 /* ---------- Nav ---------- */
@@ -233,6 +250,22 @@ ${NEXT}:hover ${N("Next title")} * { color: var(--g-next-accent) !important; }
 ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 }
 
+/* ---------- Folders (Folders.tsx) ---------- */
+@media (max-width: 1199px) { .g-folders { --g-folder-cols: 2; } }
+/* Folder pages (Writing, Resources, Photography, Other outlets) */
+@media (max-width: 1199px) {
+  ${N("Shelf header")} { padding: 120px 32px 40px !important; }
+  ${N("Shelf list")} { padding: 0 32px 120px !important; }
+}
+@media (max-width: 809px) {
+  ${N("Shelf header")} { padding: 64px 20px 32px !important; max-width: 100% !important; }
+  ${N("Shelf title")} * { font-size: 40px !important; }
+  ${N("Shelf description")} * { font-size: 17px !important; }
+  ${N("Shelf list")} { padding: 0 20px 88px !important; grid-template-columns: 1fr !important; max-width: 100% !important; }
+  ${N("Shelf list")} ${N("Shelf thumb")} { flex-shrink: 0; }
+}
+@media (max-width: 809px) { .g-folders { gap: 8px !important; } .g-folders > a { padding: 28px 4px 18px !important; } .g-folders > a > div:first-child { zoom: 0.8; } }
+
 /* ---------- Tablet (810–1199) ---------- */
 @media (max-width: 1199px) {
   ${N("Nav (fixed)")} { padding: 20px 32px !important; }
@@ -268,8 +301,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   #main * { max-width: 100%; }
   ${N("Nav (fixed)")} { padding: 16px 20px !important; }
   ${N("Nav (fixed)")} ${N("Work")}, ${N("Nav (fixed)")} ${N("About")}, ${N("Nav (fixed)")} ${N("Contact")} { display: none !important; }
-  ${N("Nav (fixed)")} ${N("Theme toggle")}, ${N("Nav (fixed)")} ${S("CTA / Email")} { display: none !important; }
-  ${N("Nav (fixed)")} ${N("Menu button")} { display: flex !important; }
+  ${N("Nav (fixed)")} ${S("CTA / Email")} { display: none !important; }
   ${N("Nav (fixed)")} ${N("Frame")} { gap: 12px !important; }
   html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 20px) !important; padding: 8px 8px 8px 16px !important; }
   ${N("01 Hero")} { padding: 48px 20px 72px !important; gap: 24px !important; }
@@ -386,54 +418,78 @@ function readTheme() {
 function applyTheme(theme: string) {
     if (typeof document === "undefined") return
     document.documentElement.dataset.ginciTheme = theme
-    document
-        .querySelectorAll('[data-framer-name="Theme toggle"]')
-        .forEach((el) => {
-            el.setAttribute(
-                "aria-label",
-                theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
-            )
-            el.setAttribute("aria-pressed", theme === "light" ? "true" : "false")
-        })
+    window.dispatchEvent(new CustomEvent("ginci-theme", { detail: theme }))
 }
 
-function toggleTheme() {
-    const next =
-        document.documentElement.dataset.ginciTheme === "light" ? "dark" : "light"
-    applyTheme(next)
+function setTheme(theme: string) {
+    applyTheme(theme)
     try {
-        localStorage.setItem(KEY, next)
+        localStorage.setItem(KEY, theme)
     } catch (e) {}
 }
 
-// One document-level listener handles every Theme toggle on every page, so the
-// toggle works even if Framer doesn't pass a click handler through the override.
-function setupThemeToggle() {
-    const w = window as any
-    if (w.__gTheme) return
-    w.__gTheme = true
-    const hit = (e: Event) => {
-        const t = e.target as Element | null
-        return !!(t && t.closest && t.closest('[data-framer-name="Theme toggle"]'))
+const SUN = (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
+        <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+)
+const MOON = (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+    </svg>
+)
+
+// Sun/moon segmented switch: a radio group, arrow keys move between the two.
+function ThemePill({ style, forwardedRef }: { style?: any; forwardedRef?: any }) {
+    const [theme, setT] = useState("dark")
+    useEffect(() => {
+        setT(document.documentElement.dataset.ginciTheme === "light" ? "light" : "dark")
+        const on = (e: any) => setT(e.detail)
+        window.addEventListener("ginci-theme", on)
+        return () => window.removeEventListener("ginci-theme", on)
+    }, [])
+    const pick = (t: string) => { setTheme(t); setT(t) }
+    const btn = (t: string, label: string, icon: any) => {
+        const on = theme === t
+        return (
+            <button type="button" role="radio" aria-checked={on} aria-label={label} tabIndex={on ? 0 : -1}
+                onClick={() => pick(t)}
+                onKeyDown={(e) => {
+                    if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+                        e.preventDefault(); const n = t === "light" ? "dark" : "light"; pick(n)
+                        ;(e.currentTarget.parentElement?.querySelector(`[aria-label="${n === "light" ? "Light" : "Dark"}"]`) as HTMLElement)?.focus()
+                    }
+                }}
+                className="g-pill-btn"
+                style={{
+                    width: 30, height: 30, padding: 0, display: "grid", placeItems: "center", borderRadius: 999, cursor: "pointer",
+                    border: 0, background: on ? "#2E2E2B" : "transparent", color: on ? "#F4F3EE" : "#85847E",
+                    boxShadow: on ? "0 1px 2px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(244,243,238,0.08)" : "none",
+                    transition: "background-color 0.2s ease, color 0.2s ease",
+                }}>
+                {icon}
+            </button>
+        )
     }
-    document.addEventListener("click", (e) => {
-        if (!hit(e)) return
-        e.preventDefault()
-        toggleTheme()
-    })
-    document.addEventListener("keydown", (e) => {
-        if (!hit(e) || (e.key !== "Enter" && e.key !== " ")) return
-        e.preventDefault()
-        toggleTheme()
-    })
+    return (
+        <div ref={forwardedRef} role="radiogroup" aria-label="Colour theme" data-framer-name="Theme toggle"
+            style={{
+                ...style, width: "auto", height: "auto", display: "flex", alignItems: "center", gap: 2, padding: 2,
+                borderRadius: 999, border: "1px solid rgba(244,243,238,0.14)", background: "#121211", boxSizing: "border-box",
+            }}>
+            {btn("light", "Light", SUN)}
+            {btn("dark", "Dark", MOON)}
+        </div>
+    )
 }
 
-// Apply to the Theme toggle in the nav (on every page). Also starts the site FX.
+// Apply to the Theme toggle in the nav (on every page). Renders the sun/moon
+// switch in its place and starts the site FX.
 export function withThemeToggle(Component: any): ComponentType {
     return forwardRef((props: any, ref) => {
         useEffect(() => {
             ensureStyle()
-            setupThemeToggle()
             applyTheme(readTheme())
             setupFX()
             const t1 = setTimeout(setupFX, 700)
@@ -443,15 +499,45 @@ export function withThemeToggle(Component: any): ComponentType {
                 clearTimeout(t2)
             }
         }, [])
+        const { style } = props
+        return <ThemePill forwardedRef={ref} style={{ position: style?.position, top: style?.top, left: style?.left, right: style?.right, bottom: style?.bottom, transform: style?.transform, flexShrink: 0 }} />
+    })
+}
+
+// ---------- About: collapsed under the hero, opened by "More about me" ----------
+// Apply to the "More about me" chip. Toggles the "04 About" section and swaps
+// the chip's word More/Less.
+export function withAboutToggle(Component: any): ComponentType {
+    return forwardRef((props: any, ref) => {
+        const local = useRef<HTMLElement | null>(null)
+        const [open, setOpen] = useState(false)
+        useEffect(() => {
+            ensureStyle()
+            document.documentElement.toggleAttribute("data-g-about", open)
+            const el = local.current
+            if (!el) return
+            const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT)
+            let n = walker.nextNode()
+            while (n) {
+                const v = n.nodeValue || ""
+                if (/\b(More|Less)\b/.test(v)) n.nodeValue = v.replace(/\b(More|Less)\b/, open ? "Less" : "More").replace(/[↓↑]/, open ? "↑" : "↓")
+                n = walker.nextNode()
+            }
+            if (open) {
+                const sec = document.querySelector('[data-framer-name="04 About"]')
+                sec && sec.querySelectorAll("[data-g-rv]").forEach((k) => k.setAttribute("data-g-in", ""))
+            }
+        }, [open])
+        const setRef = (node: HTMLElement | null) => {
+            local.current = node
+            if (typeof ref === "function") ref(node)
+            else if (ref) (ref as any).current = node
+        }
         return (
-            <Component
-                ref={ref}
-                {...props}
-                role="button"
-                tabIndex={0}
-                aria-label="Switch colour theme"
-                style={{ ...props.style, cursor: "pointer" }}
-            />
+            <Component {...props} ref={setRef} role="button" tabIndex={0} aria-expanded={open} aria-controls="about"
+                onClick={(e: any) => { e.preventDefault(); setOpen((o) => !o) }}
+                onKeyDown={(e: any) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen((o) => !o) } }}
+                style={{ ...props.style, cursor: "pointer" }} />
         )
     })
 }
@@ -464,7 +550,7 @@ const MENU_LINKS = [
     { label: "About", href: "/#about" },
     { label: "Contact", href: "/#contact" },
 ]
-const MENU_EMAIL = "hello@njomgift.com"
+const MENU_EMAIL = "hi@ginciDesign.com"
 
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
     const [theme, setTheme] = useState("dark")
@@ -888,7 +974,7 @@ function setupFX() {
             b.style.setProperty("--g-o", q > 0.002 ? "1" : "0")
         })
         const top = document.querySelector<HTMLElement>(
-            '[data-framer-name="01 Hero"], [data-framer-name="Header"]'
+            '[data-framer-name="01 Hero"], [data-framer-name="Header"], [data-framer-name="Shelf header"]'
         )
         if (top) {
             const r = top.getBoundingClientRect()
@@ -917,6 +1003,11 @@ function setupFX() {
         }
         document.addEventListener("click", toTop)
         document.addEventListener("keydown", toTop)
+        // Folder pages: Escape goes back home.
+        document.addEventListener("keydown", (e) => {
+            if (e.key !== "Escape" || document.getElementById("g-menu")?.getAttribute("aria-hidden") === "false") return
+            if (document.querySelector('[data-framer-name="Shelf page"]')) window.location.href = "/"
+        })
     }
     gridUpdate()
     document.querySelectorAll('[data-framer-name^="Back to top"]').forEach((el) => {

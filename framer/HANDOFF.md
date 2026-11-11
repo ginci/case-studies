@@ -113,6 +113,23 @@ Don't mix the two: `sync` overwrites the CMS text fields with what's in content.
   Edit the links or email in `MENU_LINKS` / `MENU_EMAIL` at the top of that block.
 - The old "nav links" component (projects/notes/about/contact, from an earlier iteration) is unused; safe to delete.
 
+## Folders, expandable About, theme pill (2026-11-11)
+Inspired by lanrefadire.com (patterns recreated in our own code and visual language; none of his code, images or text).
+- **Theme switch:** sun/moon segmented pill (radio group, arrow keys). Rendered by `withThemeToggle` in place of the "Theme toggle"
+  layer, which still starts the site effects, so don't delete that layer.
+- **Nav:** Work/About/Contact links hidden. Desktop/tablet: theme pill + "Get in touch". Phone: logo + pill (hamburger hidden;
+  `withMobileMenu` code kept but unused).
+- **Home order:** Hero → About (collapsed) → Selected work → "03 Shelf" (folders) → Contact → Footer. Portrait section deleted.
+- **About:** collapsed until the hero's "More about me ↓" chip (centred on a dashed divider, override `withAboutToggle`) is clicked;
+  the chip flips to "Less about me ↑". "Download CV" now sits inside About (no file linked yet).
+- **Folders** (code component `Folders.tsx`): Resources, Writing, Photography, Other outlets. Edit titles, count lines, shortcut keys,
+  links, card labels and photos in the Properties panel. Hover lifts the folder and fans out three cards (mouse only); shortcut keys
+  R/W/P/O open the pages; tap opens on touch. 4 columns desktop, 2 below 1200px.
+- **Folder pages:** /writing, /resources, /photography (2-column photo grid), /outlets. Each lists items from the **Shelf** CMS
+  collection filtered by its `Folder` field (Title, Meta, Link, Image, Order). 15 placeholder items. Escape returns home.
+  These pages have one (desktop) breakpoint; phone/tablet spacing comes from ThemeToggle.tsx CSS.
+- All mailto links now use hi@ginciDesign.com (the address shown in Contact).
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
