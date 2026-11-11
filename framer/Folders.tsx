@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react"
+import { useEffect, useRef, useState, type CSSProperties } from "react"
 import { addPropertyControls, ControlType } from "framer"
 
 // Folders: a row of folder icons. On hover the folder lifts and three cards
@@ -83,6 +83,15 @@ export default function Folders(props: { folders: Folder[]; accent: string; colu
     const fine = useHover()
     const [hover, setHover] = useState(-1)
     const [reduce, setReduce] = useState(false)
+    const grid = useRef<HTMLDivElement | null>(null)
+    const [gridW, setGridW] = useState(0)
+    useEffect(() => {
+        const el = grid.current
+        if (!el || typeof ResizeObserver === "undefined") return
+        const ro = new ResizeObserver((e) => setGridW(e[0].contentRect.width))
+        ro.observe(el)
+        return () => ro.disconnect()
+    }, [])
     useEffect(() => {
         if (typeof window === "undefined") return
         setReduce(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
@@ -96,27 +105,33 @@ export default function Folders(props: { folders: Folder[]; accent: string; colu
         window.addEventListener("keydown", key)
         return () => window.removeEventListener("keydown", key)
     }, [folders])
+    // Fit: shrink the folder so it never overflows its column (two per row on phones).
+    const cols = props.columns || 2
+    const gap = gridW && gridW < 520 ? 8 : 16
+    const colW = gridW ? (gridW - gap * (cols - 1)) / cols : 9999
+    const s = Math.max(0.5, Math.min(1, (colW - 20) / 176))
+    const compact = s < 0.95
     return (
-        <div className="g-folders" style={{ ...props.style, display: "grid", gridTemplateColumns: `repeat(var(--g-folder-cols, ${props.columns || 2}), minmax(0, 1fr))`, gap: 16, width: "100%" }}>
+        <div ref={grid} className="g-folders" style={{ ...props.style, display: "grid", gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`, gap, width: "100%", maxWidth: 760, margin: "0 auto" }}>
             {folders.map((f, i) => {
                 const open = fine && hover === i
                 return (
                     <a key={i} href={f.link} aria-label={`${f.title}, ${f.meta}`}
                         onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(-1)}
                         onFocus={() => setHover(i)} onBlur={() => setHover(-1)}
-                        style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "40px 16px 26px", borderRadius: 20,
+                        style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: compact ? 8 : 14, padding: compact ? "24px 6px 16px" : "40px 16px 26px", borderRadius: compact ? 16 : 20, minWidth: 0,
                             textDecoration: "none", color: "inherit", background: open ? "rgba(244,243,238,0.04)" : "transparent",
                             transition: "background-color .3s ease", outlineOffset: 2 }}>
-                        <FolderIcon f={f} open={open} accent={accent} reduce={reduce} />
+                        <div style={{ zoom: s }}><FolderIcon f={f} open={open} accent={accent} reduce={reduce} /></div>
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, marginTop: 6 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                <span style={{ font: "500 16px/1.2 Outfit, sans-serif", color: "#F4F3EE" }}>{f.title}</span>
+                                <span style={{ font: `500 ${compact ? 14 : 16}px/1.2 Outfit, sans-serif`, color: "#F4F3EE", whiteSpace: "nowrap" }}>{f.title}</span>
                                 {fine && f.shortcut ? (
                                     <kbd style={{ font: "500 10px/1 'Geist Mono', monospace", color: "#85847E", border: "1px solid rgba(244,243,238,0.18)",
                                         borderRadius: 4, padding: "3px 5px", textTransform: "uppercase" }}>{f.shortcut}</kbd>
                                 ) : null}
                             </div>
-                            <span style={{ font: "400 14px/1.3 'Nunito Sans', sans-serif", color: "#85847E" }}>{f.meta}</span>
+                            <span style={{ font: `400 ${compact ? 12.5 : 14}px/1.3 'Nunito Sans', sans-serif`, color: "#85847E", textAlign: "center" }}>{f.meta}</span>
                         </div>
                     </a>
                 )

@@ -251,7 +251,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 }
 
 /* ---------- Folders (Folders.tsx) ---------- */
-.g-folders { --g-folder-cols: 2 !important; max-width: 760px !important; margin: 0 auto !important; }
+/* Folder grid sizing lives in Folders.tsx (it measures itself). */
 /* Folder pages (Writing, Resources, Photography, Other outlets) */
 @media (max-width: 1199px) {
   ${N("Shelf header")} { padding: 120px 32px 40px !important; }
@@ -264,11 +264,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   ${N("Shelf list")} { padding: 0 20px 88px !important; grid-template-columns: 1fr !important; max-width: 100% !important; }
   ${N("Shelf list")} ${N("Shelf thumb")} { flex-shrink: 0; }
 }
-@media (max-width: 809px) {
-  .g-folders { gap: 8px !important; }
-  .g-folders > a { padding: 24px 4px 16px !important; gap: 10px !important; }
-  .g-folders > a > div:first-child { zoom: 0.72; }
-}
+
 
 /* ---------- Tablet (810–1199) ---------- */
 @media (max-width: 1199px) {

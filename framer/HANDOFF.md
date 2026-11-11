@@ -124,7 +124,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   the chip flips to "Less about me ↑". "Download CV" now sits inside About (no file linked yet).
 - **Folders** (code component `Folders.tsx`): Resources, Writing, Photography, Other outlets. Edit titles, count lines, shortcut keys,
   links, card labels and photos in the Properties panel. Hover lifts the folder and fans out three cards (mouse only); shortcut keys
-  R/W/P/O open the pages; tap opens on touch. 2×2 at every size (grid capped at 760px, centred); the folder icon shrinks to 72% on phones.
+  R/W/P/O open the pages; tap opens on touch. 2×2 at every size (grid capped at 760px, centred). Folders.tsx measures its own width and scales the icons and labels to fit two per row, so it looks right on the canvas too. Keep the instance's Columns at 2.
 - **Folder pages:** /writing, /resources, /photography (2-column photo grid), /outlets. Each lists items from the **Shelf** CMS
   collection filtered by its `Folder` field (Title, Meta, Link, Image, Order). 15 placeholder items. Escape returns home.
   These pages have one (desktop) breakpoint; phone/tablet spacing comes from ThemeToggle.tsx CSS.
