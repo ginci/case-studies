@@ -44,6 +44,7 @@ ${N("Menu button")} { display: none !important; }
 
 /* ---------- About: collapsed until "More about me" ---------- */
 ${N("04 About")} { overflow: hidden !important; max-height: 2400px; }
+html[data-g-about] ${N("04 About")} { height: auto !important; }
 html:not([data-g-about]) ${N("04 About")} {
   max-height: 0 !important; opacity: 0; padding-top: 0 !important; padding-bottom: 0 !important;
   border: 0 !important; pointer-events: none; visibility: hidden;
@@ -53,10 +54,11 @@ html:not([data-g-about]) ${N("04 About")} {
   html:not([data-g-about]) ${N("04 About")} { transition: max-height 0.5s ${EASE}, opacity 0.25s ease, padding 0.5s ${EASE}, visibility 0s linear 0.5s !important; }
 }
 ${N("About toggle")} { position: relative !important; }
-${N("About toggle")}::before {
-  content: ""; position: absolute; left: 0; right: 0; bottom: var(--g-about-mid, 15px); height: 0;
-  border-top: 1px dotted rgba(244, 243, 238, 0.32); pointer-events: none;
-}
+${N("About toggle")} ${N("Dotted line")} { background: none !important; height: 0 !important; border-top: 1px dotted rgba(244, 243, 238, 0.36) !important; }
+/* the ribbon runs to the screen edges: pull it out over the hero's side padding */
+@media (min-width: 1200px) { ${N("About toggle")} { margin-left: -80px !important; margin-right: -80px !important; width: calc(100% + 160px) !important; } }
+@media (min-width: 810px) and (max-width: 1199px) { ${N("About toggle")} { margin-left: -32px !important; margin-right: -32px !important; width: calc(100% + 64px) !important; } }
+@media (max-width: 809px) { ${N("About toggle")} { margin-left: -20px !important; margin-right: -20px !important; width: calc(100% + 40px) !important; } }
 ${S("CTA / More about me")} {
   background-color: #121211 !important; border: 1px solid rgba(244, 243, 238, 0.18) !important; text-transform: uppercase;
 }
@@ -529,7 +531,11 @@ export function withAboutToggle(Component: any): ComponentType {
             let n = walker.nextNode()
             while (n) {
                 const v = n.nodeValue || ""
-                if (/\b(More|Less)\b/.test(v)) n.nodeValue = v.replace(/\b(More|Less)\b/, open ? "Less" : "More").replace(/[↓↑]/, open ? "↑" : "↓")
+                if (/\b(more|less)\b/i.test(v))
+                    n.nodeValue = v.replace(/\b(more|less)\b/i, (w) => {
+                        const to = open ? "less" : "more"
+                        return w === w.toUpperCase() ? to.toUpperCase() : w[0] === w[0].toUpperCase() ? to[0].toUpperCase() + to.slice(1) : to
+                    }).replace(/[↓↑]/, open ? "↑" : "↓")
                 n = walker.nextNode()
             }
             if (open) {

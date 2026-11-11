@@ -130,6 +130,13 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   These pages have one (desktop) breakpoint; phone/tablet spacing comes from ThemeToggle.tsx CSS.
 - All mailto links now use hi@ginciDesign.com (the address shown in Contact).
 
+## About ribbon (2026-11-11)
+- The hero ends with an "About toggle" row: Dotted line · "MORE ABOUT ME ↓" button (override `withAboutToggle`) · Dotted line.
+  The row runs to the screen edges (CSS pulls it over the hero's side padding: 80 / 32 / 20px).
+- "04 About" (bio + Download CV) is collapsed on the canvas too (height 0, clip). To edit it on the canvas, set its height to
+  Fit temporarily, then back to 0. On the site it opens when the button is clicked (label flips to LESS ABOUT ME ↑).
+- Visible Home order: Hero → ribbon → Selected work → folders → Contact → Footer.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
