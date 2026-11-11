@@ -137,6 +137,16 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   Fit temporarily, then back to 0. On the site it opens when the button is clicked (label flips to LESS ABOUT ME ↑).
 - Visible Home order: Hero → ribbon → Selected work → folders → Contact → Footer.
 
+## Inline chips, hero intro, toggle on canvas (2026-11-11)
+- Hero intro rewritten in the reference's structure (who → now → before → AI) with inline chips: Tranzakt and Dado Foods link
+  to their case studies (green / orange tint, solid fill on hover). Link style preset "Inline chip" + CSS in ThemeToggle.tsx.
+- About bio ends "…The full story, with dates and roles, is in my CV." "CV" is a chip; hover fills and shows ↓.
+  **The CV link is a placeholder mailto (hi@ginciDesign.com, subject "CV request") until the PDF is uploaded**; then point the
+  run's link at the file (any link ending .pdf gets the same ↓ hover). The Download CV button was removed.
+- MORE ABOUT ME button: hover fills white, label turns dark, arrow drops in from the top (rises when open).
+- About opens with 16px above it.
+- Theme toggle layers on all six pages rebuilt on the canvas as the sun/moon pill (Lucide icons) so the canvas matches the site.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

@@ -44,7 +44,7 @@ ${N("Menu button")} { display: none !important; }
 
 /* ---------- About: collapsed until "More about me" ---------- */
 ${N("04 About")} { overflow: hidden !important; max-height: 2400px; }
-html[data-g-about] ${N("04 About")} { height: auto !important; }
+html[data-g-about] ${N("04 About")} { height: auto !important; padding-top: 16px !important; }
 html:not([data-g-about]) ${N("04 About")} {
   max-height: 0 !important; opacity: 0; padding-top: 0 !important; padding-bottom: 0 !important;
   border: 0 !important; pointer-events: none; visibility: hidden;
@@ -63,10 +63,40 @@ ${S("CTA / More about me")} {
   background-color: #121211 !important; border: 1px solid rgba(244, 243, 238, 0.18) !important; text-transform: uppercase;
 }
 ${S("CTA / More about me")} * { color: #A3A29C !important; text-transform: uppercase !important; }
-${S("CTA / More about me")}:hover, ${S("CTA / More about me")}:focus-visible { border-color: rgba(244, 243, 238, 0.45) !important; outline: none; }
-${S("CTA / More about me")}:hover *, ${S("CTA / More about me")}:focus-visible * { color: #F4F3EE !important; }
-${S("CTA / More about me")} svg { transition: transform 0.35s ${EASE}; }
+${S("CTA / More about me")} svg { overflow: hidden; }
 ${S("CTA / More about me")}[aria-expanded="true"] svg { transform: rotate(180deg); }
+${S("CTA / More about me")}:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  ${S("CTA / More about me")}:hover { background-color: #F4F3EE !important; border-color: #F4F3EE !important; }
+  ${S("CTA / More about me")}:hover * { color: #121211 !important; }
+  ${S("CTA / More about me")}:hover svg *, ${S("CTA / More about me")}:hover svg { stroke: #121211 !important; }
+  ${S("CTA / More about me")}:hover svg { animation: g-drop 0.42s ${EASE}; }
+  ${S("CTA / More about me")}[aria-expanded="true"]:hover svg { animation: g-rise 0.42s ${EASE}; }
+}
+@keyframes g-drop { from { transform: translateY(-110%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes g-rise { from { transform: rotate(180deg) translateY(-110%); opacity: 0; } to { transform: rotate(180deg) translateY(0); opacity: 1; } }
+@media (prefers-reduced-motion: no-preference) {
+  ${S("CTA / More about me")} { transition: background-color 0.25s ease, border-color 0.25s ease !important; }
+  ${S("CTA / More about me")} * { transition: color 0.25s ease; }
+}
+
+/* ---------- Inline link chips (hero intro, About) ---------- */
+${N("Lede")} a, ${S("Statement")} a {
+  display: inline; padding: 0.04em 0.32em; margin: 0 0.04em; border-radius: 0.3em; text-decoration: none !important;
+  background-color: rgba(244, 243, 238, 0.12); color: #F4F3EE !important; box-decoration-break: clone; -webkit-box-decoration-break: clone;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+${N("Lede")} a *, ${S("Statement")} a * { color: inherit !important; }
+${N("Lede")} a[href*="tranzakt"] { background-color: rgba(111, 208, 140, 0.16); }
+${N("Lede")} a[href*="dado"] { background-color: rgba(232, 114, 31, 0.18); }
+${N("Lede")} a:hover, ${S("Statement")} a:hover, ${N("Lede")} a:focus-visible, ${S("Statement")} a:focus-visible { background-color: #F4F3EE; color: #121211 !important; outline: none; }
+${N("Lede")} a[href*="tranzakt"]:hover, ${N("Lede")} a[href*="tranzakt"]:focus-visible { background-color: #6FD08C; }
+${N("Lede")} a[href*="dado"]:hover, ${N("Lede")} a[href*="dado"]:focus-visible { background-color: #E8721F; }
+${S("Statement")} a[href^="mailto"]::after, ${S("Statement")} a[href$=".pdf"]::after {
+  content: "↓"; display: inline-block; width: 0; opacity: 0; overflow: hidden; vertical-align: baseline;
+  transition: width 0.25s ease, opacity 0.25s ease, margin 0.25s ease;
+}
+${S("Statement")} a[href^="mailto"]:hover::after, ${S("Statement")} a[href$=".pdf"]:hover::after { width: 0.7em; opacity: 1; margin-left: 0.15em; }
 ${N("About toggle")} > * { position: relative; z-index: 1; }
 ${LIGHT} #g-menu > div:first-child { background: rgba(255,255,255,0.55) !important; }
 
