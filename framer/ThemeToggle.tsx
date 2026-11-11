@@ -54,9 +54,17 @@ html:not([data-g-about]) ${N("04 About")} {
 }
 ${N("About toggle")} { position: relative !important; }
 ${N("About toggle")}::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 0;
-  border-top: 1px dashed rgba(244, 243, 238, 0.16); pointer-events: none;
+  content: ""; position: absolute; left: 0; right: 0; bottom: var(--g-about-mid, 15px); height: 0;
+  border-top: 1px dotted rgba(244, 243, 238, 0.32); pointer-events: none;
 }
+${S("CTA / More about me")} {
+  background-color: #121211 !important; border: 1px solid rgba(244, 243, 238, 0.18) !important; text-transform: uppercase;
+}
+${S("CTA / More about me")} * { color: #A3A29C !important; text-transform: uppercase !important; }
+${S("CTA / More about me")}:hover, ${S("CTA / More about me")}:focus-visible { border-color: rgba(244, 243, 238, 0.45) !important; outline: none; }
+${S("CTA / More about me")}:hover *, ${S("CTA / More about me")}:focus-visible * { color: #F4F3EE !important; }
+${S("CTA / More about me")} svg { transition: transform 0.35s ${EASE}; }
+${S("CTA / More about me")}[aria-expanded="true"] svg { transform: rotate(180deg); }
 ${N("About toggle")} > * { position: relative; z-index: 1; }
 ${LIGHT} #g-menu > div:first-child { background: rgba(255,255,255,0.55) !important; }
 
@@ -64,7 +72,8 @@ ${LIGHT} #g-menu > div:first-child { background: rgba(255,255,255,0.55) !importa
 
 /* ---------- Nav ---------- */
 /* Nav sits darker than the page so it always reads as its own layer. */
-${N("Nav (fixed)")} { background: #0B0B0A !important; z-index: 20 !important; }
+${N("Nav (fixed)")} { z-index: 20 !important; }
+html:not([data-g-scrolled]) ${N("Nav (fixed)")} { background: transparent !important; border-color: transparent !important; box-shadow: none !important; }
 
 /* ---------- Work list: page background at rest, project surface on hover ---------- */
 ${N("03 Work (index)")} { background-color: #121211 !important; }
