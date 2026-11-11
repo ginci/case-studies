@@ -97,7 +97,7 @@ export default function Folders(props: { folders: Folder[]; accent: string; colu
         return () => window.removeEventListener("keydown", key)
     }, [folders])
     return (
-        <div className="g-folders" style={{ ...props.style, display: "grid", gridTemplateColumns: `repeat(var(--g-folder-cols, ${props.columns || 4}), minmax(0, 1fr))`, gap: 16, width: "100%" }}>
+        <div className="g-folders" style={{ ...props.style, display: "grid", gridTemplateColumns: `repeat(var(--g-folder-cols, ${props.columns || 2}), minmax(0, 1fr))`, gap: 16, width: "100%" }}>
             {folders.map((f, i) => {
                 const open = fine && hover === i
                 return (
@@ -131,7 +131,7 @@ const DEFAULTS: Folder[] = [
     { title: "Photography", meta: "[Camera]", shortcut: "P", link: "/photography", kind: "photos", cards: [], photos: [{}, {}, {}], captions: ["[Place]", "[Place]", "[Place]"] },
     { title: "Other outlets", meta: "3 outlets", shortcut: "O", link: "/outlets", kind: "cards", cards: ["GNC Merch", "GNC Scenes", "Ginci Designs"], photos: [], captions: [] },
 ]
-Folders.defaultProps = { folders: DEFAULTS, accent: "#E8501A", columns: 4 }
+Folders.defaultProps = { folders: DEFAULTS, accent: "#E8501A", columns: 2 }
 
 addPropertyControls(Folders, {
     accent: { type: ControlType.Color, title: "Card dot" },
