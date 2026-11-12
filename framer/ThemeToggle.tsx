@@ -42,6 +42,48 @@ ${N("Menu button")} { display: none !important; }
 .g-pill-btn:hover { color: #F4F3EE !important; }
 .g-pill-btn:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 1px; }
 
+/* ---------- Background shader (ShaderGradient) ---------- */
+${N("Background shader")}, ${N("Background shader")} * { pointer-events: none !important; }
+${N("Background shader")} { z-index: 0 !important; }
+${N("Page content column")}, ${N("Case study page")} > :not(${N("Background shader")}) { position: relative; z-index: 1; }
+${LIGHT} ${N("Background shader")} { mix-blend-mode: multiply !important; opacity: 0.5 !important; filter: invert(1) hue-rotate(180deg) blur(100px) !important; }
+
+/* ---------- Case study: the full story stays folded until "Read the full story" ---------- */
+${N("Case study page")} ${N("Body")} { overflow: hidden !important; max-height: 30000px; }
+html:not([data-g-story]) ${N("Case study page")} ${N("Body")} {
+  max-height: 0 !important; height: 0 !important; opacity: 0; padding-top: 0 !important; padding-bottom: 0 !important; visibility: hidden; pointer-events: none;
+}
+html[data-g-story] ${N("Case study page")} ${N("Body")} { height: auto !important; }
+@media (prefers-reduced-motion: no-preference) {
+  ${N("Case study page")} ${N("Body")} { transition: opacity 0.5s ease, max-height 0.8s ${EASE} !important; }
+}
+${N("Story toggle")} { position: relative !important; }
+${N("Story toggle")} ${N("Dotted line")} { background: none !important; height: 0 !important; border-top: 1px dotted rgba(244, 243, 238, 0.36) !important; }
+@media (min-width: 1200px) { ${N("Story toggle")} { margin-left: -120px !important; margin-right: -120px !important; width: calc(100% + 240px) !important; } }
+@media (min-width: 810px) and (max-width: 1199px) { ${N("Story toggle")} { margin-left: -32px !important; margin-right: -32px !important; width: calc(100% + 64px) !important; } }
+@media (max-width: 809px) { ${N("Story toggle")} { margin-left: -20px !important; margin-right: -20px !important; width: calc(100% + 40px) !important; } }
+${S("CTA / Read the full story")} { background-color: #121211 !important; border: 1px solid rgba(244, 243, 238, 0.2) !important; }
+${S("CTA / Read the full story")} * { color: #A3A29C !important; text-transform: uppercase !important; }
+${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(180deg); }
+@media (hover: hover) and (pointer: fine) {
+  ${S("CTA / Read the full story")}:hover { background-color: #F4F3EE !important; border-color: #F4F3EE !important; }
+  ${S("CTA / Read the full story")}:hover * { color: #121211 !important; }
+  ${S("CTA / Read the full story")}:hover svg, ${S("CTA / Read the full story")}:hover svg * { stroke: #121211 !important; }
+  ${S("CTA / Read the full story")}:hover svg { animation: g-drop 0.42s ${EASE}; }
+  ${S("CTA / Read the full story")}[aria-expanded="true"]:hover svg { animation: g-rise 0.42s ${EASE}; }
+}
+/* Outcomes: the Stats list as a row of figures */
+${N("Outcomes stats")} ul { list-style: none !important; padding: 0 !important; margin: 0 !important; display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+${N("Outcomes stats")} li { margin: 0 !important; padding-top: 14px; border-top: 1px solid rgba(244, 243, 238, 0.12); }
+${N("Outcomes stats")} li { list-style: none !important; }
+${N("Outcomes stats")} li::marker, ${N("Outcomes stats")} li::before { content: none !important; display: none !important; }
+${N("Outcomes stats")} li > * { padding-left: 0 !important; margin-left: 0 !important; }
+@media (max-width: 809px) { ${N("Outcomes stats")} ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; } }
+/* Images keep their proportions at every width and stop growing past the layout */
+${N("Cover wrap")} { max-width: 1280px !important; margin-left: auto !important; margin-right: auto !important; }
+${S("Cover (")} { height: auto !important; aspect-ratio: 1120 / 760; }
+${N("Section image")} { height: auto !important; aspect-ratio: 880 / 460; }
+
 /* ---------- About: collapsed until "More about me" ---------- */
 ${N("04 About")} { overflow: hidden !important; max-height: 2400px; }
 html[data-g-about] ${N("04 About")} { height: auto !important; padding-top: 16px !important; }
@@ -81,22 +123,20 @@ ${S("CTA / More about me")}:focus-visible { outline: 2px solid #F4F3EE; outline-
 }
 
 /* ---------- Inline link chips (hero intro, About) ---------- */
-${N("Lede")} a, ${S("Statement")} a {
-  display: inline; padding: 0.04em 0.32em; margin: 0 0.04em; border-radius: 0.3em; text-decoration: none !important;
+${N("Lede")} a, ${S("Statement")} a, ${N("Lede")} a:hover, ${S("Statement")} a:hover {
+  display: inline; padding: 0.04em 0.32em !important; margin: 0 0.04em !important; border-radius: 0.3em !important; text-decoration: none !important;
   background-color: rgba(244, 243, 238, 0.12); color: #F4F3EE !important; box-decoration-break: clone; -webkit-box-decoration-break: clone;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 ${N("Lede")} a *, ${S("Statement")} a * { color: inherit !important; }
-${N("Lede")} a[href*="tranzakt"] { background-color: rgba(111, 208, 140, 0.16); }
+${N("Lede")} a[href*="tranzakt"], ${S("Statement")} a[href*="tranzakt"] { background-color: rgba(111, 208, 140, 0.16); }
 ${N("Lede")} a[href*="dado"] { background-color: rgba(232, 114, 31, 0.18); }
+${S("Statement")} a[href*="contentscribe"] { background-color: rgba(140, 124, 240, 0.18); }
+${S("Statement")} a[href*="contentscribe"]:hover, ${S("Statement")} a[href*="contentscribe"]:focus-visible { background-color: #8C7CF0; }
 ${N("Lede")} a:hover, ${S("Statement")} a:hover, ${N("Lede")} a:focus-visible, ${S("Statement")} a:focus-visible { background-color: #F4F3EE; color: #121211 !important; outline: none; }
-${N("Lede")} a[href*="tranzakt"]:hover, ${N("Lede")} a[href*="tranzakt"]:focus-visible { background-color: #6FD08C; }
+${N("Lede")} a[href*="tranzakt"]:hover, ${N("Lede")} a[href*="tranzakt"]:focus-visible, ${S("Statement")} a[href*="tranzakt"]:hover { background-color: #6FD08C; }
 ${N("Lede")} a[href*="dado"]:hover, ${N("Lede")} a[href*="dado"]:focus-visible { background-color: #E8721F; }
-${S("Statement")} a[href^="mailto"]::after, ${S("Statement")} a[href$=".pdf"]::after {
-  content: "↓"; display: inline-block; width: 0; opacity: 0; overflow: hidden; vertical-align: baseline;
-  transition: width 0.25s ease, opacity 0.25s ease, margin 0.25s ease;
-}
-${S("Statement")} a[href^="mailto"]:hover::after, ${S("Statement")} a[href$=".pdf"]:hover::after { width: 0.7em; opacity: 1; margin-left: 0.15em; }
+
 ${N("About toggle")} > * { position: relative; z-index: 1; }
 ${LIGHT} #g-menu > div:first-child { background: rgba(255,255,255,0.55) !important; }
 
@@ -136,6 +176,14 @@ ${N("Socials")} *:hover { color: #F4F3EE !important; }
 /* ---------- CTAs ---------- */
 ${S("CTA / Email")} { background-color: #F4F3EE !important; border-color: #F4F3EE !important; }
 ${S("CTA / Email")} * { color: #121211 !important; }
+${S("CTA / Email")} { box-shadow: 0 0 0 0 rgba(244, 243, 238, 0.35); }
+@media (prefers-reduced-motion: no-preference) {
+  ${S("CTA / Email")} { animation: g-pulse-ring 4.5s ease-out infinite; transition: transform 0.25s ${EASE}; }
+  ${S("CTA / Email")} svg { transform-origin: 50% 30%; animation: g-ring 4.5s ease-in-out infinite; }
+  ${S("CTA / Email")}:hover { transform: scale(1.06); }
+}
+@keyframes g-ring { 0%, 76%, 100% { transform: rotate(0); } 80% { transform: rotate(-14deg); } 84% { transform: rotate(12deg); } 88% { transform: rotate(-8deg); } 92% { transform: rotate(5deg); } 96% { transform: rotate(0); } }
+@keyframes g-pulse-ring { 0%, 70% { box-shadow: 0 0 0 0 rgba(244, 243, 238, 0.32); } 100% { box-shadow: 0 0 0 10px rgba(244, 243, 238, 0); } }
 
 /* ---------- Case study: CMS accent, TOC, rich text ---------- */
 ${N("Header")} ${N("Title")}, ${N("Header")} ${N("Title")} * { white-space: normal !important; }
@@ -371,12 +419,10 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   ${N("Header")} ${N("Lede")} * { font-size: 18px !important; }
   ${N("Facts")} { padding-left: 20px !important; padding-right: 20px !important; }
   ${N("Cover wrap")} { padding: 24px 20px !important; }
-  ${S("Cover (")} { height: auto !important; aspect-ratio: 4 / 3; }
   ${N("Body")} { padding-left: 20px !important; padding-right: 20px !important; }
   ${N("Main")} { gap: 72px !important; }
   ${N("Section title")} * { font-size: 28px !important; }
   ${N("Section body")} * { font-size: 16px !important; }
-  ${N("Section image")} { height: auto !important; aspect-ratio: 4 / 3; }
   ${N("Steps")} { flex-direction: column !important; padding-top: 0 !important; padding-left: 52px !important; gap: 32px !important; }
   ${N("Steps")}::before { left: 15px; right: auto; top: 6px; bottom: 6px; width: 1px; height: auto; }
   ${N("Steps")} > * { width: 100% !important; min-width: 0 !important; }
@@ -392,9 +438,9 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 
 /* ---------- Texture: grain + vertical grid lines that grow with scroll ---------- */
 #g-grain {
-  position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: 0.07;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
+  position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.62' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 260px 260px;
 }
 /* Signature rails: four hairline tracks; lines 1 and 3 draw down from the top,
    2 and 4 draw up from the bottom, each led by a glowing point. Staggered. */
@@ -545,6 +591,48 @@ export function withThemeToggle(Component: any): ComponentType {
     })
 }
 
+// ---------- Case study: "Read the full story" ----------
+// Apply to the "Read the full story" button. Unfolds the case study's Body.
+export function withStoryToggle(Component: any): ComponentType {
+    return forwardRef((props: any, ref) => {
+        const local = useRef<HTMLElement | null>(null)
+        const [open, setOpen] = useState(false)
+        useEffect(() => {
+            ensureStyle()
+            document.documentElement.toggleAttribute("data-g-story", open)
+            const el = local.current
+            if (el) {
+                const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT)
+                let n = walker.nextNode()
+                while (n) {
+                    const v = n.nodeValue || ""
+                    if (/read the full story|show less/i.test(v)) {
+                        const to = open ? "Show less" : "Read the full story"
+                        n.nodeValue = v === v.toUpperCase() ? to.toUpperCase() : to
+                    }
+                    n = walker.nextNode()
+                }
+            }
+            if (open) {
+                const body = document.querySelector('[data-framer-name="Body"]')
+                body && body.querySelectorAll("[data-g-rv]").forEach((k) => k.setAttribute("data-g-in", ""))
+            }
+        }, [open])
+        useEffect(() => () => document.documentElement.removeAttribute("data-g-story"), [])
+        const setRef = (node: HTMLElement | null) => {
+            local.current = node
+            if (typeof ref === "function") ref(node)
+            else if (ref) (ref as any).current = node
+        }
+        return (
+            <Component {...props} ref={setRef} role="button" tabIndex={0} aria-expanded={open}
+                onClick={(e: any) => { e.preventDefault(); setOpen((o) => !o) }}
+                onKeyDown={(e: any) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen((o) => !o) } }}
+                style={{ ...props.style, cursor: "pointer" }} />
+        )
+    })
+}
+
 // ---------- About: collapsed under the hero, opened by "More about me" ----------
 // Apply to the "More about me" chip. Toggles the "04 About" section and swaps
 // the chip's word More/Less.
@@ -595,7 +683,7 @@ const MENU_LINKS = [
     { label: "About", href: "/#about" },
     { label: "Contact", href: "/#contact" },
 ]
-const MENU_EMAIL = "hi@ginciDesign.com"
+const MENU_EMAIL = "ginciDesign@outlook.com"
 
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
     const [theme, setTheme] = useState("dark")

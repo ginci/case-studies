@@ -147,7 +147,30 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - About opens with 16px above it.
 - Theme toggle layers on all six pages rebuilt on the canvas as the sun/moon pill (Lucide icons) so the canvas matches the site.
 
+## Shader, summary case study, go-live prep (2026-11-12)
+- **Background shader** (Gift's ShaderGradient, layer renamed "Background shader", its own grain Off) now sits behind the
+  content: pointer-events off, z-index 0, content column z-index 1. Light theme: multiply blend, 50% opacity, re-inverted so
+  it keeps soft colour instead of washing out. A copy sits on the case-study page too.
+- **Grain** lighter and wider: opacity .035, baseFrequency .62, 2 octaves, 260px tile. Reads as texture, not dots.
+- **Inline chips**: Framer's link hover rule was zeroing padding and radius (the "shake"). Padding, margin and the 0.3em radius
+  are pinned with !important on a and a:hover. CV chip has no arrow now; Content Scribe chip is violet.
+  **CV still points to a mailto placeholder** until the PDF is uploaded; then set the run's link to the file.
+- **Email**: every mailto opens ginciDesign@outlook.com; the displayed text stays hi@ginciDesign.com as a placeholder.
+- **Nav CTA** is a calendar icon button (Lucide "Calendar") with a ring wiggle + pulse every 4.5s, reduced-motion safe.
+  It opens email with subject "Book a call" until a booking link exists.
+- "More work" (Dribbble) button removed.
+- **Folders**: Coming soon (Folders `comingSoon` prop): no links, no shortcuts, a COMING SOON pill. /writing, /resources,
+  /photography and /outlets are draft.
+- **About bio** rewritten in the reference's tone, three paragraphs, Outfit 300. Bracketed facts still to fill:
+  "[How you got into design, and when.]" and "[One line of recognition: awards, talks or features.]".
+- **Case study is a summary now**: header (+ "Visit live site ↗" from the new Live link field), facts, cover, Outcomes
+  (result + stats grid), a dotted "Read the full story" ribbon (withStoryToggle) and the full body folded beneath it, then Next.
+  Page background matches home (#121211).
+- **Images** scale by aspect ratio (cover 1120/760 capped at 1280px, section images 880/460) instead of fixed heights.
+- Case page nav is Gift's new layer (old id CNkYL3GMJ is gone); CSS handles its transparency.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
-- Home starts with Tranzakt; the list ends with a link to Dribbble instead of Load more (Gift, 2026-11-04).
+- Home starts with Tranzakt; the list ends with a link to Dribbble instead of Load more (Gift, 2026-11-04). Dribbble link removed (Gift, 2026-11-12).
+- Folders ship as Coming soon; case studies ship as summaries with the full story folded (Gift, 2026-11-12).

@@ -78,7 +78,7 @@ function FolderIcon({ f, open, accent, reduce }: { f: Folder; open: boolean; acc
     )
 }
 
-export default function Folders(props: { folders: Folder[]; accent: string; columns: number; style?: CSSProperties }) {
+export default function Folders(props: { folders: Folder[]; accent: string; columns: number; comingSoon?: boolean; style?: CSSProperties }) {
     const { folders = [], accent = "#E8501A" } = props
     const fine = useHover()
     const [hover, setHover] = useState(-1)
@@ -99,12 +99,13 @@ export default function Folders(props: { folders: Folder[]; accent: string; colu
             if (e.metaKey || e.ctrlKey || e.altKey || e.repeat) return
             const t = e.target as HTMLElement | null
             if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return
+            if (props.comingSoon) return
             const f = folders.find((x) => x.shortcut && x.shortcut.toLowerCase() === e.key.toLowerCase())
             if (f && f.link) window.location.href = f.link
         }
         window.addEventListener("keydown", key)
         return () => window.removeEventListener("keydown", key)
-    }, [folders])
+    }, [folders, props.comingSoon])
     // Fit: shrink the folder so it never overflows its column (two per row on phones).
     const cols = props.columns || 2
     const gap = gridW && gridW < 520 ? 8 : 16
@@ -116,22 +117,28 @@ export default function Folders(props: { folders: Folder[]; accent: string; colu
             {folders.map((f, i) => {
                 const open = fine && hover === i
                 return (
-                    <a key={i} href={f.link} aria-label={`${f.title}, ${f.meta}`}
+                    <a key={i} href={props.comingSoon ? undefined : f.link} aria-label={props.comingSoon ? `${f.title}, coming soon` : `${f.title}, ${f.meta}`}
+                        aria-disabled={props.comingSoon || undefined} tabIndex={props.comingSoon ? -1 : undefined}
                         onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(-1)}
                         onFocus={() => setHover(i)} onBlur={() => setHover(-1)}
                         style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: compact ? 8 : 14, padding: compact ? "24px 6px 16px" : "40px 16px 26px", borderRadius: compact ? 16 : 20, minWidth: 0,
-                            textDecoration: "none", color: "inherit", background: open ? "rgba(244,243,238,0.04)" : "transparent",
+                            textDecoration: "none", color: "inherit", background: open ? "rgba(244,243,238,0.04)" : "transparent", cursor: props.comingSoon ? "default" : "pointer",
                             transition: "background-color .3s ease", outlineOffset: 2 }}>
                         <div style={{ zoom: s }}><FolderIcon f={f} open={open} accent={accent} reduce={reduce} /></div>
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, marginTop: 6 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                 <span style={{ font: `500 ${compact ? 14 : 16}px/1.2 Outfit, sans-serif`, color: "#F4F3EE", whiteSpace: "nowrap" }}>{f.title}</span>
-                                {fine && f.shortcut ? (
+                                {fine && f.shortcut && !props.comingSoon ? (
                                     <kbd style={{ font: "500 10px/1 'Geist Mono', monospace", color: "#85847E", border: "1px solid rgba(244,243,238,0.18)",
                                         borderRadius: 4, padding: "3px 5px", textTransform: "uppercase" }}>{f.shortcut}</kbd>
                                 ) : null}
                             </div>
-                            <span style={{ font: `400 ${compact ? 12.5 : 14}px/1.3 'Nunito Sans', sans-serif`, color: "#85847E", textAlign: "center" }}>{f.meta}</span>
+                            {props.comingSoon ? (
+                                <span style={{ font: `500 ${compact ? 9 : 10}px/1 'Geist Mono', monospace`, letterSpacing: ".1em", textTransform: "uppercase", color: "#A3A29C",
+                                    border: "1px solid rgba(244,243,238,0.18)", borderRadius: 999, padding: compact ? "4px 8px" : "5px 10px", marginTop: 2 }}>Coming soon</span>
+                            ) : (
+                                <span style={{ font: `400 ${compact ? 12.5 : 14}px/1.3 'Nunito Sans', sans-serif`, color: "#85847E", textAlign: "center" }}>{f.meta}</span>
+                            )}
                         </div>
                     </a>
                 )
@@ -146,9 +153,10 @@ const DEFAULTS: Folder[] = [
     { title: "Photography", meta: "[Camera]", shortcut: "P", link: "/photography", kind: "photos", cards: [], photos: [{}, {}, {}], captions: ["[Place]", "[Place]", "[Place]"] },
     { title: "Other outlets", meta: "3 outlets", shortcut: "O", link: "/outlets", kind: "cards", cards: ["GNC Merch", "GNC Scenes", "Ginci Designs"], photos: [], captions: [] },
 ]
-Folders.defaultProps = { folders: DEFAULTS, accent: "#E8501A", columns: 2 }
+Folders.defaultProps = { folders: DEFAULTS, accent: "#E8501A", columns: 2, comingSoon: false }
 
 addPropertyControls(Folders, {
+    comingSoon: { type: ControlType.Boolean, title: "Coming soon", enabledTitle: "Yes", disabledTitle: "No" },
     accent: { type: ControlType.Color, title: "Card dot" },
     columns: { type: ControlType.Number, title: "Columns", min: 1, max: 4, step: 1, displayStepper: true },
     folders: {
