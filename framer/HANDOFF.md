@@ -143,7 +143,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - About bio ends "…The full story, with dates and roles, is in my CV." "CV" is a chip; hover fills and shows ↓.
   **The CV link is a placeholder mailto (hi@ginciDesign.com, subject "CV request") until the PDF is uploaded**; then point the
   run's link at the file (any link ending .pdf gets the same ↓ hover). The Download CV button was removed.
-- MORE ABOUT ME button: hover fills white, label turns dark, arrow drops in from the top (rises when open).
+- MORE ABOUT ME button: opening it smooth-scrolls the About section up to the middle of the screen (never scrolls up; instant with reduced motion). Hover fills white, label turns dark, arrow drops in from the top (rises when open).
 - About opens with 16px above it.
 - Theme toggle layers on all six pages rebuilt on the canvas as the sun/moon pill (Lucide icons) so the canvas matches the site.
 

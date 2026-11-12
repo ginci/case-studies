@@ -640,6 +640,7 @@ export function withAboutToggle(Component: any): ComponentType {
     return forwardRef((props: any, ref) => {
         const local = useRef<HTMLElement | null>(null)
         const [open, setOpen] = useState(false)
+        const clicked = useRef(false)
         useEffect(() => {
             ensureStyle()
             document.documentElement.toggleAttribute("data-g-about", open)
@@ -659,7 +660,16 @@ export function withAboutToggle(Component: any): ComponentType {
             if (open) {
                 const sec = document.querySelector('[data-framer-name="04 About"]')
                 sec && sec.querySelectorAll("[data-g-rv]").forEach((k) => k.setAttribute("data-g-in", ""))
+                // Bring the opened section up so its top sits at the middle of the screen.
+                if (sec && clicked.current) {
+                    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                    requestAnimationFrame(() => {
+                        const y = sec.getBoundingClientRect().top + window.scrollY - window.innerHeight / 2
+                        if (y > window.scrollY + 8) window.scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" })
+                    })
+                }
             }
+            clicked.current = false
         }, [open])
         const setRef = (node: HTMLElement | null) => {
             local.current = node
@@ -668,8 +678,8 @@ export function withAboutToggle(Component: any): ComponentType {
         }
         return (
             <Component {...props} ref={setRef} role="button" tabIndex={0} aria-expanded={open} aria-controls="about"
-                onClick={(e: any) => { e.preventDefault(); setOpen((o) => !o) }}
-                onKeyDown={(e: any) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen((o) => !o) } }}
+                onClick={(e: any) => { e.preventDefault(); clicked.current = true; setOpen((o) => !o) }}
+                onKeyDown={(e: any) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); clicked.current = true; setOpen((o) => !o) } }}
                 style={{ ...props.style, cursor: "pointer" }} />
         )
     })
