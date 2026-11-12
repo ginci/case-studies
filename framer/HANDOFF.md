@@ -169,6 +169,13 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - **Images** scale by aspect ratio (cover 1120/760 capped at 1280px, section images 880/460) instead of fixed heights.
 - Case page nav is Gift's new layer (old id CNkYL3GMJ is gone); CSS handles its transparency.
 
+## About bio v2 + queued hero change (2026-11-12)
+- About bio rewritten to be personal (who Gift is, experience, what drives them) and to name no projects, so it no longer
+  repeats the hero or the work list. The CV chip is still the mailto placeholder. Recognition line dropped; add one later if wanted.
+- **Queued, do after the case studies:** hero intro swaps the Dado Foods chip for 9mobile:
+  "Before that I led the redesign of 9mobile ([what 9mobile is now, after the acquisition]): a full website redesign plus a
+  content management system for the brand." Needs a 9mobile case study (CMS item) first so the chip has somewhere to link.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
