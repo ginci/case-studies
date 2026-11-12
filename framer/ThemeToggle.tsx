@@ -246,8 +246,8 @@ ${N("Steps")} > *::before {
 ${N("04 About")}, ${N("04 About")} > *, ${N("04 About")} > * > * { overflow: visible !important; }
 
 /* ---------- Sections: surfaces, hairline, spacing ---------- */
-${N("01 Hero")}, ${N("04 About")}, ${N("06 Footer")} { background-color: #121211 !important; }
-${N("05 Contact")} { background-color: #161615 !important; }
+/* Sections stay see-through so the background shader shows behind them; the page itself carries #121211. */
+${N("01 Hero")}, ${N("04 About")}, ${N("03 Work (index)")}, ${N("03 Shelf")}, ${N("05 Contact")}, ${N("06 Footer")} { background-color: transparent !important; }
 ${N("03 Work (index)")}, ${N("02 Portrait")}, ${N("04 About")}, ${N("05 Contact")} { border-top: 0 !important; }
 ${N("06 Footer")} { border-top: 1px solid rgba(244, 243, 238, 0.1) !important; }
 @media (min-width: 1200px) {
@@ -1050,8 +1050,17 @@ function setupReveal() {
                     revealIO && revealIO.unobserve(e.target)
                 })
             },
-            { rootMargin: "0px 0px -10% 0px", threshold: 0.01 }
+            { rootMargin: "0px", threshold: 0.01 }
         )
+    }
+    if (!(window as any).__gRevealEnd) {
+        ;(window as any).__gRevealEnd = true
+        const atEnd = () => {
+            if (window.innerHeight + window.scrollY < document.documentElement.scrollHeight - 4) return
+            document.querySelectorAll("[data-g-rv]:not([data-g-in])").forEach((k) => k.setAttribute("data-g-in", ""))
+        }
+        window.addEventListener("scroll", atEnd, { passive: true })
+        window.addEventListener("resize", atEnd)
     }
     const sections = Array.from(
         document.querySelectorAll<HTMLElement>("[data-framer-name]")
