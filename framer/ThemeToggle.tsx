@@ -46,7 +46,8 @@ ${N("Menu button")} { display: none !important; }
 ${N("Background shader")}, ${N("Background shader")} * { pointer-events: none !important; }
 ${N("Background shader")} { z-index: 0 !important; }
 ${N("Page content column")}, ${N("Case study page")} > :not(${N("Background shader")}) { position: relative; z-index: 1; }
-${LIGHT} ${N("Background shader")} { mix-blend-mode: multiply !important; opacity: 0.5 !important; filter: invert(1) hue-rotate(180deg) blur(100px) !important; }
+/* Light theme inverts the page; leaving the shader as in dark mode lets the inversion keep its teal hue, so it stays visible on white. */
+${LIGHT} ${N("Background shader")} { mix-blend-mode: difference !important; opacity: 0.25 !important; filter: brightness(2) blur(100px) !important; }
 
 /* ---------- Case study: the full story stays folded until "Read the full story" ---------- */
 ${N("Case study page")} ${N("Body")} { overflow: hidden !important; max-height: 30000px; }
@@ -72,13 +73,25 @@ ${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(
   ${S("CTA / Read the full story")}:hover svg { animation: g-drop 0.42s ${EASE}; }
   ${S("CTA / Read the full story")}[aria-expanded="true"]:hover svg { animation: g-rise 0.42s ${EASE}; }
 }
+/* Hero headline: one layer, thickened with a stroke drawn under the fill (scales with font size). */
+${N("Headline (lines rise in)")} * { -webkit-text-stroke: 0.04em currentColor; paint-order: stroke fill; }
+
+/* Case header: back link left, underlined live-site link right */
+${N("Crumb")} { align-items: center !important; }
+${N("Live link")} a, ${N("Live link")} a:hover { background: none !important; padding: 0 !important; margin: 0 !important; border-radius: 0 !important;
+  color: #F4F3EE !important; text-decoration: underline !important; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+${N("Live link")} a:hover { text-decoration-thickness: 2px; }
+${N("Facts")} > * { padding-top: 0 !important; padding-bottom: 0 !important; gap: 4px !important; }
+@media (max-width: 809px) { ${N("Facts")} { row-gap: 16px !important; } }
+
 /* Outcomes: the Stats list as a row of figures */
 ${N("Outcomes stats")} ul { list-style: none !important; padding: 0 !important; margin: 0 !important; display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
 ${N("Outcomes stats")} li { margin: 0 !important; padding-top: 14px; border-top: 1px solid rgba(244, 243, 238, 0.12); }
 ${N("Outcomes stats")} li { list-style: none !important; }
 ${N("Outcomes stats")} li::marker, ${N("Outcomes stats")} li::before { content: none !important; display: none !important; }
 ${N("Outcomes stats")} li > * { padding-left: 0 !important; margin-left: 0 !important; }
-@media (max-width: 809px) { ${N("Outcomes stats")} ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; } }
+@media (min-width: 810px) and (max-width: 1199px) { ${N("Outcomes stats")} ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; } }
+@media (max-width: 809px) { ${N("Outcomes stats")} ul { grid-template-columns: 1fr; gap: 0; } ${N("Outcomes stats")} li { padding: 12px 0; } ${N("Outcomes")} { padding-left: 20px !important; padding-right: 20px !important; } }
 /* Images keep their proportions at every width and stop growing past the layout */
 ${N("Cover wrap")} { max-width: 1280px !important; margin-left: auto !important; margin-right: auto !important; }
 ${S("Cover (")} { height: auto !important; aspect-ratio: 1120 / 760; }
@@ -190,7 +203,6 @@ ${N("Header")} ${N("Title")}, ${N("Header")} ${N("Title")} * { white-space: norm
 ${N("Header")} ${N("Title")} { max-width: 100% !important; }
 ${N("Facts")} > * { min-width: 0 !important; }
 ${N("Facts")} > * > *, ${N("Facts")} > * > * * { white-space: normal !important; max-width: 100% !important; }
-${N("Header")} ${N("Title")} * { font-size: min(128px, 10.5vw) !important; }
 ${N("Crumb title")} { cursor: pointer; }
 ${N("TOC marker")} { display: none !important; }
 ${S("TOC / ")} { position: relative !important; cursor: pointer; }
@@ -261,7 +273,7 @@ html[data-ginci-theme="light"][data-g-scrolled] ${N("Nav (fixed)")} {
 }
 
 /* Light theme case studies: near-white page (dark before the invert) and stronger body text. */
-${LIGHT} ${N("Case study page")}, ${LIGHT} ${N("Case study page")} ${N("Header")} { background-color: #0D0D0C !important; }
+${LIGHT} ${N("Case study page")} { background-color: #0D0D0C !important; }
 ${LIGHT} ${N("Section body")} *:not(strong):not(b), ${LIGHT} ${N("Next line")} *, ${LIGHT} ${N("Locked body")} *,
 ${LIGHT} ${N("Section label")} *, ${LIGHT} ${S("TOC / ")} ${N("TOC label")} *, ${LIGHT} ${N("Facts")} * { color: #ABAAA4 !important; }
 ${LIGHT} ${N("Facts")} [data-framer-name$="value"] * { color: #F4F3EE !important; }
@@ -359,16 +371,12 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 @media (max-width: 1199px) {
   ${N("Nav (fixed)")} { padding: 20px 32px !important; }
   ${N("01 Hero")} { padding: 72px 32px 96px !important; }
-  ${N("Headline (lines rise in)")} * { font-size: 60px !important; }
   ${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")} { padding: 120px 32px !important; }
-  ${ROW} ${N("Name")} * { font-size: 52px !important; }
   ${ROW} ${N("Meta")} { width: 220px !important; }
   ${N("04 About")} { flex-direction: column !important; gap: 32px !important; }
   ${N("04 About")} > * { width: 100% !important; }
-  ${N("Statement (word reveal on scroll)")} * { font-size: 34px !important; }
-  ${S("Email (")} * { font-size: 76px !important; }
   ${N("06 Footer")} { padding: 24px 32px !important; }
-  ${N("Header")} { padding-left: 32px !important; padding-right: 32px !important; }
+  ${N("Header")} { padding-left: 32px !important; padding-right: 32px !important; padding-top: 24px !important; gap: 120px !important; }
   ${N("Header")} p, ${N("Header")} h1, ${N("Header")} *, ${N("Facts")} * { white-space: normal !important; }
   ${N("Header")} > *, ${N("Header")} > * > * { max-width: 100% !important; }
   ${N("Facts")} { flex-wrap: wrap !important; padding-left: 32px !important; padding-right: 32px !important; row-gap: 24px !important; column-gap: 24px !important; }
@@ -379,9 +387,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   ${N("Body")} > ${N("Main")} { flex: 1 1 100% !important; width: 100% !important; padding: 0 !important; }
   ${N("Main")} > * { width: 100% !important; }
   ${N("Main")} [data-framer-name], ${N("Main")} p, ${N("Main")} h1, ${N("Main")} h2, ${N("Main")} h3 { white-space: normal !important; max-width: 100% !important; }
-  ${N("Section title")} * { font-size: 34px !important; }
   ${NEXT} { padding-left: 32px !important; padding-right: 32px !important; }
-  ${NEXT} ${N("Next title")} * { font-size: 64px !important; }
   ${NEXT}::after { right: 32px; width: 72px; height: 72px; margin-top: -36px; background-size: 28px; }
 }
 
@@ -394,42 +400,32 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   ${N("Nav (fixed)")} ${N("Frame")} { gap: 12px !important; }
   html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 20px) !important; padding: 8px 8px 8px 16px !important; }
   ${N("01 Hero")} { padding: 48px 20px 72px !important; gap: 24px !important; }
-  ${N("Headline (lines rise in)")} * { font-size: 40px !important; }
   ${N("01 Hero")} > ${N("Frame")} { flex-direction: column !important; align-items: flex-start !important; gap: 24px !important; }
   ${N("Lede")} { width: 100% !important; }
-  ${N("Lede")} * { font-size: 17px !important; }
   ${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")} { padding: 88px 20px !important; }
   ${ROW} { padding-top: 22px !important; padding-bottom: 22px !important; gap: 14px !important;
     margin-left: -12px !important; margin-right: -12px !important; padding-left: 12px !important; padding-right: 12px !important; width: calc(100% + 24px) !important; }
   ${ROW}::after { left: 12px; right: 12px; }
-  ${ROW} ${N("Name")} * { font-size: 30px !important; }
   ${ROW} ${N("Name")} { flex: 1 1 auto !important; min-width: 0 !important; }
   ${ROW} ${N("Meta")} { display: none !important; }
   ${ROW} ${N("Num")} { width: 24px !important; flex: 0 0 24px !important; }
   ${N("More work")} { padding-top: 32px !important; }
-  ${N("Statement (word reveal on scroll)")} * { font-size: 26px !important; }
   ${S("Exp / ")} { flex-wrap: wrap !important; row-gap: 4px !important; }
   ${S("Exp / ")} > :first-child { width: 100% !important; flex: 0 0 100% !important; }
-  ${S("Email (")} * { font-size: 30px !important; }
   ${N("05 Contact")} > :first-child, ${N("05 Contact")} > :first-child * { white-space: normal !important; width: 100% !important; }
   ${N("Socials")} { flex-wrap: wrap !important; row-gap: 12px !important; column-gap: 24px !important; }
   ${N("06 Footer")} { padding: 32px 20px 40px !important; flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
-  ${N("Header")} { padding: 48px 20px 40px !important; }
-  ${N("Header")} > :first-child { flex-wrap: wrap !important; gap: 8px !important; }
-  ${N("Header")} ${N("Lede")} * { font-size: 18px !important; }
+  ${N("Header")} { padding: 16px 20px 40px !important; gap: 72px !important; }
   ${N("Facts")} { padding-left: 20px !important; padding-right: 20px !important; }
   ${N("Cover wrap")} { padding: 24px 20px !important; }
   ${N("Body")} { padding-left: 20px !important; padding-right: 20px !important; }
   ${N("Main")} { gap: 72px !important; }
-  ${N("Section title")} * { font-size: 28px !important; }
-  ${N("Section body")} * { font-size: 16px !important; }
   ${N("Steps")} { flex-direction: column !important; padding-top: 0 !important; padding-left: 52px !important; gap: 32px !important; }
   ${N("Steps")}::before { left: 15px; right: auto; top: 6px; bottom: 6px; width: 1px; height: auto; }
   ${N("Steps")} > * { width: 100% !important; min-width: 0 !important; }
   ${N("Steps")} > *::before { left: -52px; top: 16px; }
   ${NEXT} { padding: 64px 20px 64px !important; }
   ${NEXT} > :not(${N("Next accent swatch")}) { max-width: calc(100% - 76px) !important; }
-  ${NEXT} ${N("Next title")} * { font-size: 36px !important; }
   ${NEXT}::after { top: 80px; margin-top: 0; right: 20px; width: 56px; height: 56px; background-size: 22px; }
   #g-grid b:nth-child(1), #g-grid b:nth-child(3) { display: none; }
   #g-grid b:nth-child(2) { left: 33.333%; }

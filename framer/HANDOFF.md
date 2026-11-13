@@ -176,6 +176,22 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   "Before that I led the redesign of 9mobile ([what 9mobile is now, after the acquisition]): a full website redesign plus a
   content management system for the brand." Needs a 9mobile case study (CMS item) first so the chip has somewhere to link.
 
+## Case page cleanup, type scale, light shader (2026-11-13)
+- Hero headline: the duplicate offset layer is gone. One layer, thickened with `-webkit-text-stroke: 0.04em` (paint-order
+  stroke fill), so it scales with the font and can't drift apart on phones. Wrapper is now a 100%-wide auto-height stack.
+- **Type sizes live on the canvas only.** The old CSS font-size overrides (which forced e.g. the case title to ~126px and
+  the phone headline to 40px) were removed. Scale (desktop / tablet / phone): hero headline 48/40/30, lede 18/18/16,
+  work row name 32/28/22, contact line 24/22/18, email 128/76/32; case title 56/48/36, case lede 20/18/16, facts 18/18/16,
+  outcome line 24/22/18, section titles 32/28/24, next title 56/48/32, TOC 14.
+- Case header: "← Work" left and an underlined "Visit live site ↗" right on one row, 24px under the nav. Case label and read
+  time removed. Title smaller (56px) with 120px above it. Facts are Client and Role only (Timeline and Platforms layers deleted).
+- Outcomes: 2 columns on tablet, 1 per row on phone.
+- Process (05) and "What I'd do next" (10) sections + their TOC rows deleted from the template.
+- Tranzakt copy rewritten short: Overview (industry, role, goal) → Problem → Approach (4 steps) → Scope → four
+  Problem / Solution / Result sections. Old copy saved in the session scratchpad (tzbody.before.txt).
+- Light theme shader: same treatment as dark (difference, 25%). The page inversion keeps the teal, so it shows on white.
+- Note: Gift updated the desktop hero to 9mobile, but the phone breakpoint still carries the old Dado text override.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
