@@ -188,7 +188,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Outcomes: 2 columns on tablet, 1 per row on phone.
 - Process (05) and "What I'd do next" (10) sections + their TOC rows deleted from the template.
 - Tranzakt copy rewritten short: Overview (industry, role, goal) → Problem → Approach (4 steps) → Scope → four
-  Problem / Solution / Result sections. Old copy saved in the session scratchpad (tzbody.before.txt).
+  Problem / Solution / Result sections. Old long copy kept in archive/tranzakt-long-copy-2026-11-12.html.txt.
 - Light theme shader: same treatment as dark (difference, 25%). The page inversion keeps the teal, so it shows on white.
 - Note: Gift updated the desktop hero to 9mobile, but the phone breakpoint still carries the old Dado text override.
 
