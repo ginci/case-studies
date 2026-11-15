@@ -311,6 +311,8 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 
 ## Status row + solid hover (2026-11-16, not yet published)
 - Project row hover is now solid site white (#F4F3EE) with dark text.
+- Listening-to (latest): folded it's a 28px round button with music bars always moving; hover/focus/tap unfolds it to show
+  label + track, leaving folds it back.
 - Listening-to moved off the screen edge: it's now a pill beside the status pill in a "Status row" above the headline,
   same height and type (Geist Mono 12). Animated bars only when a track is live; label "Listening to" (live) or
   "Last played"; "Not playing right now" until Last.fm or a fallback track is set. Fades in at 3.25s, just after the

@@ -1,8 +1,8 @@
 import { useEffect, useState, type CSSProperties } from "react"
 import { addPropertyControls, ControlType } from "framer"
 
-// "Listening to" pill. Sits beside the "Available for work" pill and matches its size and type.
-// Animated bars + the current track; click opens it. Live data comes from Last.fm (connect Spotify to Last.fm,
+// "Listening to" pill. Sits beside the "Available" pill at the same height. Folded, it is a round button with
+// music bars moving up and down; hover, focus or tap unfolds it to show the track; leaving folds it back. Click opens the track. Live data comes from Last.fm (connect Spotify to Last.fm,
 // then set the username and a read-only API key). Until then it shows the fallback track, or "Not playing right now".
 
 type Track = { title: string; artist: string; url?: string; live: boolean }
@@ -12,6 +12,7 @@ export default function NowPlaying(props: Props) {
     const { lastfmUser = "", lastfmKey = "", title = "", artist = "", link = "" } = props
     const fallback: Track | null = title ? { title, artist, url: link, live: false } : null
     const [track, setTrack] = useState<Track | null>(fallback)
+    const [open, setOpen] = useState(false)
     useEffect(() => {
         if (!lastfmUser || !lastfmKey) { setTrack(fallback); return }
         let stop = false
@@ -34,28 +35,37 @@ export default function NowPlaying(props: Props) {
     const href = track?.url || link || undefined
     const Tag: any = href ? "a" : "span"
     return (
-        <Tag className={"g-np" + (track?.live ? " g-np-live" : "")} href={href} target={href ? "_blank" : undefined} rel={href ? "noopener noreferrer" : undefined}
-            title={track ? `${label}: ${text}` : text} style={{ ...props.style }}>
+        <Tag className={"g-np" + (open ? " g-np-open" : "")} href={href} target={href ? "_blank" : undefined} rel={href ? "noopener noreferrer" : undefined}
+            aria-label={track ? `${label}: ${text}` : text} aria-expanded={open}
+            onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} onFocus={() => setOpen(true)} onBlur={() => setOpen(false)}
+            onClick={(e: any) => { if (!open && window.matchMedia("(hover: none)").matches) { e.preventDefault(); setOpen(true) } }}
+            style={{ ...props.style }}>
             <style>{`
-.g-np { display: inline-flex; align-items: center; gap: 8px; height: 100%; min-height: 28px; box-sizing: border-box; padding: 6px 12px 6px 10px;
+.g-np { display: inline-flex; align-items: center; gap: 8px; height: 28px; box-sizing: border-box; padding: 0 9px;
   border-radius: 999px; border: 1px solid rgba(244,243,238,.16); background: rgba(244,243,238,.04); color: #F4F3EE; text-decoration: none;
-  font: 400 12px/1.3 "Geist Mono", ui-monospace, monospace; letter-spacing: .02em; white-space: nowrap; max-width: 100%;
-  transition: border-color .25s ease, background-color .25s ease; }
+  font: 400 12px/1.3 "Geist Mono", ui-monospace, monospace; letter-spacing: .02em; white-space: nowrap; overflow: hidden;
+  max-width: 28px; transition: max-width .45s cubic-bezier(.22,1,.36,1), border-color .25s ease, background-color .25s ease, padding .3s ease; }
+.g-np.g-np-open { max-width: 360px; padding: 0 12px 0 9px; }
+.g-np-more { display: inline-flex; gap: 8px; opacity: 0; transition: opacity .2s ease; }
+.g-np-open .g-np-more { opacity: 1; transition-delay: .12s; }
 a.g-np:hover, a.g-np:focus-visible { border-color: rgba(244,243,238,.36); background: rgba(244,243,238,.08); outline: none; }
-.g-np-bars { display: inline-flex; gap: 2px; align-items: flex-end; height: 10px; flex: 0 0 auto; }
+.g-np-bars { display: inline-flex; gap: 2px; align-items: flex-end; justify-content: center; width: 8px; height: 10px; flex: 0 0 8px; }
 .g-np-bars i { width: 2px; height: 40%; border-radius: 2px; background: #6FD08C; }
 @media (prefers-reduced-motion: no-preference) {
-  .g-np-live .g-np-bars i { animation: g-np-bar 1s ease-in-out infinite; }
-  .g-np-live .g-np-bars i:nth-child(2) { animation-delay: -.3s; } .g-np-live .g-np-bars i:nth-child(3) { animation-delay: -.6s; }
+  .g-np-bars i { animation: g-np-bar 1s ease-in-out infinite; }
+  .g-np-bars i:nth-child(2) { animation-delay: -.3s; } .g-np-bars i:nth-child(3) { animation-delay: -.6s; }
 }
 @keyframes g-np-bar { 0%,100% { height: 30%; } 50% { height: 100%; } }
 .g-np-label { color: #85847E; }
 .g-np-text { overflow: hidden; text-overflow: ellipsis; max-width: 240px; }
-@media (max-width: 809px) { .g-np-text { max-width: 170px; } }
+@media (max-width: 809px) { .g-np-text { max-width: 170px; } .g-np.g-np-open { max-width: calc(100vw - 40px); } }
+@media (prefers-reduced-motion: reduce) { .g-np, .g-np-more { transition: none; } }
 `}</style>
             <span className="g-np-bars" aria-hidden="true"><i /><i /><i /></span>
-            {label ? <span className="g-np-label">{label}</span> : null}
-            <span className="g-np-text">{text}</span>
+            <span className="g-np-more">
+                {label ? <span className="g-np-label">{label}</span> : null}
+                <span className="g-np-text">{text}</span>
+            </span>
         </Tag>
     )
 }
