@@ -42,12 +42,15 @@ ${N("Menu button")} { display: none !important; }
 .g-pill-btn:hover { color: #F4F3EE !important; }
 .g-pill-btn:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 1px; }
 
-/* ---------- Background shader (ShaderGradient) ---------- */
-${N("Background shader")}, ${N("Background shader")} * { pointer-events: none !important; }
-${N("Background shader")} { z-index: 0 !important; }
-${N("Page content column")}, ${N("Case study page")} > :not(${N("Background shader")}) { position: relative; z-index: 1; }
-/* Light theme inverts the page; leaving the shader as in dark mode lets the inversion keep its teal hue, so it stays visible on white. */
-${LIGHT} ${N("Background shader")} { mix-blend-mode: difference !important; opacity: 0.25 !important; filter: brightness(2) blur(100px) !important; }
+/* ---------- Background shaders (ShaderGradient) ----------
+   Each page has two: "Background shader" (dark theme) and "Background shader (light)" with its own pale palette.
+   The light theme inverts the page, so the light shader is inverted back to show its colours exactly as picked. */
+${S("Background shader")}, ${S("Background shader")} * { pointer-events: none !important; }
+${S("Background shader")} { z-index: 0 !important; }
+${N("Page content column")}, ${N("Case study page")} > :not([data-framer-name^="Background shader"]) { position: relative; z-index: 1; }
+html:not([data-ginci-theme="light"]) ${N("Background shader (light)")} { display: none !important; }
+${LIGHT} ${N("Background shader")} { display: none !important; }
+${LIGHT} ${N("Background shader (light)")} { mix-blend-mode: normal !important; opacity: 0.45 !important; filter: invert(1) hue-rotate(180deg) blur(100px) !important; }
 
 /* ---------- Case study: sidebar + summaries. Each section shows its heading and one-paragraph summary;
    "Read the full story" opens the detail (body + image) under every section. ---------- */
@@ -73,6 +76,13 @@ ${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(
 }
 /* Work page: the list sits right under its header */
 ${N("Work header")} + ${N("03 Work (index)")} { padding-top: 40px !important; }
+${N("Link slug")} { display: none !important; }
+/* Link buttons: Back-to-top type (Geist Mono 12px), underlined, so they never read as section headers */
+${N("View all projects")} a, ${N("Back home")} a, ${N("Crumb title")} a, ${N("Back link")} a, ${N("Preview link")} a, ${N("Template link")} a,
+${N("Crumb title")}, ${N("Back home")} * , ${N("Back link")} * {
+  text-decoration: underline !important; text-underline-offset: 4px; text-decoration-thickness: 1px; color: #F4F3EE !important;
+}
+${N("View all projects")} a:hover, ${N("Back home")} a:hover, ${N("Crumb title")} a:hover, ${N("Back link")} a:hover, ${N("Preview link")} a:hover, ${N("Template link")} a:hover { text-decoration-thickness: 2px; }
 
 /* Hero headline: one layer, thickened with a stroke drawn under the fill (scales with font size). */
 ${N("Headline (lines rise in)")} * { -webkit-text-stroke: 0.04em currentColor; paint-order: stroke fill; }
@@ -674,6 +684,35 @@ export function withAboutToggle(Component: any): ComponentType {
             <Component {...props} ref={setRef} role="button" tabIndex={0} aria-expanded={open} aria-controls="about"
                 onClick={(e: any) => { e.preventDefault(); clicked.current = true; setOpen((o) => !o) }}
                 onKeyDown={(e: any) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); clicked.current = true; setOpen((o) => !o) } }}
+                style={{ ...props.style, cursor: "pointer" }} />
+        )
+    })
+}
+
+// ---------- Playground rows: open /playground/<slug> ----------
+// Apply to the repeated row in the "Playground list". The row holds a hidden text layer named "Link slug"
+// bound to the item's Link slug field. Clicking (or Enter) opens the item's page; Cmd/Ctrl-click opens a new tab.
+export function withPlaygroundLink(Component: any): ComponentType {
+    return forwardRef((props: any, ref) => {
+        const local = useRef<HTMLElement | null>(null)
+        const href = () => {
+            const t = local.current && local.current.querySelector('[data-framer-name="Link slug"]')
+            const slug = ((t && t.textContent) || "").trim()
+            return slug ? "/playground/" + slug : ""
+        }
+        const go = (e: any) => {
+            const h = href(); if (!h) return
+            if (e.metaKey || e.ctrlKey) { window.open(h, "_blank"); return }
+            window.location.href = h
+        }
+        const setRef = (node: HTMLElement | null) => {
+            local.current = node
+            if (typeof ref === "function") ref(node)
+            else if (ref) (ref as any).current = node
+        }
+        return (
+            <Component {...props} ref={setRef} role="link" tabIndex={0} onClick={go}
+                onKeyDown={(e: any) => { if (e.key === "Enter") go(e) }}
                 style={{ ...props.style, cursor: "pointer" }} />
         )
     })

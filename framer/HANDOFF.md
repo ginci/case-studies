@@ -231,6 +231,21 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   list style; rows show the title and one line (hidden on phone), hover shows the image, rows have no link yet.
 - Nav pill no longer sticks halfway: on at >80px, off at <16px (hysteresis) and `overflow-anchor: none`.
 
+## Published 2026-11-16: case studies, Playground pages, light shaders, link styles
+- **Live** at gincidesign.framer.website (versions 3b62c602c, then 28a1be64c).
+- **Light-theme shaders:** every page with a shader (Home, Work, case study, Playground item) now has "Background shader (light)",
+  a pale mint / peach / sky copy. The code shows only the one matching the theme and inverts the light one back, so its
+  colours appear as picked (45% opacity). Edit its colours on the canvas.
+- **Case studies in the CMS:** 9mobile (now published), NSIA, CreatorScribe (title renamed; slug still contentscribe) and
+  Dado's new sections (Checkout and wallet, Menu as a Service). Order: Tranzakt, 9mobile, Dado, NSIA, CreatorScribe, Mobile app.
+  Images are the 0.35-scale Figma exports upscaled; swap for sharp ones when Figma's rate limit allows
+  (scratchpad hires.py retries).
+- **Playground item page** `/playground/:Playground`: type, title, summary, audience, "Preview in Figma ↗", "Buy the template ↗"
+  (hidden until the Template link field is filled), image. Rows on /work open it via the withPlaygroundLink override,
+  which reads a hidden "Link slug" text (Framer wouldn't accept a field for a CMS link there).
+- **Section headers** (Featured work, More from me, Contact, About, Work, Outcomes) are Outfit 500 22/20/18.
+  **Link buttons** (View all projects, ← Home, ← Work, ← Playground, Preview/Buy) use the Back-to-top type, underlined.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
