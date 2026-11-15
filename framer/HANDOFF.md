@@ -209,6 +209,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   Home list is limited to 4 and has "View all projects →" beside the label. The case page "← Work" now goes to /work.
 - Hero headline text effect: letter-by-letter (character tokenization, blur 6px → 0, 0.03s stagger) on all breakpoints.
 
+## Hand-written headline (2026-11-15)
+- The hero headline is now the **HandHeadline** code component (layer "Headline (hand-written)"). Every letter of
+  Playwrite AR is traced as a pen stroke in reading order, then filled, about 3.3s in total (Speed 1.2, start delay 0.2s).
+  Size per breakpoint: 48 / 40 / 30. Props: Size, Line height, Color, Weight (extra stroke), Speed, Start delay.
+- The old rich-text headline layer is hidden on all breakpoints (kept for reference). Reduced motion and the Framer canvas
+  show the finished text with no animation.
+- Changing the words means regenerating the outlines: see tools/hand-headline/README.md.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
