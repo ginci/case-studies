@@ -47,10 +47,11 @@ ${N("Menu button")} { display: none !important; }
    The light theme inverts the page, so the light shader is inverted back to show its colours exactly as picked. */
 ${S("Background shader")}, ${S("Background shader")} * { pointer-events: none !important; }
 ${S("Background shader")} { z-index: 0 !important; }
-${N("Page content column")}, ${N("Case study page")} > :not([data-framer-name^="Background shader"]) { position: relative; z-index: 1; }
+${N("Page content column")}, ${N("Case study page")} > :not([data-framer-name^="Background shader"]):not(${N("Nav (fixed)")}) { position: relative; z-index: 1 !important; }
+${N("Case study page")} > ${N("Nav (fixed)")} { position: sticky !important; top: 0; z-index: 20 !important; }
 html:not([data-ginci-theme="light"]) ${N("Background shader (light)")} { display: none !important; }
 ${LIGHT} ${N("Background shader")} { display: none !important; }
-${LIGHT} ${N("Background shader (light)")} { mix-blend-mode: normal !important; opacity: 0.45 !important; filter: invert(1) hue-rotate(180deg) blur(100px) !important; }
+${LIGHT} ${N("Background shader (light)")} { mix-blend-mode: normal !important; filter: invert(1) hue-rotate(180deg) saturate(0.55) blur(100px) !important; }
 
 /* ---------- Case study: sidebar + summaries. Each section shows its heading and one-paragraph summary;
    "Read the full story" opens the detail (body + image) under every section. ---------- */
@@ -77,12 +78,15 @@ ${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(
 /* Work page: the list sits right under its header */
 ${N("Work header")} + ${N("03 Work (index)")} { padding-top: 40px !important; }
 ${N("Link slug")} { display: none !important; }
-/* Link buttons: Back-to-top type (Geist Mono 12px), underlined, so they never read as section headers */
-${N("View all projects")} a, ${N("Back home")} a, ${N("Crumb title")} a, ${N("Back link")} a, ${N("Preview link")} a, ${N("Template link")} a,
-${N("Crumb title")}, ${N("Back home")} * , ${N("Back link")} * {
+/* Link buttons: Back-to-top type, underlined, so they never read as section headers */
+${N("View all projects")} a, ${N("Preview link")} a, ${N("Template link")} a {
   text-decoration: underline !important; text-underline-offset: 4px; text-decoration-thickness: 1px; color: #F4F3EE !important;
 }
-${N("View all projects")} a:hover, ${N("Back home")} a:hover, ${N("Crumb title")} a:hover, ${N("Back link")} a:hover, ${N("Preview link")} a:hover, ${N("Template link")} a:hover { text-decoration-thickness: 2px; }
+${N("View all projects")} a:hover, ${N("Preview link")} a:hover, ${N("Template link")} a:hover { text-decoration-thickness: 2px; }
+/* Back links (← Home / ← Work / ← Playground): larger, underline only on hover */
+${N("Back home")} *, ${N("Crumb title")} *, ${N("Back link")} * { font-size: 15px !important; text-decoration: none !important; color: #F4F3EE !important; }
+${N("Back home")} a, ${N("Crumb title")} a, ${N("Back link")} a { text-underline-offset: 5px; text-decoration-thickness: 1px; }
+${N("Back home")}:hover *, ${N("Crumb title")}:hover *, ${N("Back link")}:hover * { text-decoration: underline !important; text-underline-offset: 5px; }
 
 /* Hero headline: one layer, thickened with a stroke drawn under the fill (scales with font size). */
 ${N("Headline (lines rise in)")} * { -webkit-text-stroke: 0.04em currentColor; paint-order: stroke fill; }
@@ -447,7 +451,8 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 }
 /* Signature rails: four hairline tracks; lines 1 and 3 draw down from the top,
    2 and 4 draw up from the bottom, each led by a glowing point. Staggered. */
-#g-grid { position: fixed; inset: 0; z-index: 15; pointer-events: none; --g-ink: 244, 243, 238; }
+#g-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; --g-ink: 244, 243, 238; }
+html:has(${N("Case study page")}) #g-grid { opacity: 0.2; }
 #g-grid b { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(var(--g-ink), 0.022); }
 #g-grid b:nth-child(1) { left: 20%; }
 #g-grid b:nth-child(2) { left: 40%; }

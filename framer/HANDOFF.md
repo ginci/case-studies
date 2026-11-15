@@ -246,6 +246,16 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - **Section headers** (Featured work, More from me, Contact, About, Work, Outcomes) are Outfit 500 22/20/18.
   **Link buttons** (View all projects, ← Home, ← Work, ← Playground, Preview/Buy) use the Back-to-top type, underlined.
 
+## Fixes published 2026-11-16 (version 3177e0da8)
+- **Stacking:** the canvas sets the content column's z-index to 0 inline, which let the shader (later in the DOM) paint over
+  the content and nav. CSS now forces z-index 1 !important. Grid lines moved to z-index 0 (behind content and nav).
+  The case page's own nav is excluded from that rule, so it stays sticky and becomes the floating pill like other pages.
+- Light shader: canvas opacity is respected (no CSS override); CSS adds saturate(0.55) on top of the inversion.
+- Case study page: grid lines at 20% opacity; footer added (copy of the Home footer).
+- Back links (← Home, ← Work, ← Playground): 15px, underline only on hover. View all / Preview / Buy stay underlined.
+- CMS: Mobile app placeholder set to draft (hidden). 9mobile is "9mobile (now T2)", client "9mobile (now T2), through
+  Devstudio", live link https://www.t2mobile.com.ng. NSIA was already credited through Devstudio.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
