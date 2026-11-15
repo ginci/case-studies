@@ -71,6 +71,8 @@ export default function NowPlaying(props: Props) {
   font: 400 12px/1.3 "Geist Mono", ui-monospace, monospace; letter-spacing: .02em; white-space: nowrap; overflow: hidden;
   max-width: 28px; transition: max-width .45s cubic-bezier(.22,1,.36,1), border-color .25s ease, background-color .25s ease, padding .3s ease; }
 .g-np.g-np-open { max-width: 360px; padding: 0 12px 0 9px; }
+/* Folded stays a 28px circle even where a page-wide "max-width: 100%" rule applies (phones) */
+.g-np:not(.g-np-open) { max-width: 28px !important; }
 .g-np-more { display: inline-flex; gap: 8px; min-width: 0; overflow: hidden; opacity: 0; transition: opacity .2s ease; }
 .g-np-open .g-np-more { opacity: 1; transition-delay: .12s; }
 .g-np { cursor: pointer; -webkit-tap-highlight-color: transparent; }
