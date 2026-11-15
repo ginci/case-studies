@@ -209,7 +209,10 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   Home list is limited to 4 and has "View all projects →" beside the label. The case page "← Work" now goes to /work.
 - Hero headline text effect: letter-by-letter (character tokenization, blur 6px → 0, 0.03s stagger) on all breakpoints.
 
-## Hand-written headline (2026-11-15)
+## Hand-written headline (2026-11-15, updated)
+- Now "Product designer. Vibe coder." One line on desktop/tablet; on phones it stays one line if the screen is wide
+  enough (about 15.6em of the font size) and breaks into two lines otherwise (CSS container query). Speed 1 (~2.9s), start delay 0.1s.
+  Replays on every visit to Home. Prop names on the instance are $control__size / $control__startDelay.
 - The hero headline is now the **HandHeadline** code component (layer "Headline (hand-written)"). Every letter of
   Playwrite AR is traced as a pen stroke in reading order, then filled, about 3.3s in total (Speed 1.2, start delay 0.2s).
   Size per breakpoint: 48 / 40 / 30. Props: Size, Line height, Color, Weight (extra stroke), Speed, Start delay.
