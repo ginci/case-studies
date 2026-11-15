@@ -83,15 +83,21 @@ ${N("Listening to")} { width: auto !important; max-width: none !important; overf
    The WebGL shader (a live 3D scene, blurred to a glow) is the heaviest thing on the page. On phones it is replaced by
    a still CSS glow in the same colours; the shaders stay hidden so (with Lazy load on) they never start. The full-screen
    grain layer and the nav's background blur are also dropped on phones, where they cost the most while scrolling. */
+/* Still glow in the shader colours on every page frame: the background is there from the first paint,
+   and on desktop/tablet the WebGL shader fades in on top of it. */
+${N("Home V2 / Index (dark)")}, ${N("Work / Index")}, ${N("Playground / Index")}, ${N("Case study page")} {
+  background-image:
+    radial-gradient(90% 520px at 78% 300px, rgba(0, 191, 188, 0.16), rgba(0, 191, 188, 0) 70%),
+    radial-gradient(80% 460px at 8% 760px, rgba(0, 39, 130, 0.22), rgba(0, 39, 130, 0) 70%),
+    radial-gradient(70% 420px at 60% 1500px, rgba(0, 209, 224, 0.08), rgba(0, 209, 224, 0) 70%) !important;
+  background-repeat: no-repeat !important;
+}
+/* Hero paragraph: a short CSS fade that starts with the page (no waiting for scripts) */
+${N("01 Hero")} ${N("Lede")} { animation: g-lede-in 0.7s ease 0.15s both; }
+@keyframes g-lede-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { ${N("01 Hero")} ${N("Lede")} { animation: none; } }
 @media (max-width: 809px) {
   ${S("Background shader")} { display: none !important; }
-  ${N("Home V2 / Index (dark)")}, ${N("Work / Index")}, ${N("Playground / Index")}, ${N("Case study page")} {
-    background-image:
-      radial-gradient(90% 520px at 78% 300px, rgba(0, 191, 188, 0.16), rgba(0, 191, 188, 0) 70%),
-      radial-gradient(80% 460px at 8% 760px, rgba(0, 39, 130, 0.22), rgba(0, 39, 130, 0) 70%),
-      radial-gradient(70% 420px at 60% 1500px, rgba(0, 209, 224, 0.08), rgba(0, 209, 224, 0) 70%) !important;
-    background-repeat: no-repeat !important;
-  }
   #g-grain { display: none !important; }
   html[data-g-scrolled] ${N("Nav (fixed)")} { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background-color: rgba(11, 11, 10, 0.97) !important; }
 }
@@ -1095,6 +1101,7 @@ function setupTOC() {
 }
 
 function setupReveal() {
+    return // Disabled: sections show as soon as the page paints (no hidden-until-scrolled content).
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
     if (typeof IntersectionObserver === "undefined") return
     if (!revealIO) {

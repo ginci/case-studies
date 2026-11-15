@@ -369,6 +369,18 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Nunito Sans removed site-wide (4 canvas texts + Folders.tsx now use Nunito): two fewer font files (~75KB).
 - Desktop and tablet unchanged.
 
+## No-delay load (2026-11-16, not yet published)
+- A throttled refresh showed: headline at <1s, but the hero paragraph and ribbon only after ~6s, site CSS only after ~4s
+  (it was injected by code after hydration, so pages first painted unstyled), 10 sections hidden by scroll-reveal,
+  and the shader appearing last.
+- **Site CSS now also lives in the page <head>** (Framer custom code, headEnd) together with a tiny theme bootstrap
+  (applies the saved light/dark theme and theme-color before first paint). tools/headcode.mjs rebuilds it from
+  ThemeToggle.tsx's CSS constant; **re-run it after every ThemeToggle change** (ensureStyle keeps the same id).
+- Removed JS-gated reveals: hero paragraph text effect (now a 0.7s pure-CSS fade), project-row appear effects (Home),
+  case cover appear effect, and the scroll-reveal script (setupReveal is a no-op).
+- Still glow in the shader colours on every page frame, so the background is there at first paint; the WebGL shader fades in
+  over it on desktop/tablet. Kept on purpose: the handwritten headline, and the Available / Listening pills' late entrance.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
