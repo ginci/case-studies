@@ -49,20 +49,18 @@ ${N("Page content column")}, ${N("Case study page")} > :not(${N("Background shad
 /* Light theme inverts the page; leaving the shader as in dark mode lets the inversion keep its teal hue, so it stays visible on white. */
 ${LIGHT} ${N("Background shader")} { mix-blend-mode: difference !important; opacity: 0.25 !important; filter: brightness(2) blur(100px) !important; }
 
-/* ---------- Case study: the full story stays folded until "Read the full story" ---------- */
-${N("Case study page")} ${N("Body")} { overflow: hidden !important; max-height: 30000px; }
-html:not([data-g-story]) ${N("Case study page")} ${N("Body")} {
-  max-height: 0 !important; height: 0 !important; opacity: 0; padding-top: 0 !important; padding-bottom: 0 !important; visibility: hidden; pointer-events: none;
-}
-html[data-g-story] ${N("Case study page")} ${N("Body")} { height: auto !important; }
-@media (prefers-reduced-motion: no-preference) {
-  ${N("Case study page")} ${N("Body")} { transition: opacity 0.5s ease, max-height 0.8s ${EASE} !important; }
-}
+/* ---------- Case study: sidebar + summaries. Each section shows its heading and one-paragraph summary;
+   "Read the full story" opens the detail (body + image) under every section. ---------- */
+${N("Case study page")} ${N("Body")}, ${N("Case study page")} ${N("Main")} { overflow: visible !important; }
+${S("TOC (")} { position: sticky !important; top: 112px !important; align-self: flex-start !important; overflow: visible !important; }
+html:not([data-g-story]) ${N("Case study page")} ${N("Section body")},
+html:not([data-g-story]) ${N("Case study page")} ${N("Section image")} { display: none !important; }
+html[data-g-story] ${N("Case study page")} ${N("Section body")} { animation: g-fade-in 0.5s ease both; }
+@keyframes g-fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { html[data-g-story] ${N("Case study page")} ${N("Section body")} { animation: none; } }
 ${N("Story toggle")} { position: relative !important; }
 ${N("Story toggle")} ${N("Dotted line")} { background: none !important; height: 0 !important; border-top: 1px dotted rgba(244, 243, 238, 0.36) !important; }
-@media (min-width: 1200px) { ${N("Story toggle")} { margin-left: -120px !important; margin-right: -120px !important; width: calc(100% + 240px) !important; } }
-@media (min-width: 810px) and (max-width: 1199px) { ${N("Story toggle")} { margin-left: -32px !important; margin-right: -32px !important; width: calc(100% + 64px) !important; } }
-@media (max-width: 809px) { ${N("Story toggle")} { margin-left: -20px !important; margin-right: -20px !important; width: calc(100% + 40px) !important; } }
+${S("CTA / Read the full story")}, ${S("CTA / Read the full story")} * { flex-shrink: 0 !important; white-space: nowrap !important; }
 ${S("CTA / Read the full story")} { background-color: #121211 !important; border: 1px solid rgba(244, 243, 238, 0.2) !important; }
 ${S("CTA / Read the full story")} * { color: #A3A29C !important; text-transform: uppercase !important; }
 ${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(180deg); }
@@ -73,6 +71,9 @@ ${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(
   ${S("CTA / Read the full story")}:hover svg { animation: g-drop 0.42s ${EASE}; }
   ${S("CTA / Read the full story")}[aria-expanded="true"]:hover svg { animation: g-rise 0.42s ${EASE}; }
 }
+/* Work page: the list sits right under its header */
+${N("Work header")} + ${N("03 Work (index)")} { padding-top: 40px !important; }
+
 /* Hero headline: one layer, thickened with a stroke drawn under the fill (scales with font size). */
 ${N("Headline (lines rise in)")} * { -webkit-text-stroke: 0.04em currentColor; paint-order: stroke fill; }
 
@@ -81,8 +82,7 @@ ${N("Crumb")} { align-items: center !important; }
 ${N("Live link")} a, ${N("Live link")} a:hover { background: none !important; padding: 0 !important; margin: 0 !important; border-radius: 0 !important;
   color: #F4F3EE !important; text-decoration: underline !important; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 ${N("Live link")} a:hover { text-decoration-thickness: 2px; }
-${N("Facts")} > * { padding-top: 0 !important; padding-bottom: 0 !important; gap: 4px !important; }
-@media (max-width: 809px) { ${N("Facts")} { row-gap: 16px !important; } }
+
 
 /* Outcomes: the Stats list as a row of figures */
 ${N("Outcomes stats")} ul { list-style: none !important; padding: 0 !important; margin: 0 !important; display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
@@ -90,8 +90,9 @@ ${N("Outcomes stats")} li { margin: 0 !important; padding-top: 14px; border-top:
 ${N("Outcomes stats")} li { list-style: none !important; }
 ${N("Outcomes stats")} li::marker, ${N("Outcomes stats")} li::before { content: none !important; display: none !important; }
 ${N("Outcomes stats")} li > * { padding-left: 0 !important; margin-left: 0 !important; }
+${N("Outcomes stats")} ul, ${N("Outcomes stats")} li, ${N("Outcomes stats")} li * { padding-inline-start: 0 !important; margin-inline-start: 0 !important; --framer-list-indent: 0px; }
 @media (min-width: 810px) and (max-width: 1199px) { ${N("Outcomes stats")} ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; } }
-@media (max-width: 809px) { ${N("Outcomes stats")} ul { grid-template-columns: 1fr; gap: 0; } ${N("Outcomes stats")} li { padding: 12px 0; } ${N("Outcomes")} { padding-left: 20px !important; padding-right: 20px !important; } }
+@media (max-width: 809px) { ${N("Outcomes stats")} ul { grid-template-columns: 1fr; gap: 0; } ${N("Outcomes stats")} li { padding: 12px 0; } }
 /* Images keep their proportions at every width and stop growing past the layout */
 ${N("Cover wrap")} { max-width: 1280px !important; margin-left: auto !important; margin-right: auto !important; }
 ${S("Cover (")} { height: auto !important; aspect-ratio: 1120 / 760; }
@@ -275,7 +276,7 @@ html[data-ginci-theme="light"][data-g-scrolled] ${N("Nav (fixed)")} {
 /* Light theme case studies: near-white page (dark before the invert) and stronger body text. */
 ${LIGHT} ${N("Case study page")} { background-color: #0D0D0C !important; }
 ${LIGHT} ${N("Section body")} *:not(strong):not(b), ${LIGHT} ${N("Next line")} *, ${LIGHT} ${N("Locked body")} *,
-${LIGHT} ${N("Section label")} *, ${LIGHT} ${S("TOC / ")} ${N("TOC label")} *, ${LIGHT} ${N("Facts")} * { color: #ABAAA4 !important; }
+${LIGHT} ${S("TOC / ")} ${N("TOC label")} *, ${LIGHT} ${N("Facts")} * { color: #ABAAA4 !important; }
 ${LIGHT} ${N("Facts")} [data-framer-name$="value"] * { color: #F4F3EE !important; }
 
 /* ---------- Footer: muted meta, one clear action ---------- */
@@ -378,8 +379,6 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   ${N("Header")} { padding-left: 32px !important; padding-right: 32px !important; padding-top: 24px !important; gap: 120px !important; }
   ${N("Header")} p, ${N("Header")} h1, ${N("Header")} *, ${N("Facts")} * { white-space: normal !important; }
   ${N("Header")} > *, ${N("Header")} > * > * { max-width: 100% !important; }
-  ${N("Facts")} { flex-wrap: wrap !important; padding-left: 32px !important; padding-right: 32px !important; row-gap: 24px !important; column-gap: 24px !important; }
-  ${N("Facts")} > * { flex: 0 0 calc(50% - 12px) !important; min-width: 0 !important; }
   ${N("Cover wrap")} { padding-left: 32px !important; padding-right: 32px !important; }
   ${N("Body")} { padding-left: 32px !important; padding-right: 32px !important; }
   ${S("TOC")} { display: none !important; }
@@ -414,7 +413,6 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   ${N("Socials")} { flex-wrap: wrap !important; row-gap: 12px !important; column-gap: 24px !important; }
   ${N("06 Footer")} { padding: 32px 20px 40px !important; flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
   ${N("Header")} { padding: 16px 20px 40px !important; gap: 72px !important; }
-  ${N("Facts")} { padding-left: 20px !important; padding-right: 20px !important; }
   ${N("Cover wrap")} { padding: 24px 20px !important; }
   ${N("Body")} { padding-left: 20px !important; padding-right: 20px !important; }
   ${N("Main")} { gap: 72px !important; }
@@ -600,8 +598,8 @@ export function withStoryToggle(Component: any): ComponentType {
                 let n = walker.nextNode()
                 while (n) {
                     const v = n.nodeValue || ""
-                    if (/read the full story|show less/i.test(v)) {
-                        const to = open ? "Show less" : "Read the full story"
+                    if (/read the full story|show less|short version/i.test(v)) {
+                        const to = open ? "Short version" : "Read the full story"
                         n.nodeValue = v === v.toUpperCase() ? to.toUpperCase() : to
                     }
                     n = walker.nextNode()
@@ -611,6 +609,7 @@ export function withStoryToggle(Component: any): ComponentType {
                 const body = document.querySelector('[data-framer-name="Body"]')
                 body && body.querySelectorAll("[data-g-rv]").forEach((k) => k.setAttribute("data-g-in", ""))
             }
+            requestAnimationFrame(() => tocUpdate && tocUpdate())
         }, [open])
         useEffect(() => () => document.documentElement.removeAttribute("data-g-story"), [])
         const setRef = (node: HTMLElement | null) => {

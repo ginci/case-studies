@@ -193,6 +193,22 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Hero padding now comes from the canvas on every breakpoint (tablet and phone CSS padding overrides removed, 2026-11-15).
 - Hero intro is the same on all breakpoints (2026-11-15): Tranzakt → "payment solutions for Nigerian businesses", then Dado Foods. 9mobile is not used (Gift); its CMS item stays draft.
 
+## Case template v3 (reference layout), Work page, headline (2026-11-15)
+- **Case page layout:** header, cover, then two columns: a sticky sidebar (desktop) beside Facts → Outcomes →
+  "Read the full story" → sections. Each section shows its **label as the heading** and its **title field as a one-paragraph
+  summary**; the **body and image only appear after "Read the full story"** (button then says "Short version").
+  Sidebar rows are named "TOC / NN" (the code needs that prefix) and highlight the section in view; the old Body fold used
+  overflow:hidden, which is what broke the sticky sidebar.
+- **CMS section convention (use this for every new case study):**
+  S01 = The problem · S02 = Approach · S06–S09 = feature sections (with images) · S03 = Results (shown last) ·
+  S04/S05/S10 unused (leave empty). For each: label = sidebar name, title = one-sentence summary, body = detail
+  (Problem / Solution / Result for features). Empty title hides the section and its sidebar row.
+- Facts are rows: Industry (the old Kicker field, renamed), Client, Role, Team. Empty fields hide their row.
+- Tranzakt and Dado rewritten in this structure (old Dado copy in archive/). Tranzakt Team is empty until confirmed.
+- **Work page** `/work`: header + the full project list (all published projects) + footer, with tablet/phone breakpoints.
+  Home list is limited to 4 and has "View all projects →" beside the label. The case page "← Work" now goes to /work.
+- Hero headline text effect: letter-by-letter (character tokenization, blur 6px → 0, 0.03s stagger) on all breakpoints.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
