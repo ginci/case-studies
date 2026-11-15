@@ -357,6 +357,10 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   old per-breakpoint negative margins that no longer matched the hero padding.
 - Phone spacing: 20px side gutter everywhere (hero, shelf), Work section top 64, Contact 72/72 with 48 gap, email 28px.
 
+## Link buttons 12px (2026-11-16, not yet published)
+- All link buttons are Geist Mono 12px: All projects, ← Home / ← Work / ← Playground (CSS no longer forces 15px),
+  Visit live site, Preview in Figma, Buy the template. Back links still underline only on hover.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

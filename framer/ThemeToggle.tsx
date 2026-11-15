@@ -94,7 +94,7 @@ ${N("View all projects")} a, ${N("Preview link")} a, ${N("Template link")} a {
 }
 ${N("View all projects")} a:hover, ${N("Preview link")} a:hover, ${N("Template link")} a:hover { text-decoration-thickness: 2px; }
 /* Back links (← Home / ← Work / ← Playground): larger, underline only on hover */
-${N("Back home")} *, ${N("Crumb title")} *, ${N("Back link")} * { font-size: 15px !important; text-decoration: none !important; color: #F4F3EE !important; }
+${N("Back home")} *, ${N("Crumb title")} *, ${N("Back link")} * { font-size: 12px !important; text-decoration: none !important; color: #F4F3EE !important; }
 ${N("Back home")} a, ${N("Crumb title")} a, ${N("Back link")} a { text-underline-offset: 5px; text-decoration-thickness: 1px; }
 ${N("Back home")}:hover *, ${N("Crumb title")}:hover *, ${N("Back link")}:hover * { text-decoration: underline !important; text-underline-offset: 5px; }
 
