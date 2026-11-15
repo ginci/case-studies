@@ -75,6 +75,9 @@ ${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(
   ${S("CTA / Read the full story")}:hover svg { animation: g-drop 0.42s ${EASE}; }
   ${S("CTA / Read the full story")}[aria-expanded="true"]:hover svg { animation: g-rise 0.42s ${EASE}; }
 }
+/* Listening-to: let Framer's wrapper grow when the pill unfolds (it is measured at the folded 28px) */
+${N("Listening to")} { width: auto !important; max-width: none !important; overflow: visible !important; }
+
 /* Availability pill above the headline: soft pulse on the dot */
 ${N("Status dot")} { box-shadow: 0 0 0 0 rgba(111, 208, 140, 0.55); }
 @media (prefers-reduced-motion: no-preference) {

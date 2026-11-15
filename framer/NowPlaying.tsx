@@ -30,6 +30,8 @@ export default function NowPlaying(props: Props) {
         return () => { stop = true; window.clearInterval(id) }
     }, [lastfmUser, lastfmKey, title, artist, link])
 
+    // Framer passes the measured (folded, 28px) width/height in style; drop them so the pill can unfold.
+    const { width: _w, height: _h, ...rest } = (props.style || {}) as any
     const label = track?.live ? "Listening to" : track ? "Last played" : ""
     const text = track ? `${track.title}${track.artist ? " · " + track.artist : ""}` : "Not playing right now"
     const href = track?.url || link || undefined
@@ -39,7 +41,7 @@ export default function NowPlaying(props: Props) {
             aria-label={track ? `${label}: ${text}` : text} aria-expanded={open}
             onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} onFocus={() => setOpen(true)} onBlur={() => setOpen(false)}
             onClick={(e: any) => { if (!open && window.matchMedia("(hover: none)").matches) { e.preventDefault(); setOpen(true) } }}
-            style={{ ...props.style }}>
+            style={{ ...rest }}>
             <style>{`
 .g-np { display: inline-flex; align-items: center; gap: 8px; height: 28px; box-sizing: border-box; padding: 0 9px;
   border-radius: 999px; border: 1px solid rgba(244,243,238,.16); background: rgba(244,243,238,.04); color: #F4F3EE; text-decoration: none;

@@ -330,6 +330,17 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Light theme grid lines raised to 9% so they stay visible over the shader.
 - Work page: back link 40px under the nav, then 200px to the "Work" header (tablet 32/140, phone 24/96).
 
+## Published 2026-11-16 (versions 85981b859 → 39a30ffa8)
+- Live: blue-cyan light shader at 30%, subtle row hover, Work page spacing, status row with the folding Listening-to button,
+  Playground rows visible, speed pass.
+- **Measured live after the speed pass:** ~0.85MB per page (was ~4.2MB), 30–33 requests (was 33–42), one shader canvas
+  running (was two), JS heap roughly halved. (Headless test browsers render WebGL in software, so frame-rate numbers
+  from them are not meaningful.)
+- Listening-to unfolds to ~195px on hover live. Framer measures the folded 28px, so the component drops the incoming
+  width and the CSS lets its wrapper grow.
+- **Next:** Last.fm username + API key go into the "Listening to" layer's Last.fm user / Last.fm key props (never the
+  shared secret).
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
