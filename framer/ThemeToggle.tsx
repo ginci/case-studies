@@ -33,7 +33,8 @@ const CSS = `
 /* ---------- Theme ----------
    Light = the whole page inverted once at the root (images flipped back).
    The root, not #main, so it also covers the preview, grain and rails. */
-html { background: #121211; }
+html, body { background: #121211; }
+${LIGHT} body { background: transparent; }
 /* Slide-in reveals start off to the side: never let them cause sideways scroll. */
 #main { overflow-x: clip; }
 ${LIGHT} { filter: invert(1) hue-rotate(180deg); background: #EDEDEE; }
@@ -501,6 +502,10 @@ function readTheme() {
 function applyTheme(theme: string) {
     if (typeof document === "undefined") return
     document.documentElement.dataset.ginciTheme = theme
+    // Browser chrome (iOS Safari status/tool bars, Android address bar) takes the page colour: keep it in step.
+    let tc = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+    if (!tc) { tc = document.createElement("meta"); tc.name = "theme-color"; document.head.appendChild(tc) }
+    tc.content = theme === "light" ? "#EDEDEE" : "#121211"
     window.dispatchEvent(new CustomEvent("ginci-theme", { detail: theme }))
 }
 

@@ -341,6 +341,11 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Last.fm connected (version 472dc1de5): username "ginci" and the read-only API key are set on the "Listening to" layer
   (key kept out of this repo; the shared secret is not used). Verified live: the pill showed the current Spotify track.
 
+## Phone browser bars (2026-11-16, not yet published)
+- iOS Safari showed white above the status bar and behind the bottom toolbar: Home's breakpoint frames had fill #ffffff.
+  Now rgb(18,18,17) on all three. CSS sets html and body to #121211 (body transparent in light theme), and applyTheme()
+  writes <meta name="theme-color"> = #121211 (dark) / #EDEDEE (light) so the browser chrome follows the theme.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
