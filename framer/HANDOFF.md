@@ -256,6 +256,26 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - CMS: Mobile app placeholder set to draft (hidden). 9mobile is "9mobile (now T2)", client "9mobile (now T2), through
   Devstudio", live link https://www.t2mobile.com.ng. NSIA was already credited through Devstudio.
 
+## Canvas is now the source of layout (2026-11-16, not yet published)
+- 22 CSS rules that forced padding / gap / layout per breakpoint were removed from ThemeToggle.tsx. Their live values were
+  measured on the published site and written into the canvas first (section paddings incl. desktop 160px top/bottom on
+  Work/About/Contact, nav rest padding 20/32 tablet and 16/20 phone, footers, case Header / Cover wrap / Main / Next,
+  phone hero frame and footer stacking). **Edit spacing on the canvas now; the code no longer overrides it.**
+- Still in code on purpose (things the canvas can't express): nav pill on scroll, light theme inversion + shader swap,
+  grain and grid overlays, chip hover, About and story folds, full-bleed dotted ribbons, sticky TOC, reveal-on-scroll,
+  row hover bleed on phone, outcomes grid, link underline styles, and a safety z-index for content above shaders.
+- Baseline metrics/screenshots for the before/after comparison are in the session scratchpad (cons/). Re-run the diff after
+  the next publish.
+
+## Hero: sketch to screen + wet-sand trail (2026-11-16, not yet published)
+- **HeroSketch** (layer "Hero sketch", absolute, centred, top 190 / 124 / 96): a card wireframe draws itself like a pen,
+  a cursor taps its button, and it becomes UI (surface, green button, solid text bars). 2.4s. Props: Size (280/240/200),
+  Ink, Surface, Button, Duration, Start delay. ("Size", not "width": Framer reserves width.)
+- **Sequencing:** headline Start delay = 2.5s; hero paragraph text effect delay = 2.5s, so both start as the sketch finishes.
+- **SandTrail** (layer "Sand trail", fills the hero behind the text): pointer presses a groove into damp sand (dark trench,
+  faint ridge, wet sheen); slow strokes are wide, fast ones thin; settles in 2.6s. Mouse/trackpad only, off for reduced
+  motion, idle when nothing moves. Props: Settles in, Groove width, Depth.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

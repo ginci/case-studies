@@ -76,7 +76,6 @@ ${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(
   ${S("CTA / Read the full story")}[aria-expanded="true"]:hover svg { animation: g-rise 0.42s ${EASE}; }
 }
 /* Work page: the list sits right under its header */
-${N("Work header")} + ${N("03 Work (index)")} { padding-top: 40px !important; }
 ${N("Link slug")} { display: none !important; }
 /* Link buttons: Back-to-top type, underlined, so they never read as section headers */
 ${N("View all projects")} a, ${N("Preview link")} a, ${N("Template link")} a {
@@ -176,7 +175,6 @@ ${N("Nav (fixed)")} { z-index: 20 !important; }
 html:not([data-g-scrolled]) ${N("Nav (fixed)")} { background: transparent !important; border-color: transparent !important; box-shadow: none !important; }
 
 /* ---------- Work list: page background at rest, project surface on hover ---------- */
-${N("03 Work (index)")} { background-color: #121211 !important; }
 ${ROW} {
   --g-accent: #F4F3EE; cursor: pointer; position: relative !important;
   background-color: transparent !important; border-radius: 14px;
@@ -273,13 +271,8 @@ ${N("Steps")} > *::before {
 ${N("04 About")}, ${N("04 About")} > *, ${N("04 About")} > * > * { overflow: visible !important; }
 
 /* ---------- Sections: surfaces, hairline, spacing ---------- */
-/* Sections stay see-through so the background shader shows behind them; the page itself carries #121211. */
-${N("01 Hero")}, ${N("04 About")}, ${N("03 Work (index)")}, ${N("03 Shelf")}, ${N("05 Contact")}, ${N("06 Footer")} { background-color: transparent !important; }
 ${N("03 Work (index)")}, ${N("02 Portrait")}, ${N("04 About")}, ${N("05 Contact")} { border-top: 0 !important; }
 ${N("06 Footer")} { border-top: 1px solid rgba(244, 243, 238, 0.1) !important; }
-@media (min-width: 1200px) {
-  ${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")} { padding-top: 160px !important; padding-bottom: 160px !important; }
-}
 
 /* Light theme: the scrolled nav pill is pure white (black before the page-wide invert). */
 html[data-ginci-theme="light"][data-g-scrolled] ${N("Nav (fixed)")} {
@@ -385,36 +378,25 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 
 /* ---------- Tablet (810–1199) ---------- */
 @media (max-width: 1199px) {
-  ${N("Nav (fixed)")} { padding: 20px 32px !important; }
-  ${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")} { padding: 120px 32px !important; }
   ${ROW} ${N("Meta")} { width: 220px !important; }
   ${N("04 About")} { flex-direction: column !important; gap: 32px !important; }
   ${N("04 About")} > * { width: 100% !important; }
-  ${N("06 Footer")} { padding: 24px 32px !important; }
-  ${N("Header")} { padding-left: 32px !important; padding-right: 32px !important; padding-top: 24px !important; gap: 120px !important; }
   ${N("Header")} p, ${N("Header")} h1, ${N("Header")} *, ${N("Facts")} * { white-space: normal !important; }
   ${N("Header")} > *, ${N("Header")} > * > * { max-width: 100% !important; }
-  ${N("Cover wrap")} { padding-left: 32px !important; padding-right: 32px !important; }
-  ${N("Body")} { padding-left: 32px !important; padding-right: 32px !important; }
   ${S("TOC")} { display: none !important; }
   ${N("Body")} > ${N("Main")} { flex: 1 1 100% !important; width: 100% !important; padding: 0 !important; }
   ${N("Main")} > * { width: 100% !important; }
   ${N("Main")} [data-framer-name], ${N("Main")} p, ${N("Main")} h1, ${N("Main")} h2, ${N("Main")} h3 { white-space: normal !important; max-width: 100% !important; }
-  ${NEXT} { padding-left: 32px !important; padding-right: 32px !important; }
   ${NEXT}::after { right: 32px; width: 72px; height: 72px; margin-top: -36px; background-size: 28px; }
 }
 
 /* ---------- Phone (up to 809) ---------- */
 @media (max-width: 809px) {
   #main * { max-width: 100%; }
-  ${N("Nav (fixed)")} { padding: 16px 20px !important; }
   ${N("Nav (fixed)")} ${N("Work")}, ${N("Nav (fixed)")} ${N("About")}, ${N("Nav (fixed)")} ${N("Contact")} { display: none !important; }
   ${N("Nav (fixed)")} ${S("CTA / Email")} { display: none !important; }
-  ${N("Nav (fixed)")} ${N("Frame")} { gap: 12px !important; }
   html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 20px) !important; padding: 8px 8px 8px 16px !important; }
-  ${N("01 Hero")} > ${N("Frame")} { flex-direction: column !important; align-items: flex-start !important; gap: 24px !important; }
   ${N("Lede")} { width: 100% !important; }
-  ${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")} { padding: 88px 20px !important; }
   ${ROW} { padding-top: 22px !important; padding-bottom: 22px !important; gap: 14px !important;
     margin-left: -12px !important; margin-right: -12px !important; padding-left: 12px !important; padding-right: 12px !important; width: calc(100% + 24px) !important; }
   ${ROW}::after { left: 12px; right: 12px; }
@@ -426,16 +408,10 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   ${S("Exp / ")} > :first-child { width: 100% !important; flex: 0 0 100% !important; }
   ${N("05 Contact")} > :first-child, ${N("05 Contact")} > :first-child * { white-space: normal !important; width: 100% !important; }
   ${N("Socials")} { flex-wrap: wrap !important; row-gap: 12px !important; column-gap: 24px !important; }
-  ${N("06 Footer")} { padding: 32px 20px 40px !important; flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
-  ${N("Header")} { padding: 16px 20px 40px !important; gap: 72px !important; }
-  ${N("Cover wrap")} { padding: 24px 20px !important; }
-  ${N("Body")} { padding-left: 20px !important; padding-right: 20px !important; }
-  ${N("Main")} { gap: 72px !important; }
   ${N("Steps")} { flex-direction: column !important; padding-top: 0 !important; padding-left: 52px !important; gap: 32px !important; }
   ${N("Steps")}::before { left: 15px; right: auto; top: 6px; bottom: 6px; width: 1px; height: auto; }
   ${N("Steps")} > * { width: 100% !important; min-width: 0 !important; }
   ${N("Steps")} > *::before { left: -52px; top: 16px; }
-  ${NEXT} { padding: 64px 20px 64px !important; }
   ${NEXT} > :not(${N("Next accent swatch")}) { max-width: calc(100% - 76px) !important; }
   ${NEXT}::after { top: 80px; margin-top: 0; right: 20px; width: 56px; height: 56px; background-size: 22px; }
   #g-grid b:nth-child(1), #g-grid b:nth-child(3) { display: none; }
