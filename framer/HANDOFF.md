@@ -341,12 +341,12 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Last.fm connected (version 472dc1de5): username "ginci" and the read-only API key are set on the "Listening to" layer
   (key kept out of this repo; the shared secret is not used). Verified live: the pill showed the current Spotify track.
 
-## Phone browser bars (2026-11-16, not yet published)
+## Phone browser bars (2026-11-16, published f91988f25)
 - iOS Safari showed white above the status bar and behind the bottom toolbar: Home's breakpoint frames had fill #ffffff.
   Now rgb(18,18,17) on all three. CSS sets html and body to #121211 (body transparent in light theme), and applyTheme()
   writes <meta name="theme-color"> = #121211 (dark) / #EDEDEE (light) so the browser chrome follows the theme.
 
-## Phone polish (2026-11-16, not yet published)
+## Phone polish (2026-11-16, published f91988f25, verified on an iPhone-size screen)
 - Listening-to pill: fixed 28px height; when it opens it measures the room to the right and never passes the 20px gutter
   (max 360px); the track name truncates with an ellipsis instead of pushing the pill off screen.
 - Phone nav shows the mail button (36px) on every page; logo 60px wide on phones.
