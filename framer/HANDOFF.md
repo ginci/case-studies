@@ -190,6 +190,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Tranzakt copy rewritten short: Overview (industry, role, goal) → Problem → Approach (4 steps) → Scope → four
   Problem / Solution / Result sections. Old long copy kept in archive/tranzakt-long-copy-2026-11-12.html.txt.
 - Light theme shader: same treatment as dark (difference, 25%). The page inversion keeps the teal, so it shows on white.
+- Hero padding now comes from the canvas on every breakpoint (tablet and phone CSS padding overrides removed, 2026-11-15).
 - Note: Gift updated the desktop hero to 9mobile, but the phone breakpoint still carries the old Dado text override.
 
 ## Decisions log

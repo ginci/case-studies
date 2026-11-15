@@ -370,7 +370,6 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 /* ---------- Tablet (810–1199) ---------- */
 @media (max-width: 1199px) {
   ${N("Nav (fixed)")} { padding: 20px 32px !important; }
-  ${N("01 Hero")} { padding: 72px 32px 96px !important; }
   ${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")} { padding: 120px 32px !important; }
   ${ROW} ${N("Meta")} { width: 220px !important; }
   ${N("04 About")} { flex-direction: column !important; gap: 32px !important; }
@@ -399,7 +398,6 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   ${N("Nav (fixed)")} ${S("CTA / Email")} { display: none !important; }
   ${N("Nav (fixed)")} ${N("Frame")} { gap: 12px !important; }
   html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 20px) !important; padding: 8px 8px 8px 16px !important; }
-  ${N("01 Hero")} { padding: 48px 20px 72px !important; gap: 24px !important; }
   ${N("01 Hero")} > ${N("Frame")} { flex-direction: column !important; align-items: flex-start !important; gap: 24px !important; }
   ${N("Lede")} { width: 100% !important; }
   ${N("03 Work (index)")}, ${N("04 About")}, ${N("05 Contact")} { padding: 88px 20px !important; }
