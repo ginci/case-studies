@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react"
+import { useEffect, useRef, useState, type CSSProperties } from "react"
 import { addPropertyControls, ControlType } from "framer"
 
 // "Listening to" pill. Sits beside the "Available" pill at the same height. Folded, it is a round button with
@@ -13,6 +13,14 @@ export default function NowPlaying(props: Props) {
     const fallback: Track | null = title ? { title, artist, url: link, live: false } : null
     const [track, setTrack] = useState<Track | null>(fallback)
     const [open, setOpen] = useState(false)
+    const root = useRef<HTMLSpanElement | null>(null)
+    // Touch: tapping anywhere else folds it again.
+    useEffect(() => {
+        if (!open) return
+        const away = (e: PointerEvent) => { if (root.current && !root.current.contains(e.target as Node)) setOpen(false) }
+        document.addEventListener("pointerdown", away)
+        return () => document.removeEventListener("pointerdown", away)
+    }, [open])
     useEffect(() => {
         if (!lastfmUser || !lastfmKey) { setTrack(fallback); return }
         let stop = false
@@ -35,12 +43,20 @@ export default function NowPlaying(props: Props) {
     const label = track?.live ? "Listening to" : track ? "Last played" : ""
     const text = track ? `${track.title}${track.artist ? " · " + track.artist : ""}` : "Not playing right now"
     const href = track?.url || link || undefined
-    const Tag: any = href ? "a" : "span"
+    // Desktop (mouse): hover opens, leaving closes. Touch: tap toggles; while open, tapping the track opens it.
     return (
-        <Tag className={"g-np" + (open ? " g-np-open" : "")} href={href} target={href ? "_blank" : undefined} rel={href ? "noopener noreferrer" : undefined}
+        <span ref={root} className={"g-np" + (open ? " g-np-open" : "")} role="button" tabIndex={0}
             aria-label={track ? `${label}: ${text}` : text} aria-expanded={open}
-            onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} onFocus={() => setOpen(true)} onBlur={() => setOpen(false)}
-            onClick={(e: any) => { if (!open && window.matchMedia("(hover: none)").matches) { e.preventDefault(); setOpen(true) } }}
+            onPointerEnter={(e) => { if (e.pointerType === "mouse") setOpen(true) }}
+            onPointerLeave={(e) => { if (e.pointerType === "mouse") setOpen(false) }}
+            onClick={(e: any) => {
+                const onLink = (e.target as Element).closest && (e.target as Element).closest("a")
+                if (onLink && open) return // follow the track link
+                if (onLink) e.preventDefault()
+                if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) setOpen((o) => !o)
+            }}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen((o) => !o) } if (e.key === "Escape") setOpen(false) }}
+            onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false) }}
             style={{ ...rest }}>
             <style>{`
 .g-np { display: inline-flex; align-items: center; gap: 8px; height: 28px; box-sizing: border-box; padding: 0 9px;
@@ -50,7 +66,9 @@ export default function NowPlaying(props: Props) {
 .g-np.g-np-open { max-width: 360px; padding: 0 12px 0 9px; }
 .g-np-more { display: inline-flex; gap: 8px; opacity: 0; transition: opacity .2s ease; }
 .g-np-open .g-np-more { opacity: 1; transition-delay: .12s; }
-a.g-np:hover, a.g-np:focus-visible { border-color: rgba(244,243,238,.36); background: rgba(244,243,238,.08); outline: none; }
+.g-np { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.g-np:hover, .g-np:focus-visible { border-color: rgba(244,243,238,.36); background: rgba(244,243,238,.08); outline: none; }
+a.g-np-text { color: inherit; text-decoration: none; } a.g-np-text:hover { text-decoration: underline; text-underline-offset: 3px; }
 .g-np-bars { display: inline-flex; gap: 2px; align-items: flex-end; justify-content: center; width: 8px; height: 10px; flex: 0 0 8px; }
 .g-np-bars i { width: 2px; height: 40%; border-radius: 2px; background: #6FD08C; }
 @media (prefers-reduced-motion: no-preference) {
@@ -66,9 +84,9 @@ a.g-np:hover, a.g-np:focus-visible { border-color: rgba(244,243,238,.36); backgr
             <span className="g-np-bars" aria-hidden="true"><i /><i /><i /></span>
             <span className="g-np-more">
                 {label ? <span className="g-np-label">{label}</span> : null}
-                <span className="g-np-text">{text}</span>
+                {href ? <a className="g-np-text" href={href} target="_blank" rel="noopener noreferrer" tabIndex={open ? 0 : -1}>{text}</a> : <span className="g-np-text">{text}</span>}
             </span>
-        </Tag>
+        </span>
     )
 }
 
