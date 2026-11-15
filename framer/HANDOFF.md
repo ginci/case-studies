@@ -347,6 +347,8 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   writes <meta name="theme-color"> = #121211 (dark) / #EDEDEE (light) so the browser chrome follows the theme.
 
 ## Phone polish (2026-11-16, not yet published)
+- Listening-to pill: fixed 28px height; when it opens it measures the room to the right and never passes the 20px gutter
+  (max 360px); the track name truncates with an ellipsis instead of pushing the pill off screen.
 - Phone nav shows the mail button (36px) on every page; logo 60px wide on phones.
 - Section headers back to Geist Mono 400 12px grey (rgb 133,132,126): Featured work, More from me, Contact, About, and the
   Work page "Work" label.

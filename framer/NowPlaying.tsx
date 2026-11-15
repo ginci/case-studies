@@ -14,6 +14,13 @@ export default function NowPlaying(props: Props) {
     const [track, setTrack] = useState<Track | null>(fallback)
     const [open, setOpen] = useState(false)
     const root = useRef<HTMLSpanElement | null>(null)
+    // Never unfold past the screen edge: measure the room to the right when it opens (20px gutter).
+    const [room, setRoom] = useState(360)
+    useEffect(() => {
+        if (!open || !root.current) return
+        const left = root.current.getBoundingClientRect().left
+        setRoom(Math.max(28, Math.min(360, Math.floor(window.innerWidth - left - 20))))
+    }, [open])
     // Touch: tapping anywhere else folds it again.
     useEffect(() => {
         if (!open) return
@@ -57,14 +64,14 @@ export default function NowPlaying(props: Props) {
             }}
             onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen((o) => !o) } if (e.key === "Escape") setOpen(false) }}
             onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false) }}
-            style={{ ...rest }}>
+            style={{ ...rest, ...(open ? { maxWidth: room } : null) }}>
             <style>{`
-.g-np { display: inline-flex; align-items: center; gap: 8px; height: 28px; box-sizing: border-box; padding: 0 9px;
+.g-np { display: inline-flex; align-items: center; gap: 8px; height: 28px; min-height: 28px; max-height: 28px; box-sizing: border-box; padding: 0 9px; flex: 0 1 auto; min-width: 28px;
   border-radius: 999px; border: 1px solid rgba(244,243,238,.16); background: rgba(244,243,238,.04); color: #F4F3EE; text-decoration: none;
   font: 400 12px/1.3 "Geist Mono", ui-monospace, monospace; letter-spacing: .02em; white-space: nowrap; overflow: hidden;
   max-width: 28px; transition: max-width .45s cubic-bezier(.22,1,.36,1), border-color .25s ease, background-color .25s ease, padding .3s ease; }
 .g-np.g-np-open { max-width: 360px; padding: 0 12px 0 9px; }
-.g-np-more { display: inline-flex; gap: 8px; opacity: 0; transition: opacity .2s ease; }
+.g-np-more { display: inline-flex; gap: 8px; min-width: 0; overflow: hidden; opacity: 0; transition: opacity .2s ease; }
 .g-np-open .g-np-more { opacity: 1; transition-delay: .12s; }
 .g-np { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .g-np:hover, .g-np:focus-visible { border-color: rgba(244,243,238,.36); background: rgba(244,243,238,.08); outline: none; }
@@ -77,8 +84,9 @@ a.g-np-text { color: inherit; text-decoration: none; } a.g-np-text:hover { text-
 }
 @keyframes g-np-bar { 0%,100% { height: 30%; } 50% { height: 100%; } }
 .g-np-label { color: #85847E; }
-.g-np-text { overflow: hidden; text-overflow: ellipsis; max-width: 240px; }
-@media (max-width: 809px) { .g-np-text { max-width: 170px; } .g-np.g-np-open { max-width: calc(100vw - 40px); } }
+.g-np-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1 1 auto; max-width: 240px; }
+.g-np-label { flex: 0 0 auto; }
+@media (max-width: 809px) { .g-np-text { max-width: none; } }
 @media (prefers-reduced-motion: reduce) { .g-np, .g-np-more { transition: none; } }
 `}</style>
             <span className="g-np-bars" aria-hidden="true"><i /><i /><i /></span>
