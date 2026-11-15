@@ -267,7 +267,10 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Baseline metrics/screenshots for the before/after comparison are in the session scratchpad (cons/). Re-run the diff after
   the next publish.
 
-## Hero: sketch to screen + wet-sand trail (2026-11-16, not yet published)
+## Hero: sketch to screen + wet-sand trail: REMOVED (2026-11-16)
+- Both deleted at Gift's request (layers, Framer code files and repo files). Headline/paragraph start at 0.1s again.
+
+## (historical) Hero: sketch to screen + wet-sand trail
 - **HeroSketch** (layer "Hero sketch", absolute, centred, top 190 / 124 / 96): a card wireframe draws itself like a pen,
   a cursor taps its button, and it becomes UI (surface, green button, solid text bars). 2.4s. Props: Size (280/240/200),
   Ink, Surface, Button, Duration, Start delay. ("Size", not "width": Framer reserves width.)
@@ -275,6 +278,17 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - **SandTrail** (layer "Sand trail", fills the hero behind the text): pointer presses a groove into damp sand (dark trench,
   faint ridge, wet sheen); slow strokes are wide, fast ones thin; settles in 2.6s. Mouse/trackpad only, off for reduced
   motion, idle when nothing moves. Props: Settles in, Groove width, Depth.
+
+## Availability pill + Listening-to tab (2026-11-16, not yet published)
+- **"Available for work"** pill (layer "Status", native frame) sits directly above the headline and fades in at 3.1s via its
+  appear effect, after the headline finishes. The dot pulses (CSS, from 3.4s). Hero top padding reduced by 46px
+  (514 / 354 / 274) so the headline stays where it was.
+- **NowPlaying** (layer "Listening to (edge tab)" in the hero): fixed to the right edge on the live site (rendered into
+  <body>), flat right side, rounded left, animated music bars; hover/focus/tap slides it out to show cover, "Listening to",
+  track and artist; docks again on leave. Live data needs Last.fm (connect Spotify to Last.fm, then set "Last.fm user" and
+  a read-only "Last.fm key"). Until then it shows the fallback Track/Artist/Cover/Link props, or "Nothing right now".
+  Shows "Last played" when the latest Last.fm track isn't playing now. "From bottom" sets its height on screen.
+- Case study page: footer moved below "Next project".
 
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).

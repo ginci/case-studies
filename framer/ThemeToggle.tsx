@@ -75,6 +75,13 @@ ${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(
   ${S("CTA / Read the full story")}:hover svg { animation: g-drop 0.42s ${EASE}; }
   ${S("CTA / Read the full story")}[aria-expanded="true"]:hover svg { animation: g-rise 0.42s ${EASE}; }
 }
+/* Availability pill above the headline: soft pulse on the dot */
+${N("Status dot")} { box-shadow: 0 0 0 0 rgba(111, 208, 140, 0.55); }
+@media (prefers-reduced-motion: no-preference) {
+  ${N("Status dot")} { animation: g-status 2.4s ease-out 3.4s infinite; }
+}
+@keyframes g-status { 0% { box-shadow: 0 0 0 0 rgba(111, 208, 140, 0.55); } 70%, 100% { box-shadow: 0 0 0 8px rgba(111, 208, 140, 0); } }
+
 /* Work page: the list sits right under its header */
 ${N("Link slug")} { display: none !important; }
 /* Link buttons: Back-to-top type, underlined, so they never read as section headers */
