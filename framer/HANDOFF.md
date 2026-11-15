@@ -309,6 +309,13 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - Deleted the hidden old rich-text headline (it was the only Playwrite AR use); TOC labels moved off Inter to Nunito.
   - Baseline (live, before): ~4.2MB transferred per page, 33 to 42 requests; three HDR files were the largest assets.
 
+## Status row + solid hover (2026-11-16, not yet published)
+- Project row hover is now solid site white (#F4F3EE) with dark text.
+- Listening-to moved off the screen edge: it's now a pill beside the status pill in a "Status row" above the headline,
+  same height and type (Geist Mono 12). Animated bars only when a track is live; label "Listening to" (live) or
+  "Last played"; "Not playing right now" until Last.fm or a fallback track is set. Fades in at 3.25s, just after the
+  status pill (3.1s). Clicking opens the track.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
