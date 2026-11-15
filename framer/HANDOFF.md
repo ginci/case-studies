@@ -346,6 +346,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   Now rgb(18,18,17) on all three. CSS sets html and body to #121211 (body transparent in light theme), and applyTheme()
   writes <meta name="theme-color"> = #121211 (dark) / #EDEDEE (light) so the browser chrome follows the theme.
 
+## Phone polish (2026-11-16, not yet published)
+- Phone nav shows the mail button (36px) on every page; logo 60px wide on phones.
+- Section headers back to Geist Mono 400 12px grey (rgb 133,132,126): Featured work, More from me, Contact, About, and the
+  Work page "Work" label.
+- "More about me" ribbon: full screen width at every size (100vw, centred), so the button is always centred; replaces the
+  old per-breakpoint negative margins that no longer matched the hero padding.
+- Phone spacing: 20px side gutter everywhere (hero, shelf), Work section top 64, Contact 72/72 with 48 gap, email 28px.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

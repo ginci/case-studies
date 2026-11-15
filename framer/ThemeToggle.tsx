@@ -134,11 +134,10 @@ html:not([data-g-about]) ${N("04 About")} {
   html:not([data-g-about]) ${N("04 About")} { transition: max-height 0.5s ${EASE}, opacity 0.25s ease, padding 0.5s ${EASE}, visibility 0s linear 0.5s !important; }
 }
 ${N("About toggle")} { position: relative !important; }
+/* Ribbon runs edge to edge of the screen at every size, so the button sits dead centre */
+${N("About toggle")} { width: 100vw !important; max-width: 100vw !important; margin-left: calc(50% - 50vw) !important; margin-right: 0 !important; }
 ${N("About toggle")} ${N("Dotted line")} { background: none !important; height: 0 !important; border-top: 1px dotted rgba(244, 243, 238, 0.36) !important; }
 /* the ribbon runs to the screen edges: pull it out over the hero's side padding */
-@media (min-width: 1200px) { ${N("About toggle")} { margin-left: -80px !important; margin-right: -80px !important; width: calc(100% + 160px) !important; } }
-@media (min-width: 810px) and (max-width: 1199px) { ${N("About toggle")} { margin-left: -32px !important; margin-right: -32px !important; width: calc(100% + 64px) !important; } }
-@media (max-width: 809px) { ${N("About toggle")} { margin-left: -20px !important; margin-right: -20px !important; width: calc(100% + 40px) !important; } }
 ${S("CTA / More about me")} {
   background-color: #121211 !important; border: 1px solid rgba(244, 243, 238, 0.18) !important; text-transform: uppercase;
 }
@@ -406,7 +405,6 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 @media (max-width: 809px) {
   #main * { max-width: 100%; }
   ${N("Nav (fixed)")} ${N("Work")}, ${N("Nav (fixed)")} ${N("About")}, ${N("Nav (fixed)")} ${N("Contact")} { display: none !important; }
-  ${N("Nav (fixed)")} ${S("CTA / Email")} { display: none !important; }
   html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 20px) !important; padding: 8px 8px 8px 16px !important; }
   ${N("Lede")} { width: 100% !important; }
   ${ROW} { padding-top: 22px !important; padding-bottom: 22px !important; gap: 14px !important;
