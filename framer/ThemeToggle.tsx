@@ -79,6 +79,23 @@ ${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(
 /* Listening-to: let Framer's wrapper grow when the pill unfolds (it is measured at the folded 28px) */
 ${N("Listening to")} { width: auto !important; max-width: none !important; overflow: visible !important; }
 
+/* ---------- Phones: lighter rendering ----------
+   The WebGL shader (a live 3D scene, blurred to a glow) is the heaviest thing on the page. On phones it is replaced by
+   a still CSS glow in the same colours; the shaders stay hidden so (with Lazy load on) they never start. The full-screen
+   grain layer and the nav's background blur are also dropped on phones, where they cost the most while scrolling. */
+@media (max-width: 809px) {
+  ${S("Background shader")} { display: none !important; }
+  ${N("Home V2 / Index (dark)")}, ${N("Work / Index")}, ${N("Playground / Index")}, ${N("Case study page")} {
+    background-image:
+      radial-gradient(90% 520px at 78% 300px, rgba(0, 191, 188, 0.16), rgba(0, 191, 188, 0) 70%),
+      radial-gradient(80% 460px at 8% 760px, rgba(0, 39, 130, 0.22), rgba(0, 39, 130, 0) 70%),
+      radial-gradient(70% 420px at 60% 1500px, rgba(0, 209, 224, 0.08), rgba(0, 209, 224, 0) 70%) !important;
+    background-repeat: no-repeat !important;
+  }
+  #g-grain { display: none !important; }
+  html[data-g-scrolled] ${N("Nav (fixed)")} { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background-color: rgba(11, 11, 10, 0.97) !important; }
+}
+
 /* Availability pill above the headline: soft pulse on the dot */
 ${N("Status dot")} { box-shadow: 0 0 0 0 rgba(111, 208, 140, 0.55); }
 @media (prefers-reduced-motion: no-preference) {

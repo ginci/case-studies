@@ -137,7 +137,7 @@ export default function Folders(props: { folders: Folder[]; accent: string; colu
                                 <span style={{ font: `500 ${compact ? 9 : 10}px/1 'Geist Mono', monospace`, letterSpacing: ".1em", textTransform: "uppercase", color: "#A3A29C",
                                     border: "1px solid rgba(244,243,238,0.18)", borderRadius: 999, padding: compact ? "4px 8px" : "5px 10px", marginTop: 2 }}>Coming soon</span>
                             ) : (
-                                <span style={{ font: `400 ${compact ? 12.5 : 14}px/1.3 'Nunito Sans', sans-serif`, color: "#85847E", textAlign: "center" }}>{f.meta}</span>
+                                <span style={{ font: `400 ${compact ? 12.5 : 14}px/1.3 'Nunito', sans-serif`, color: "#85847E", textAlign: "center" }}>{f.meta}</span>
                             )}
                         </div>
                     </a>
