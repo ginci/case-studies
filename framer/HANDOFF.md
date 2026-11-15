@@ -298,6 +298,17 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - **Playground tab blocker fixed:** the rows' Framer appear effect never fired when the tab switched (the list was hidden at
   load), so the rows stayed invisible. Appear effects removed from both Work-page lists. Rows sort by the Order field.
 
+## Light shader palette + speed pass (2026-11-16, not yet published)
+- Light shaders (all 4 pages) now lean blue: soft aqua rgb(198,234,232), pale periwinkle rgb(196,214,246),
+  light cyan rgb(205,240,246). The peach (which read orange/murky once inverted) is gone.
+- **Speed:**
+  - All 8 shaders: lighting "Light" (3D) instead of "Env". Env made the library download three ~1.1MB HDR maps
+    (city, dawn, lobby: 3.3MB of the 4.2MB each page transferred). Pixel density 2.3 → 1 (the shader is blurred 100px,
+    so the extra pixels were wasted GPU work). Lazy load on, so the shader for the inactive theme (display:none) never starts.
+  - Scroll handler (grid + sidebar) throttled to one update per animation frame (it measured layout on every scroll event).
+  - Deleted the hidden old rich-text headline (it was the only Playwrite AR use); TOC labels moved off Inter to Nunito.
+  - Baseline (live, before): ~4.2MB transferred per page, 33 to 42 requests; three HDR files were the largest assets.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

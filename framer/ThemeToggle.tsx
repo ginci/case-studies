@@ -1165,9 +1165,15 @@ function setupFX() {
     const w = window as any
     if (!w.__gFX) {
         w.__gFX = true
+        // At most one grid/TOC update per frame (scroll fires far more often than the screen repaints).
+        let fxRaf = 0
         const onScroll = () => {
-            gridUpdate && gridUpdate()
-            tocUpdate && tocUpdate()
+            if (fxRaf) return
+            fxRaf = requestAnimationFrame(() => {
+                fxRaf = 0
+                gridUpdate && gridUpdate()
+                tocUpdate && tocUpdate()
+            })
         }
         window.addEventListener("scroll", onScroll, { passive: true })
         window.addEventListener("resize", onScroll)
