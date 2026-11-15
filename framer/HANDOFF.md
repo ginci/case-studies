@@ -317,7 +317,9 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   status pill (3.1s). Clicking opens the track.
 
 ## Light shader = dark palette, subtle hover, Work spacing (2026-11-16, not yet published)
-- Light shaders now use the dark theme's palette (teal, navy, cyan) at 35% opacity; CSS only cancels the page inversion
+- REVERTED at Gift's request: light shaders are back to the pale blue palette (aqua 198,234,232 / periwinkle 196,214,246 /
+  cyan 205,240,246) with the saturate(0.55) filter, opacity lowered from 0.6 to 0.3. (Superseded note follows.)
+- (superseded) Light shaders now use the dark theme's palette (teal, navy, cyan) at 35% opacity; CSS only cancels the page inversion
   (no desaturate). A browser simulation of the filter chain gives soft teal / slate-blue tints with no orange.
   The earlier pale palette came out washed-out grey, and the warmth came from the shader's lighting on very pale colours.
 - Row hover: rgba(244,243,238,0.05) everywhere, text keeps its colour (inverted to a soft grey in light mode).
