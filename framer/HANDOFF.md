@@ -222,6 +222,15 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   show the finished text with no animation.
 - Changing the words means regenerating the outlines: see tools/hand-headline/README.md.
 
+## Work page tabs, back link, nav fix (2026-11-16)
+- Work page: "← Home" back link 24px under the nav; a **WorkTabs** pill (Case studies / Playground) above the list.
+  WorkTabs shows the layer named "Work list" or "Playground list" (html[data-g-tab]) and keeps the choice in the URL
+  (#playground). Arrow keys switch tabs.
+- **Playground** CMS collection (Title, Line, Image, Order) with 6 items: Dado customer/courier/vendor landing pages,
+  Dado App Store screens, Menu as a Service templates, CreatorScribe landing page. The Playground list reuses the case
+  list style; rows show the title and one line (hidden on phone), hover shows the image, rows have no link yet.
+- Nav pill no longer sticks halfway: on at >80px, off at <16px (hysteresis) and `overflow-anchor: none`.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

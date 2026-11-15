@@ -293,6 +293,7 @@ ${S("Back to top")}:hover, ${S("Back to top")}:focus-visible { background-color:
 ${S("Back to top")}:hover *, ${S("Back to top")}:focus-visible * { color: #121211 !important; }
 
 /* ---------- Nav: becomes a floating pill once the page scrolls ---------- */
+html { overflow-anchor: none; }
 ${N("Nav (fixed)")} {
   align-self: center !important; width: 100% !important; max-width: 100% !important;
   border: 1px solid transparent !important; box-sizing: border-box !important;
@@ -1126,7 +1127,10 @@ function setupFX() {
             const start = Math.max(0, r.top + r.height * 0.75)
             grid!.style.clipPath = `inset(${start.toFixed(0)}px 0 0 0)`
         } else grid!.style.clipPath = ""
-        document.documentElement.toggleAttribute("data-g-scrolled", y > 48)
+        // Hysteresis: the nav gets shorter when it becomes a pill, which shifts the page a little.
+        // Separate on/off points stop that shift from flipping the state back (the "stuck halfway" nav).
+        const navOn = document.documentElement.hasAttribute("data-g-scrolled")
+        document.documentElement.toggleAttribute("data-g-scrolled", navOn ? y > 16 : y > 80)
     }
 
     const w = window as any
