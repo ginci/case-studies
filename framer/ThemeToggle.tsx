@@ -51,7 +51,7 @@ ${N("Page content column")}, ${N("Case study page")} > :not([data-framer-name^="
 ${N("Case study page")} > ${N("Nav (fixed)")} { position: sticky !important; top: 0; z-index: 20 !important; }
 html:not([data-ginci-theme="light"]) ${N("Background shader (light)")} { display: none !important; }
 ${LIGHT} ${N("Background shader")} { display: none !important; }
-${LIGHT} ${N("Background shader (light)")} { mix-blend-mode: normal !important; filter: invert(1) hue-rotate(180deg) saturate(0.55) blur(100px) !important; }
+${LIGHT} ${N("Background shader (light)")} { mix-blend-mode: normal !important; filter: invert(1) hue-rotate(180deg) blur(100px) !important; }
 
 /* ---------- Case study: sidebar + summaries. Each section shows its heading and one-paragraph summary;
    "Read the full story" opens the detail (body + image) under every section. ---------- */

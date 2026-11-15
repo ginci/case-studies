@@ -317,7 +317,9 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   status pill (3.1s). Clicking opens the track.
 
 ## Light shader = dark palette, subtle hover, Work spacing (2026-11-16, not yet published)
-- REVERTED at Gift's request: light shaders are back to the pale blue palette (aqua 198,234,232 / periwinkle 196,214,246 /
+- NOW (latest): cyan-blue light palette aqua 190,236,232 / cyan 176,226,238 / icy blue 204,232,244 at 30%, no desaturate
+  (periwinkle read purple). Orange option if wanted later: mint 207,235,221 / peach 246,216,196 / sky 215,230,245.
+- Earlier revert: light shaders back to the pale blue palette (aqua 198,234,232 / periwinkle 196,214,246 /
   cyan 205,240,246) with the saturate(0.55) filter, opacity lowered from 0.6 to 0.3. (Superseded note follows.)
 - (superseded) Light shaders now use the dark theme's palette (teal, navy, cyan) at 35% opacity; CSS only cancels the page inversion
   (no desaturate). A browser simulation of the filter chain gives soft teal / slate-blue tints with no orange.
