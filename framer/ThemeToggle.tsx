@@ -51,7 +51,7 @@ ${N("Page content column")}, ${N("Case study page")} > :not([data-framer-name^="
 ${N("Case study page")} > ${N("Nav (fixed)")} { position: sticky !important; top: 0; z-index: 20 !important; }
 html:not([data-ginci-theme="light"]) ${N("Background shader (light)")} { display: none !important; }
 ${LIGHT} ${N("Background shader")} { display: none !important; }
-${LIGHT} ${N("Background shader (light)")} { mix-blend-mode: normal !important; filter: invert(1) hue-rotate(180deg) saturate(0.55) blur(100px) !important; }
+${LIGHT} ${N("Background shader (light)")} { mix-blend-mode: normal !important; filter: invert(1) hue-rotate(180deg) blur(100px) !important; }
 
 /* ---------- Case study: sidebar + summaries. Each section shows its heading and one-paragraph summary;
    "Read the full story" opens the detail (body + image) under every section. ---------- */
@@ -351,15 +351,14 @@ html[data-g-scrolled] ${N("Nav (fixed)")} {
 
 
 /* ---------- Hover effects only where a real pointer hovers (no sticky hover after a tap on phones/tablets) ---------- */
-/* One hover colour for every project list (Home, Work, Playground): solid site white (#F4F3EE), with dark text for contrast */
-${ROW}:focus-visible { background-color: #F4F3EE !important; outline: none; }
-${ROW}:focus-visible *, ${ROW}:focus-visible [data-framer-name] * { color: #121211 !important; }
+/* One subtle hover tint for every project list (Home, Work, Playground); the light theme inverts it into a soft grey */
+${ROW}:focus-visible { background-color: rgba(244, 243, 238, 0.05) !important; outline: none; }
 @media (hover: hover) and (pointer: fine) {
 ${ROW}:hover {
-  background-color: #F4F3EE !important; outline: none;
+  background-color: rgba(244, 243, 238, 0.05) !important; outline: none;
 }
 ${ROW}:hover::after { opacity: 0; }
-${ROW}:hover ${N("Name")} *, ${ROW}:hover ${N("Arrow")} *, ${ROW}:hover ${N("Num")} *, ${ROW}:hover ${N("Meta")} * { color: #121211 !important; }
+${ROW}:hover ${N("Name")} *, ${ROW}:hover ${N("Arrow")} * { color: #F4F3EE !important; }
 ${NEXT}:hover::after {
   background-color: var(--g-next-accent); border-color: var(--g-next-accent);
   background-image: ${ARROW_DARK}; transform: translateX(8px);
@@ -438,6 +437,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
    2 and 4 draw up from the bottom, each led by a glowing point. Staggered. */
 #g-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; --g-ink: 244, 243, 238; }
 html:has(${N("Case study page")}) #g-grid { opacity: 0.2; }
+${LIGHT} #g-grid b { background: rgba(var(--g-ink), 0.09) !important; }
 #g-grid b { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(var(--g-ink), 0.022); }
 #g-grid b:nth-child(1) { left: 20%; }
 #g-grid b:nth-child(2) { left: 40%; }

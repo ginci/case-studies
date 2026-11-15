@@ -316,6 +316,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   "Last played"; "Not playing right now" until Last.fm or a fallback track is set. Fades in at 3.25s, just after the
   status pill (3.1s). Clicking opens the track.
 
+## Light shader = dark palette, subtle hover, Work spacing (2026-11-16, not yet published)
+- Light shaders now use the dark theme's palette (teal, navy, cyan) at 35% opacity; CSS only cancels the page inversion
+  (no desaturate). A browser simulation of the filter chain gives soft teal / slate-blue tints with no orange.
+  The earlier pale palette came out washed-out grey, and the warmth came from the shader's lighting on very pale colours.
+- Row hover: rgba(244,243,238,0.05) everywhere, text keeps its colour (inverted to a soft grey in light mode).
+- Light theme grid lines raised to 9% so they stay visible over the shader.
+- Work page: back link 40px under the nav, then 200px to the "Work" header (tablet 32/140, phone 24/96).
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
