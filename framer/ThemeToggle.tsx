@@ -351,13 +351,15 @@ html[data-g-scrolled] ${N("Nav (fixed)")} {
 
 
 /* ---------- Hover effects only where a real pointer hovers (no sticky hover after a tap on phones/tablets) ---------- */
-${ROW}:focus-visible { background-color: color-mix(in srgb, var(--g-accent) 9%, #161615) !important; outline: none; }
+/* One hover colour for every project list (Home, Work, Playground): white at 50%, with dark text for contrast */
+${ROW}:focus-visible { background-color: rgba(255, 255, 255, 0.5) !important; outline: none; }
+${ROW}:focus-visible *, ${ROW}:focus-visible [data-framer-name] * { color: #121211 !important; }
 @media (hover: hover) and (pointer: fine) {
 ${ROW}:hover {
-  background-color: color-mix(in srgb, var(--g-accent) 9%, #161615) !important; outline: none;
+  background-color: rgba(255, 255, 255, 0.5) !important; outline: none;
 }
 ${ROW}:hover::after { opacity: 0; }
-${ROW}:hover ${N("Name")} *, ${ROW}:hover ${N("Arrow")} * { color: var(--g-accent, #F4F3EE) !important; }
+${ROW}:hover ${N("Name")} *, ${ROW}:hover ${N("Arrow")} *, ${ROW}:hover ${N("Num")} *, ${ROW}:hover ${N("Meta")} * { color: #121211 !important; }
 ${NEXT}:hover::after {
   background-color: var(--g-next-accent); border-color: var(--g-next-accent);
   background-image: ${ARROW_DARK}; transform: translateX(8px);

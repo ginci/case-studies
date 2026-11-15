@@ -8,16 +8,32 @@ import { addPropertyControls, ControlType, RenderTarget } from "framer"
 // Until then (or if Last.fm fails) it shows the fallback track. Rendered into <body> so it stays fixed while scrolling.
 
 type Track = { title: string; artist: string; cover?: string; url?: string; live: boolean }
-type Props = { lastfmUser: string; lastfmKey: string; title: string; artist: string; cover?: { src?: string } | string; link: string; bottom: number; style?: CSSProperties }
+type Props = { lastfmUser: string; lastfmKey: string; title: string; artist: string; cover?: { src?: string } | string; link: string; gap: number; style?: CSSProperties }
 
 export default function NowPlaying(props: Props) {
-    const { lastfmUser = "", lastfmKey = "", title = "", artist = "", link = "", bottom = 96 } = props
+    const { lastfmUser = "", lastfmKey = "", title = "", artist = "", link = "", gap = 40 } = props
     const coverSrc = typeof props.cover === "string" ? props.cover : props.cover?.src
     const fallback: Track | null = title ? { title, artist, cover: coverSrc, url: link, live: false } : null
     const [track, setTrack] = useState<Track | null>(fallback)
     const [open, setOpen] = useState(false)
     const [mounted, setMounted] = useState(false)
+    const [top, setTop] = useState(144)
     useEffect(() => setMounted(true), [])
+    // Sit `gap` px below the nav's bottom edge (the nav changes height when it becomes the floating pill).
+    useEffect(() => {
+        if (typeof window === "undefined") return
+        let raf = 0
+        const place = () => {
+            raf = 0
+            const nav = document.querySelector('[data-framer-name="Nav (fixed)"]') as HTMLElement | null
+            const b = nav ? Math.max(0, nav.getBoundingClientRect().bottom) : 104
+            setTop(Math.round(b + gap))
+        }
+        const req = () => { if (!raf) raf = requestAnimationFrame(place) }
+        place(); const t = window.setTimeout(place, 900)
+        window.addEventListener("scroll", req, { passive: true }); window.addEventListener("resize", req)
+        return () => { window.removeEventListener("scroll", req); window.removeEventListener("resize", req); window.clearTimeout(t); cancelAnimationFrame(raf) }
+    }, [gap])
     useEffect(() => {
         if (!lastfmUser || !lastfmKey) { setTrack(fallback); return }
         let stop = false
@@ -39,14 +55,14 @@ export default function NowPlaying(props: Props) {
     const isCanvas = RenderTarget.current() === RenderTarget.canvas
     const label = track?.live ? "Listening to" : track ? "Last played" : "Listening to"
     const ui = (
-        <div className={"g-np" + (open ? " g-np-open" : "")} style={{ bottom, position: isCanvas ? "relative" : "fixed" }}
+        <div className={"g-np" + (open ? " g-np-open" : "")} style={{ top: isCanvas ? undefined : top, position: isCanvas ? "relative" : "fixed" }}
             onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
             <style>{`
 .g-np { right: 0; z-index: 30; display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 16px 0 14px;
   border-radius: 999px 0 0 999px; border: 1px solid rgba(244,243,238,.14); border-right: 0;
   background: rgba(18,18,17,.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 10px 30px rgba(0,0,0,.35); color: #F4F3EE; max-width: 56px; overflow: hidden; cursor: default;
-  transition: max-width .45s cubic-bezier(.22,1,.36,1), background-color .3s ease; }
+  transition: max-width .45s cubic-bezier(.22,1,.36,1), background-color .3s ease, top .35s ease; }
 .g-np.g-np-open { max-width: 340px; }
 .g-np-btn { all: unset; flex: 0 0 auto; width: 28px; height: 28px; display: grid; place-items: center; cursor: pointer; border-radius: 99px; }
 .g-np-btn:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 2px; }
@@ -85,7 +101,7 @@ export default function NowPlaying(props: Props) {
     return mounted ? createPortal(ui, document.body) : null
 }
 
-NowPlaying.defaultProps = { lastfmUser: "", lastfmKey: "", title: "", artist: "", link: "", bottom: 96 }
+NowPlaying.defaultProps = { lastfmUser: "", lastfmKey: "", title: "", artist: "", link: "", gap: 40 }
 addPropertyControls(NowPlaying, {
     lastfmUser: { type: ControlType.String, title: "Last.fm user", description: "Connect Spotify to Last.fm, then add your username." },
     lastfmKey: { type: ControlType.String, title: "Last.fm key", description: "A read-only API key from last.fm/api." },
@@ -93,5 +109,5 @@ addPropertyControls(NowPlaying, {
     artist: { type: ControlType.String, title: "Artist" },
     cover: { type: ControlType.ResponsiveImage, title: "Cover" },
     link: { type: ControlType.Link, title: "Link" },
-    bottom: { type: ControlType.Number, title: "From bottom", min: 16, max: 600, step: 4, unit: "px" },
+    gap: { type: ControlType.Number, title: "Below nav", min: 0, max: 400, step: 4, unit: "px" },
 })

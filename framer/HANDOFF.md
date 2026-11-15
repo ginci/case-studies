@@ -290,6 +290,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   Shows "Last played" when the latest Last.fm track isn't playing now. "From bottom" sets its height on screen.
 - Case study page: footer moved below "Next project".
 
+## Hover, headers, Playground fix, tab position (2026-11-16, not yet published)
+- Listening-to tab now sits 40px below the nav's bottom edge (follows the nav as it turns into the pill). Prop "Below nav".
+- Project list hover is one colour everywhere (Home, Work, Playground): white at 50% with dark text for contrast.
+  The per-project accent hover is gone. Playground rows renamed "Row / Playground" so they share the list styles.
+- Work page "Work" header and Home "Contact" header now match the other Home headers: Geist Mono 500, 16/15/14.
+- **Playground tab blocker fixed:** the rows' Framer appear effect never fired when the tab switched (the list was hidden at
+  load), so the rows stayed invisible. Appear effects removed from both Work-page lists. Rows sort by the Order field.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
