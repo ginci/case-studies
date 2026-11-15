@@ -172,7 +172,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 ## About bio v2 + queued hero change (2026-11-12)
 - About bio rewritten to be personal (who Gift is, experience, what drives them) and to name no projects, so it no longer
   repeats the hero or the work list. The CV chip is still the mailto placeholder. Recognition line dropped; add one later if wanted.
-- **Queued, do after the case studies:** hero intro swaps the Dado Foods chip for 9mobile:
+- ~~Queued: hero intro swaps the Dado Foods chip for 9mobile~~ Cancelled 2026-11-15, 9mobile is not used. Old note:
   "Before that I led the redesign of 9mobile ([what 9mobile is now, after the acquisition]): a full website redesign plus a
   content management system for the brand." Needs a 9mobile case study (CMS item) first so the chip has somewhere to link.
 
@@ -191,7 +191,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   Problem / Solution / Result sections. Old long copy kept in archive/tranzakt-long-copy-2026-11-12.html.txt.
 - Light theme shader: same treatment as dark (difference, 25%). The page inversion keeps the teal, so it shows on white.
 - Hero padding now comes from the canvas on every breakpoint (tablet and phone CSS padding overrides removed, 2026-11-15).
-- Note: Gift updated the desktop hero to 9mobile, but the phone breakpoint still carries the old Dado text override.
+- Hero intro is the same on all breakpoints (2026-11-15): Tranzakt → "payment solutions for Nigerian businesses", then Dado Foods. 9mobile is not used (Gift); its CMS item stays draft.
 
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
