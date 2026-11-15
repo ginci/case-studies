@@ -338,8 +338,8 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   from them are not meaningful.)
 - Listening-to unfolds to ~195px on hover live. Framer measures the folded 28px, so the component drops the incoming
   width and the CSS lets its wrapper grow.
-- **Next:** Last.fm username + API key go into the "Listening to" layer's Last.fm user / Last.fm key props (never the
-  shared secret).
+- Last.fm connected (version 472dc1de5): username "ginci" and the read-only API key are set on the "Listening to" layer
+  (key kept out of this repo; the shared secret is not used). Verified live: the pill showed the current Spotify track.
 
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
