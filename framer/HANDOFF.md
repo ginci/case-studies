@@ -369,7 +369,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Nunito Sans removed site-wide (4 canvas texts + Folders.tsx now use Nunito): two fewer font files (~75KB).
 - Desktop and tablet unchanged.
 
-## No-delay load (2026-11-16, not yet published)
+## No-delay load (2026-11-16, published 9084cbe4f)
 - A throttled refresh showed: headline at <1s, but the hero paragraph and ribbon only after ~6s, site CSS only after ~4s
   (it was injected by code after hydration, so pages first painted unstyled), 10 sections hidden by scroll-reveal,
   and the shader appearing last.
@@ -381,12 +381,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Still glow in the shader colours on every page frame, so the background is there at first paint; the WebGL shader fades in
   over it on desktop/tablet. Kept on purpose: the handwritten headline, and the Available / Listening pills' late entrance.
 
-## Scroll starts at the top (2026-11-16, not yet published)
+## Scroll starts at the top (2026-11-16, published c31673e9e, verified live)
+- Framer restores scroll itself after hydration, so settleTop() holds scrollY at 0 for ~1.2s after each visit (stops as soon
+  as the visitor scrolls, clicks or types); route changes are detected by polling location.pathname every 100ms.
 - history.scrollRestoration = "manual" in the head bootstrap and in ThemeToggle; scroll to top on first load, on pageshow
   (back/forward cache), and on every route change (pushState/replaceState/popstate are watched), so refresh, back,
   the logo and returning from Work/case pages all start at the top. Links with a #hash still land on their section.
 
-## Playground parked (2026-11-16, not yet published)
+## Playground parked (2026-11-16, published 9084cbe4f)
 - Work page shows case studies only: "Work tabs" (WorkTabs) and "Playground list" are hidden (visible=false), and a plain
   "Case studies" label sits above the list. All 6 Playground CMS items are drafts, so /playground/* pages aren't published.
 - Nothing deleted: the collection, the /playground/:Playground page, WorkTabs and withPlaygroundLink remain.

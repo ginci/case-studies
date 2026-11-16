@@ -1196,21 +1196,30 @@ function setupFX() {
     if (!w.__gFX) {
         w.__gFX = true
         // Every page visit starts at the top: refresh, back/forward, the logo, or returning from another page.
-        // (Links to a section, e.g. /work#playground, still land on that section.)
+        // Framer restores scroll itself after it loads, so for a moment after each visit we hold the page at the top,
+        // unless the visitor starts scrolling. Links to a section (#hash) still land on their section.
         try { history.scrollRestoration = "manual" } catch (e) {}
-        let lastPath = location.pathname
-        const scrollHome = () => { if (!location.hash) window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior }) }
-        const onRoute = () => {
+        let lastPath = location.pathname, userMoved = false
+        const moved = () => { userMoved = true }
+        for (const ev of ["wheel", "touchstart", "keydown", "mousedown"]) window.addEventListener(ev, moved, { passive: true })
+        const settleTop = () => {
+            userMoved = false
+            const t0 = performance.now()
+            const tick = () => {
+                if (location.hash || userMoved) return
+                if (window.scrollY !== 0) window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior })
+                if (performance.now() - t0 < 1200) requestAnimationFrame(tick)
+            }
+            tick()
+        }
+        settleTop()
+        window.setInterval(() => {
             if (location.pathname === lastPath) return
             lastPath = location.pathname
-            scrollHome(); requestAnimationFrame(scrollHome)
-        }
-        window.addEventListener("popstate", () => { lastPath = ""; setTimeout(onRoute, 0) })
-        for (const k of ["pushState", "replaceState"] as const) {
-            const orig = history[k].bind(history)
-            ;(history as any)[k] = (...args: any[]) => { const r = (orig as any)(...args); setTimeout(onRoute, 0); return r }
-        }
-        window.addEventListener("pageshow", scrollHome)
+            settleTop()
+        }, 100)
+        window.addEventListener("popstate", () => setTimeout(settleTop, 0))
+        window.addEventListener("pageshow", () => settleTop())
         // At most one grid/TOC update per frame (scroll fires far more often than the screen repaints).
         let fxRaf = 0
         const onScroll = () => {
