@@ -415,6 +415,12 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   Previously lines 1 and 3 were hidden on phones, leaving two lines both moving up.
 - "More about me" on phones: padding 8/20/8/16 (more room before the arrow).
 
+## Phone hero fits the screen (2026-11-16, not yet published)
+- Phones: 01 Hero min-height calc(100svh - 70px) (nav ~70px), padding 24/24, content stacked from the bottom, so the
+  "More about me" button sits 24px above the bottom edge (checked: iPhone 13, Pixel 7, iPhone 14 Pro Max). On very short
+  screens (iPhone SE) the intro is taller than the screen, so the button falls just below the fold. This CSS overrides
+  the phone canvas top padding (274px).
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

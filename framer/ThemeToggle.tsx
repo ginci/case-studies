@@ -96,6 +96,12 @@ ${N("Home V2 / Index (dark)")}, ${N("Work / Index")}, ${N("Playground / Index")}
 ${N("01 Hero")} ${N("Lede")} { animation: g-lede-in 0.7s ease 0.15s both; }
 @keyframes g-lede-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { ${N("01 Hero")} ${N("Lede")} { animation: none; } }
+/* Phone hero fills the visible screen under the nav and stacks its content from the bottom, so "More about me"
+   sits 24px above the bottom edge on any phone height (the canvas top padding is overridden here on phones). */
+@media (max-width: 809px) {
+  ${N("01 Hero")} { min-height: calc(100svh - 70px) !important; padding-top: 24px !important; padding-bottom: 24px !important;
+    justify-content: flex-end !important; box-sizing: border-box !important; }
+}
 @media (max-width: 809px) {
   ${S("Background shader")} { display: none !important; }
   #g-grain { display: none !important; }
