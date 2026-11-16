@@ -394,6 +394,11 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Gift's direction for the rethink: group the Playground by type (Websites, SaaS, Mobile apps) with each type opening its
   pieces; anything that belongs to a case study (e.g. the Dado landing pages) should live in that case study, not twice.
 
+## Floating nav: minimal change (2026-11-16, not yet published)
+- The scrolled pill now wraps the resting nav content plus 8px on every side, so logo and buttons stay put:
+  desktop top 24 / width calc(100% - 224px), tablet top 12 / calc(100% - 48px), phone top 8 / calc(100% - 24px),
+  padding 8px everywhere (was: max 920px wide, top 14, padding 10/10/10/24). Matches resting padding 32/120, 20/32, 16/20.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

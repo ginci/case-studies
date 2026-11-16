@@ -338,9 +338,11 @@ ${N("Nav (fixed)")} {
   align-self: center !important; width: 100% !important; max-width: 100% !important;
   border: 1px solid transparent !important; box-sizing: border-box !important;
 }
+/* Floating pill = the resting nav content plus 8px on every side, so the logo and buttons don't move when it floats.
+   Resting padding: desktop 32/120, tablet 20/32, phone 16/20. */
 html[data-g-scrolled] ${N("Nav (fixed)")} {
-  top: 14px !important; max-width: min(920px, calc(100% - 32px)) !important;
-  border-radius: 999px !important; padding: 10px 10px 10px 24px !important;
+  top: 24px !important; max-width: calc(100% - 224px) !important;
+  border-radius: 999px !important; padding: 8px !important;
   background-color: rgba(11, 11, 10, 0.92) !important; border-color: rgba(244, 243, 238, 0.12) !important;
   backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
@@ -412,6 +414,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 
 /* ---------- Tablet (810–1199) ---------- */
 @media (max-width: 1199px) {
+  html[data-g-scrolled] ${N("Nav (fixed)")} { top: 12px !important; max-width: calc(100% - 48px) !important; padding: 8px !important; }
   ${ROW} ${N("Meta")} { width: 220px !important; }
   ${N("04 About")} { flex-direction: column !important; gap: 32px !important; }
   ${N("04 About")} > * { width: 100% !important; }
@@ -428,7 +431,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 @media (max-width: 809px) {
   #main * { max-width: 100%; }
   ${N("Nav (fixed)")} ${N("Work")}, ${N("Nav (fixed)")} ${N("About")}, ${N("Nav (fixed)")} ${N("Contact")} { display: none !important; }
-  html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 20px) !important; padding: 8px 8px 8px 16px !important; }
+  html[data-g-scrolled] ${N("Nav (fixed)")} { top: 8px !important; max-width: calc(100% - 24px) !important; padding: 8px !important; }
   ${N("Lede")} { width: 100% !important; }
   ${ROW} { padding-top: 22px !important; padding-bottom: 22px !important; gap: 14px !important;
     margin-left: -12px !important; margin-right: -12px !important; padding-left: 12px !important; padding-right: 12px !important; width: calc(100% + 24px) !important; }
