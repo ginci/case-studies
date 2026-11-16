@@ -66,6 +66,8 @@ html[data-g-story] ${N("Case study page")} ${N("Section body")} { animation: g-f
 ${N("Story toggle")} { position: relative !important; }
 ${N("Story toggle")} ${N("Dotted line")} { background: none !important; height: 0 !important; border-top: 1px dotted rgba(244, 243, 238, 0.36) !important; }
 ${S("CTA / Read the full story")}, ${S("CTA / Read the full story")} * { flex-shrink: 0 !important; white-space: nowrap !important; }
+/* The pill always fits its label (no wrapping or squeezing on phones) */
+#main ${S("CTA / Read the full story")}, #main ${S("CTA / Read the full story")} > [data-framer-component-type="RichTextContainer"], #main ${S("CTA / Read the full story")} p { width: max-content !important; max-width: none !important; min-width: max-content !important; white-space: nowrap !important; flex: 0 0 auto !important; }
 ${S("CTA / Read the full story")} { background-color: #121211 !important; border: 1px solid rgba(244, 243, 238, 0.2) !important; }
 ${S("CTA / Read the full story")} * { color: #A3A29C !important; text-transform: uppercase !important; }
 ${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(180deg); }
@@ -628,8 +630,8 @@ export function withStoryToggle(Component: any): ComponentType {
                 let n = walker.nextNode()
                 while (n) {
                     const v = n.nodeValue || ""
-                    if (/read the full story|show less|short version/i.test(v)) {
-                        const to = open ? "Short version" : "Read the full story"
+                    if (/read the full story|read more|show less|short version/i.test(v)) {
+                        const to = open ? "Short version" : "Read more"
                         n.nodeValue = v === v.toUpperCase() ? to.toUpperCase() : to
                     }
                     n = walker.nextNode()

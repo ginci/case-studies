@@ -446,3 +446,9 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Removed the CSS `width:100vw; margin-left:calc(50% - 50vw)` rule on About toggle.
 - Phone CSS `#main * { max-width:100% }` now skips layers named "Dotted line (bleed…".
 - Not published yet (waiting for "publish").
+
+## 16 Nov 2026: case study button says "Read more"
+- Canvas label changed from "READ THE FULL STORY" to "READ MORE" on Desktop, Tablet and Phone. The text layer is renamed "Read more". The button layer keeps its name "CTA / Read the full story" because the CSS targets it.
+- withStoryToggle now swaps between "Read more" and "Short version" (open).
+- On phones the label wrapped onto four lines and cut off the arrow, because of `#main * { max-width:100% }`. New CSS sizes the pill and its text to max-content with no wrapping, at every breakpoint.
+- Not published yet.
