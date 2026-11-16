@@ -394,7 +394,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Gift's direction for the rethink: group the Playground by type (Websites, SaaS, Mobile apps) with each type opening its
   pieces; anything that belongs to a case study (e.g. the Dado landing pages) should live in that case study, not twice.
 
-## Floating nav: minimal change (2026-11-16, not yet published)
+## Floating nav: minimal change — REVERTED at Gift's request (back to max 920px, top 14, padding 10/10/10/24; phone top 10)
 - The scrolled pill now wraps the resting nav content plus 8px on every side, so logo and buttons stay put:
   desktop top 24 / width calc(100% - 224px), tablet top 12 / calc(100% - 48px), phone top 8 / calc(100% - 24px),
   padding 8px everywhere (was: max 920px wide, top 14, padding 10/10/10/24). Matches resting padding 32/120, 20/32, 16/20.
