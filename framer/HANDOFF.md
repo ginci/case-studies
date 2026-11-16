@@ -452,3 +452,4 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - withStoryToggle now swaps between "Read more" and "Short version" (open).
 - On phones the label wrapped onto four lines and cut off the arrow, because of `#main * { max-width:100% }`. New CSS sizes the pill and its text to max-content with no wrapping, at every breakpoint.
 - Not published yet.
+- Update, same day: the "Dotted line (bleed …)" canvas layers were deleted in the editor before publishing, so the 100vw CSS rule on About toggle is back. Published and verified edge to edge at 390, 834, 1440 and 2560 with no horizontal scroll. "READ MORE" is live.

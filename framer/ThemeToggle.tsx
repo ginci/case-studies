@@ -163,6 +163,7 @@ ${N("About toggle")} { position: relative !important; }
 ${N("About toggle")} > ${S("CTA / More about me")}, ${N("About toggle")} > ${N("More about me")} { flex-shrink: 0 !important; }
 ${N("About toggle")} ${N("Dotted line")} { flex: 1 1 0 !important; min-width: 16px; }
 @media (max-width: 809px) { ${N("About toggle")} ${N("More about me")}, ${N("About toggle")} ${S("CTA / More about me")} { padding: 8px 20px 8px 16px !important; } }
+${N("About toggle")} { width: 100vw !important; max-width: 100vw !important; margin-left: calc(50% - 50vw) !important; margin-right: 0 !important; }
 ${N("About toggle")} ${N("Dotted line")} { background: none !important; height: 0 !important; border-top: 1px dotted rgba(244, 243, 238, 0.36) !important; }
 /* the ribbon runs to the screen edges: pull it out over the hero's side padding */
 ${S("CTA / More about me")} {
