@@ -160,7 +160,7 @@ ${N("About toggle")} { position: relative !important; }
 /* Ribbon runs edge to edge of the screen at every size, so the button sits dead centre */
 ${N("About toggle")} > ${S("CTA / More about me")}, ${N("About toggle")} > ${N("More about me")} { flex-shrink: 0 !important; }
 ${N("About toggle")} ${N("Dotted line")} { flex: 1 1 0 !important; min-width: 16px; }
-@media (max-width: 809px) { ${N("About toggle")} ${N("More about me")}, ${N("About toggle")} ${S("CTA / More about me")} { padding: 8px 16px 8px 14px !important; } }
+@media (max-width: 809px) { ${N("About toggle")} ${N("More about me")}, ${N("About toggle")} ${S("CTA / More about me")} { padding: 8px 20px 8px 16px !important; } }
 ${N("About toggle")} { width: 100vw !important; max-width: 100vw !important; margin-left: calc(50% - 50vw) !important; margin-right: 0 !important; }
 ${N("About toggle")} ${N("Dotted line")} { background: none !important; height: 0 !important; border-top: 1px dotted rgba(244, 243, 238, 0.36) !important; }
 /* the ribbon runs to the screen edges: pull it out over the hero's side padding */
@@ -450,9 +450,6 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   ${N("Steps")} > *::before { left: -52px; top: 16px; }
   ${NEXT} > :not(${N("Next accent swatch")}) { max-width: calc(100% - 76px) !important; }
   ${NEXT}::after { top: 80px; margin-top: 0; right: 20px; width: 56px; height: 56px; background-size: 22px; }
-  #g-grid b:nth-child(1), #g-grid b:nth-child(3) { display: none; }
-  #g-grid b:nth-child(2) { left: 33.333%; }
-  #g-grid b:nth-child(4) { left: 66.666%; }
 }
 
 /* ---------- Texture: grain + vertical grid lines that grow with scroll ---------- */

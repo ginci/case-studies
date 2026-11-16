@@ -410,6 +410,11 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Floating nav pill: width = screen minus 16px each side on every device (calc(100vw - 32px)), not capped by the
   1200px content column.
 
+## Phone grid + button (2026-11-16, not yet published)
+- Phones now show all four grid lines with the same alternating motion as desktop (lines 1/3 draw down, 2/4 draw up).
+  Previously lines 1 and 3 were hidden on phones, leaving two lines both moving up.
+- "More about me" on phones: padding 8/20/8/16 (more room before the arrow).
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
