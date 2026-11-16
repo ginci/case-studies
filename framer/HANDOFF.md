@@ -381,6 +381,11 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Still glow in the shader colours on every page frame, so the background is there at first paint; the WebGL shader fades in
   over it on desktop/tablet. Kept on purpose: the handwritten headline, and the Available / Listening pills' late entrance.
 
+## Scroll starts at the top (2026-11-16, not yet published)
+- history.scrollRestoration = "manual" in the head bootstrap and in ThemeToggle; scroll to top on first load, on pageshow
+  (back/forward cache), and on every route change (pushState/replaceState/popstate are watched), so refresh, back,
+  the logo and returning from Work/case pages all start at the top. Links with a #hash still land on their section.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).

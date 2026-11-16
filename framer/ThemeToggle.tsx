@@ -1195,6 +1195,22 @@ function setupFX() {
     const w = window as any
     if (!w.__gFX) {
         w.__gFX = true
+        // Every page visit starts at the top: refresh, back/forward, the logo, or returning from another page.
+        // (Links to a section, e.g. /work#playground, still land on that section.)
+        try { history.scrollRestoration = "manual" } catch (e) {}
+        let lastPath = location.pathname
+        const scrollHome = () => { if (!location.hash) window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior }) }
+        const onRoute = () => {
+            if (location.pathname === lastPath) return
+            lastPath = location.pathname
+            scrollHome(); requestAnimationFrame(scrollHome)
+        }
+        window.addEventListener("popstate", () => { lastPath = ""; setTimeout(onRoute, 0) })
+        for (const k of ["pushState", "replaceState"] as const) {
+            const orig = history[k].bind(history)
+            ;(history as any)[k] = (...args: any[]) => { const r = (orig as any)(...args); setTimeout(onRoute, 0); return r }
+        }
+        window.addEventListener("pageshow", scrollHome)
         // At most one grid/TOC update per frame (scroll fires far more often than the screen repaints).
         let fxRaf = 0
         const onScroll = () => {
