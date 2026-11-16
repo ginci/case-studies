@@ -386,6 +386,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   (back/forward cache), and on every route change (pushState/replaceState/popstate are watched), so refresh, back,
   the logo and returning from Work/case pages all start at the top. Links with a #hash still land on their section.
 
+## Playground parked (2026-11-16, not yet published)
+- Work page shows case studies only: "Work tabs" (WorkTabs) and "Playground list" are hidden (visible=false), and a plain
+  "Case studies" label sits above the list. All 6 Playground CMS items are drafts, so /playground/* pages aren't published.
+- Nothing deleted: the collection, the /playground/:Playground page, WorkTabs and withPlaygroundLink remain.
+- To restore later: un-draft items, set Work tabs + Playground list visible, remove the "Case studies" label.
+- Gift's direction for the rethink: group the Playground by type (Websites, SaaS, Mobile apps) with each type opening its
+  pieces; anything that belongs to a case study (e.g. the Dado landing pages) should live in that case study, not twice.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
