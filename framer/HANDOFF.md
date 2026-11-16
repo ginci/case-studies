@@ -431,3 +431,9 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
 - Home starts with Tranzakt; the list ends with a link to Dribbble instead of Load more (Gift, 2026-11-04). Dribbble link removed (Gift, 2026-11-12).
 - Folders ship as Coming soon; case studies ship as summaries with the full story folded (Gift, 2026-11-12).
+
+## 16 Nov 2026: floating nav width
+- Reverted the `width: calc(100vw - 32px)` attempt; it broke the floating-pill look.
+- The pill keeps its original max-width animation, with a wider cap: `min(1200px, calc(100% - 32px))` (was 920px). On phones it's `calc(100% - 32px)` (was `100% - 20px`).
+- Verified live: rounded 999px pill, inset 16px, top 14px (10px on phone) at 390, 834, 1440 and 1920px.
+- If this ever needs undoing, the original values were 920px and, on phones, `100% - 20px`.
