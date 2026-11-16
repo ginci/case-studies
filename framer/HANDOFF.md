@@ -401,6 +401,15 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   desktop top 24 / width calc(100% - 224px), tablet top 12 / calc(100% - 48px), phone top 8 / calc(100% - 24px),
   padding 8px everywhere (was: max 920px wide, top 14, padding 10/10/10/24). Matches resting padding 32/120, 20/32, 16/20.
 
+## Pill, ribbon, nav width (2026-11-16, published bce998a56, verified live)
+- "Available" pill back to the original green: fill rgba(111,208,140,0.08), border rgba(111,208,140,0.28), text #F4F3EE.
+  It inverts cleanly to a light-green pill with dark text in light mode (the grey version lost contrast there).
+- "More about me" ribbon: Gift's fixed-width vector lines replaced by two "Dotted line" frames (width 1fr, CSS draws the
+  dotted border) so they reach both screen edges at any width (checked at 1920px); the button never shrinks; phone
+  padding 8/16/8/14 (arrow sits 17px from the edge).
+- Floating nav pill: width = screen minus 16px each side on every device (calc(100vw - 32px)), not capped by the
+  1200px content column.
+
 ## Decisions log
 - No design-system sections (Gift, 2026-11-02).
 - Tranzakt: two user types (customers, merchants). Scope led by consolidated login, payment gateway, KYC/KYB updates, merchant dashboard updates. Deep dives: Treasury, Checkout, KYC/KYB (real copy from content/case-studies.json), Merchant dashboard (Merchant AI framing + placeholder for shipped updates). Website moved into Scope (Gift, 2026-11-04).
