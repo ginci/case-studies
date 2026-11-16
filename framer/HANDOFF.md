@@ -437,3 +437,12 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - The pill keeps its original max-width animation, with a wider cap: `min(1200px, calc(100% - 32px))` (was 920px). On phones it's `calc(100% - 32px)` (was `100% - 20px`).
 - Verified live: rounded 999px pill, inset 16px, top 14px (10px on phone) at 390, 834, 1440 and 1920px.
 - If this ever needs undoing, the original values were 920px and, on phones, `100% - 20px`.
+
+## 16 Nov 2026: "More about me" dotted lines built in the canvas
+- The edge-to-edge dotted lines are now real canvas layers, not a CSS trick, so they show in the editor.
+- Inside "About toggle" there are two absolute layers, "Dotted line (bleed left)" and "Dotted line (bleed right)". Each is 3000px wide and pinned 3000px outside the toggle's edges (bottom 13px; 14px on Phone). They grow with the screen and are clipped at the screen edge.
+- All dotted lines use a canvas border: 1px dotted, top only, rgba(244,243,238,0.36).
+- "Page content column" overflow is now Visible so the extensions can pass the 1200px column.
+- Removed the CSS `width:100vw; margin-left:calc(50% - 50vw)` rule on About toggle.
+- Phone CSS `#main * { max-width:100% }` now skips layers named "Dotted line (bleed…".
+- Not published yet (waiting for "publish").
