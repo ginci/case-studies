@@ -459,3 +459,9 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - "Page content column" overflow is set back to Clip.
 - The lines now follow the canvas: they span the hero's content width (80px in on desktop, 40 on tablet, 20 on phone).
 - Uploaded, not published yet.
+
+## 17 Nov 2026: button labels never wrap
+- On phones "Request access" (CTA / Email request, locked case study) wrapped onto three lines, again because of `#main * { max-width:100% }`.
+- Replaced the one-off "Read more" fix with one rule. Every layer named "CTA / …" that has a text label is sized to max-content with nowrap at every breakpoint. Icon-only CTAs (CTA / Email me) are excluded via `:has(p)`, so they keep their size.
+- To make a new button follow this, name it "CTA / Something".
+- Uploaded, not published yet (still waiting for "publish", together with the dotted-line revert).

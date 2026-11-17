@@ -66,8 +66,9 @@ html[data-g-story] ${N("Case study page")} ${N("Section body")} { animation: g-f
 ${N("Story toggle")} { position: relative !important; }
 ${N("Story toggle")} ${N("Dotted line")} { background: none !important; height: 0 !important; border-top: 1px dotted rgba(244, 243, 238, 0.36) !important; }
 ${S("CTA / Read the full story")}, ${S("CTA / Read the full story")} * { flex-shrink: 0 !important; white-space: nowrap !important; }
-/* The pill always fits its label (no wrapping or squeezing on phones) */
-#main ${S("CTA / Read the full story")}, #main ${S("CTA / Read the full story")} > [data-framer-component-type="RichTextContainer"], #main ${S("CTA / Read the full story")} p { width: max-content !important; max-width: none !important; min-width: max-content !important; white-space: nowrap !important; flex: 0 0 auto !important; }
+/* Buttons: every layer named "CTA / …" fits its label on one line at every breakpoint.
+   (Overrides the phone rule "#main * { max-width: 100% }", which squeezed labels into several lines.) */
+#main [data-framer-name^="CTA / "]:has(p), #main [data-framer-name^="CTA / "] > [data-framer-component-type="RichTextContainer"], #main [data-framer-name^="CTA / "] p { width: max-content !important; max-width: none !important; min-width: max-content !important; white-space: nowrap !important; flex: 0 0 auto !important; }
 ${S("CTA / Read the full story")} { background-color: #121211 !important; border: 1px solid rgba(244, 243, 238, 0.2) !important; }
 ${S("CTA / Read the full story")} * { color: #A3A29C !important; text-transform: uppercase !important; }
 ${S("CTA / Read the full story")}[aria-expanded="true"] svg { transform: rotate(180deg); }
