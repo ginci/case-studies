@@ -527,3 +527,15 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 | Contact heading | 18 → 17 |
 | Lede, outcomes label/result | 18 → 16 |
 | Locked body | 17 → 16 |
+
+## 17 Nov 2026: floating nav shrinks inward; all published (bc63eb5a3)
+- On scroll the nav pill is narrower than the content:
+  - desktop: `max-width: calc(min(100%, 1200px) - 192px)` (16px inside the 80px margins)
+  - tablet: `calc(100% - 96px)` (16px inside 32)
+  - phone: `calc(100% - 56px)` (8px inside 20)
+  - Before, it was 1200px wide on desktop, which pushed it outside the content edges.
+- Verified live:
+  - pill edges at 216..1224 (1440), 456..1464 (1920), 48..786 (834), 28..362 (390), the same on Home, Work and case studies
+  - text starts at 200/440/32/20 on every page
+  - Shots tab: `#shots`, 6 tiles, Work list hidden
+  - phone case title 30px

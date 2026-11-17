@@ -344,7 +344,7 @@ ${N("Nav (fixed)")} {
   border: 1px solid transparent !important; box-sizing: border-box !important;
 }
 html[data-g-scrolled] ${N("Nav (fixed)")} {
-  top: 14px !important; max-width: min(1200px, calc(100% - 32px)) !important;
+  top: 14px !important; max-width: calc(min(100%, 1200px) - 192px) !important; /* shrinks inward: 16px inside the 80px content margins */
   border-radius: 999px !important; padding: 10px 10px 10px 24px !important;
   background-color: rgba(11, 11, 10, 0.92) !important; border-color: rgba(244, 243, 238, 0.12) !important;
   backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
@@ -445,11 +445,13 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   ${NEXT}::after { right: 32px; width: 72px; height: 72px; margin-top: -36px; background-size: 28px; }
 }
 
+@media (min-width: 810px) and (max-width: 1199px) { html[data-g-scrolled] ${N("Nav (fixed)")} { max-width: calc(100% - 96px) !important; } } /* tablet: 16px inside the 32px margins */
+
 /* ---------- Phone (up to 809) ---------- */
 @media (max-width: 809px) {
   #main * { max-width: 100%; }
   ${N("Nav (fixed)")} ${N("Work")}, ${N("Nav (fixed)")} ${N("About")}, ${N("Nav (fixed)")} ${N("Contact")} { display: none !important; }
-  html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 32px) !important; padding: 8px 8px 8px 16px !important; }
+  html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 56px) !important; padding: 8px 8px 8px 16px !important; } /* 8px inside the 20px phone margins */
   ${N("Lede")} { width: 100% !important; }
   ${ROW} { padding-top: 22px !important; padding-bottom: 22px !important; gap: 14px !important;
     margin-left: -12px !important; margin-right: -12px !important; padding-left: 12px !important; padding-right: 12px !important; width: calc(100% + 24px) !important; }
