@@ -453,3 +453,9 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - On phones the label wrapped onto four lines and cut off the arrow, because of `#main * { max-width:100% }`. New CSS sizes the pill and its text to max-content with no wrapping, at every breakpoint.
 - Not published yet.
 - Update, same day: the "Dotted line (bleed …)" canvas layers were deleted in the editor before publishing, so the 100vw CSS rule on About toggle is back. Published and verified edge to edge at 390, 834, 1440 and 2560 with no horizontal scroll. "READ MORE" is live.
+
+## 17 Nov 2026: "More about me" dotted lines back to content width
+- Gift no longer wants edge-to-edge lines. The 100vw CSS rule on About toggle and the phone bleed exception are removed.
+- "Page content column" overflow is set back to Clip.
+- The lines now follow the canvas: they span the hero's content width (80px in on desktop, 40 on tablet, 20 on phone).
+- Uploaded, not published yet.
