@@ -465,3 +465,19 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Replaced the one-off "Read more" fix with one rule. Every layer named "CTA / …" that has a text label is sized to max-content with nowrap at every breakpoint. Icon-only CTAs (CTA / Email me) are excluded via `:has(p)`, so they keep their size.
 - To make a new button follow this, name it "CTA / Something".
 - Uploaded, not published yet (still waiting for "publish", together with the dotted-line revert).
+
+## 17 Nov 2026: high-resolution case study images (partly done)
+- Exported from Figma at 2× with the Figma connector (download_assets, defaultScale 2), then composed in the Tranzakt style by `mockups/case-mocks.cjs`: browser windows on a branded backdrop, rendered at 2×. Address bars show product names, not invented URLs.
+- **Replaced in the CMS:**
+  - 9mobile: Cover + Preview (2240×1520), S06 website, S07 eShop, S08 CMS (1760×920).
+  - NSIA: Cover + Preview (newer dashboard, `8918:67547`), S07 daily production (filled report, `6875:149979`; the old one was an empty table).
+  - Previous image URLs: `mockups/cms-images-before-2026-11-17.json`.
+- **Still the old low-res images:**
+  - NSIA S09 reports (use `10168:90400`). NSIA S08 flow is already high resolution, so it's fine.
+  - CreatorScribe Cover/Preview, S06–S08 (`492:22172`, `482:24227`, `482:25357`, `482:28441` in `vAfry4XNlu5JpVPhWa6J7i`).
+  - Dado S08 checkout (pick single phone screens from `15479:56662` in `cRhK9EMb7YHnin0eUbJCbb`; the current image is a slide of tiny phones) and S09 MaaS (`3331:55288` in `qbmBAvzSsnH8mHj34N3UR8`).
+- **Blocked by Figma's Starter-plan limits:**
+  - REST image API: 429, Retry-After 257,844 s (about 20 Nov).
+  - Figma connector: "tool call limit on the Starter plan".
+- To finish: export the frames above at 2× into the scratchpad `fig/src` as `<name>-top.png`, add scenes to `case-mocks.cjs`, run it, then upload like `hiimg.mjs` does.
+- Not published yet.

@@ -1,0 +1,62 @@
+{
+ "9mobile": {
+  "Cover": {
+   "id": "n9N2m5dXwvgeDpUXbquWKAbc9k.jpg",
+   "url": "https://framerusercontent.com/images/n9N2m5dXwvgeDpUXbquWKAbc9k.jpg",
+   "thumbnailUrl": "https://framerusercontent.com/images/n9N2m5dXwvgeDpUXbquWKAbc9k.jpg?scale-down-to=512",
+   "altText": "9mobile overview",
+   "resolution": "auto"
+  },
+  "Preview": {
+   "id": "n9N2m5dXwvgeDpUXbquWKAbc9k.jpg",
+   "url": "https://framerusercontent.com/images/n9N2m5dXwvgeDpUXbquWKAbc9k.jpg",
+   "thumbnailUrl": "https://framerusercontent.com/images/n9N2m5dXwvgeDpUXbquWKAbc9k.jpg?scale-down-to=512",
+   "altText": "9mobile overview",
+   "resolution": "auto"
+  },
+  "S06 image": {
+   "id": "Kn43HJjvQOns26r4HNIEv6zrxpE.jpg",
+   "url": "https://framerusercontent.com/images/Kn43HJjvQOns26r4HNIEv6zrxpE.jpg",
+   "thumbnailUrl": "https://framerusercontent.com/images/Kn43HJjvQOns26r4HNIEv6zrxpE.jpg?scale-down-to=512",
+   "altText": "9mobile S06 section",
+   "resolution": "auto"
+  },
+  "S07 image": {
+   "id": "Dxl9I1ISdGWOMRIN2IlZJLA1cvY.jpg",
+   "url": "https://framerusercontent.com/images/Dxl9I1ISdGWOMRIN2IlZJLA1cvY.jpg",
+   "thumbnailUrl": "https://framerusercontent.com/images/Dxl9I1ISdGWOMRIN2IlZJLA1cvY.jpg?scale-down-to=512",
+   "altText": "9mobile S07 section",
+   "resolution": "auto"
+  },
+  "S08 image": {
+   "id": "apw7B9WdPZcmkScYylW9V0sLc.jpg",
+   "url": "https://framerusercontent.com/images/apw7B9WdPZcmkScYylW9V0sLc.jpg",
+   "thumbnailUrl": "https://framerusercontent.com/images/apw7B9WdPZcmkScYylW9V0sLc.jpg?scale-down-to=512",
+   "altText": "9mobile S08 section",
+   "resolution": "auto"
+  }
+ },
+ "nsia": {
+  "Cover": {
+   "id": "DgUrJWCoOd6PRQVRgKi98wukbcY.jpg",
+   "url": "https://framerusercontent.com/images/DgUrJWCoOd6PRQVRgKi98wukbcY.jpg",
+   "thumbnailUrl": "https://framerusercontent.com/images/DgUrJWCoOd6PRQVRgKi98wukbcY.jpg?scale-down-to=512",
+   "altText": "NSIA overview",
+   "resolution": "auto"
+  },
+  "Preview": {
+   "id": "DgUrJWCoOd6PRQVRgKi98wukbcY.jpg",
+   "url": "https://framerusercontent.com/images/DgUrJWCoOd6PRQVRgKi98wukbcY.jpg",
+   "thumbnailUrl": "https://framerusercontent.com/images/DgUrJWCoOd6PRQVRgKi98wukbcY.jpg?scale-down-to=512",
+   "altText": "NSIA overview",
+   "resolution": "auto"
+  },
+  "S07 image": {
+   "id": "1rlVLL5R46FNkSeV4eYMyEdyX1Q.jpg",
+   "url": "https://framerusercontent.com/images/1rlVLL5R46FNkSeV4eYMyEdyX1Q.jpg",
+   "thumbnailUrl": "https://framerusercontent.com/images/1rlVLL5R46FNkSeV4eYMyEdyX1Q.jpg?scale-down-to=512",
+   "altText": "NSIA S07 section",
+   "resolution": "auto"
+  }
+ }
+}
