@@ -539,3 +539,16 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - text starts at 200/440/32/20 on every page
   - Shots tab: `#shots`, 6 tiles, Work list hidden
   - phone case title 30px
+
+## 17 Nov 2026: hero photo hover, CV wording → experience (published 4cab576c4)
+**Photo hover.** Hovering "Gift" in the hero lede shows a 200×250 halftone portrait card.
+- It follows the cursor, sits above and to the right of it, is tilted −4°, and is smaller than the project preview.
+- Touch: tap "Gift" to show it for about 2.6 s.
+- Code: `setupPhotoHover()` + `drawHalftone()` in ThemeToggle (canvas, 45° dot grid, light dots on #121211).
+- Photo source: the layer **"Hover photo (set fill to your photo)"** in "01 Hero" (CSS keeps it invisible). Set its Fill → Image to Gift's photo and republish.
+- With no photo it draws a halftone silhouette. No photo of Gift exists in the repo, the Framer project or the conversation, so the silhouette is live for now.
+
+**CV wording → experience:**
+- The About chip was "…Dates and titles live in my CV." It's now "…Want the full picture? **Explore my experience**." The chip link is mailto `ginciDesign@outlook.com?subject=Your experience` (no experience page or PDF exists yet; point it there when one does).
+- Socials "Read.cv ↗" → "Experience ↗". None of the socials have links yet.
+- The earlier notes above about the "CV" chip / "Download CV" are superseded by this.

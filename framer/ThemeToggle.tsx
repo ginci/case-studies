@@ -415,6 +415,16 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 }
 
 
+/* Hero: halftone portrait on hover over "Gift" (built by setupPhotoHover) */
+[data-g-photo] { cursor: default; text-decoration: underline dotted rgba(244, 243, 238, 0.45); text-underline-offset: 4px; }
+[data-framer-name^="Hover photo"] { position: absolute !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important; overflow: hidden !important; }
+#g-photo { position: fixed; z-index: 60; width: 200px; height: 250px; border-radius: 14px; overflow: hidden; pointer-events: none;
+  background: #121211; box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(244,243,238,.12);
+  opacity: 0; transform: rotate(-4deg) scale(.86); transform-origin: 0 100%; transition: opacity .22s ease, transform .32s cubic-bezier(.2,.8,.2,1); }
+#g-photo.g-on { opacity: 1; transform: rotate(-4deg) scale(1); }
+#g-photo canvas { display: block; width: 100%; height: 100%; }
+@media (prefers-reduced-motion: reduce) { #g-photo { transition: opacity .15s ease; transform: rotate(-4deg); } }
+
 /* ---------- One page margin everywhere: every page lines up with the Home hero ----------
    Home sits in a 1200px column with 80px padding. On wider screens, the other pages' full-width sections get the same
    left/right inset (backgrounds stay full-bleed). Below 1200px the canvas paddings already match. */
@@ -1074,6 +1084,89 @@ function applyAccents() {
 }
 
 // Case study TOC: click to jump, and mark the section in view.
+// ---------- Hero: hovering "Gift" in the lede shows a small halftone portrait that follows the cursor ----------
+// The photo comes from the layer "Hover photo (set fill to your photo)" in the hero (kept off screen); without one,
+// a halftone silhouette is shown. The halftone is drawn on a canvas at runtime. Touch: tap "Gift" to show it briefly.
+let photoCard: HTMLDivElement | null = null
+let photoDrawnFrom = ""
+function drawHalftone(cv: HTMLCanvasElement, img: HTMLImageElement | null) {
+    const W = cv.width, H = cv.height, ctx = cv.getContext("2d")
+    if (!ctx) return
+    const src = document.createElement("canvas"); src.width = W; src.height = H
+    const sx = src.getContext("2d", { willReadFrequently: true } as any) as CanvasRenderingContext2D
+    sx.fillStyle = "#000"; sx.fillRect(0, 0, W, H)
+    if (img && img.naturalWidth) {
+        const r = Math.max(W / img.naturalWidth, H / img.naturalHeight), w = img.naturalWidth * r, h = img.naturalHeight * r
+        sx.filter = "grayscale(1) contrast(1.15)"; sx.drawImage(img, (W - w) / 2, (H - h) / 2.6, w, h); sx.filter = "none"
+    } else {
+        const g = sx.createRadialGradient(W / 2, H * 0.36, 4, W / 2, H * 0.36, W * 0.3); g.addColorStop(0, "#d8d8d8"); g.addColorStop(1, "#5a5a5a")
+        sx.fillStyle = g; sx.beginPath(); sx.ellipse(W / 2, H * 0.37, W * 0.2, H * 0.17, 0, 0, Math.PI * 2); sx.fill()
+        const b = sx.createLinearGradient(0, H * 0.6, 0, H); b.addColorStop(0, "#9a9a9a"); b.addColorStop(1, "#3a3a3a")
+        sx.fillStyle = b; sx.beginPath(); sx.ellipse(W / 2, H * 1.02, W * 0.46, H * 0.42, 0, Math.PI, 0); sx.fill()
+    }
+    let data: Uint8ClampedArray
+    try { data = sx.getImageData(0, 0, W, H).data } catch { return } // cross-origin image without CORS: keep the CSS fallback
+    ctx.fillStyle = "#121211"; ctx.fillRect(0, 0, W, H); ctx.fillStyle = "#F4F3EE"
+    const step = Math.round(W / 46), ang = Math.PI / 4, cos = Math.cos(ang), sin = Math.sin(ang), R = Math.hypot(W, H)
+    for (let u = -R; u < R; u += step) for (let v = -R; v < R; v += step) {
+        const x = W / 2 + u * cos - v * sin, y = H / 2 + u * sin + v * cos
+        if (x < 0 || y < 0 || x >= W || y >= H) continue
+        const i = (Math.floor(y) * W + Math.floor(x)) * 4, l = (data[i] * 0.3 + data[i + 1] * 0.59 + data[i + 2] * 0.11) / 255
+        const rad = (step / 2) * Math.sqrt(l) * 1.05
+        if (rad > 0.35) { ctx.beginPath(); ctx.arc(x, y, rad, 0, Math.PI * 2); ctx.fill() }
+    }
+}
+function photoSource(): string {
+    const holder = document.querySelector('[data-framer-name^="Hover photo"]') as HTMLElement | null
+    const im = holder?.querySelector("img") as HTMLImageElement | null
+    if (im?.src) return im.src
+    const bg = holder ? getComputedStyle(holder).backgroundImage : ""
+    const m = bg && bg.match(/url\("?(.*?)"?\)/)
+    return m ? m[1] : ""
+}
+function setupPhotoHover() {
+    const lede = document.querySelector('[data-framer-name="Lede"]')
+    if (!lede) return
+    let target: HTMLElement | null = lede.querySelector("[data-g-photo]")
+    if (!target) {
+        const w = document.createTreeWalker(lede, NodeFilter.SHOW_TEXT); let n: Node | null
+        while ((n = w.nextNode())) if ((n.nodeValue || "").trim() === "Gift" && n.parentElement && n.parentElement !== lede) { target = n.parentElement; break }
+        if (!target) return
+        target.setAttribute("data-g-photo", "")
+    }
+    if (target.getAttribute("data-g-photo") === "on") return
+    target.setAttribute("data-g-photo", "on")
+    if (!photoCard) {
+        photoCard = document.createElement("div"); photoCard.id = "g-photo"; photoCard.setAttribute("aria-hidden", "true")
+        const cv = document.createElement("canvas"); cv.width = 400; cv.height = 500; photoCard.appendChild(cv)
+        document.body.appendChild(photoCard)
+    }
+    const card = photoCard, cv = card.querySelector("canvas") as HTMLCanvasElement
+    const render = () => {
+        const url = photoSource()
+        if (photoDrawnFrom === (url || "none")) return
+        photoDrawnFrom = url || "none"
+        if (!url) { drawHalftone(cv, null); return }
+        const img = new Image(); img.crossOrigin = "anonymous"
+        img.onload = () => drawHalftone(cv, img); img.onerror = () => drawHalftone(cv, null)
+        img.src = url.includes("framerusercontent.com") ? url.split("?")[0] + "?scale-down-to=1024" : url
+    }
+    const move = (e: PointerEvent) => { card.style.left = Math.min(e.clientX + 28, window.innerWidth - 230) + "px"; card.style.top = Math.max(12, e.clientY - 276) + "px" }
+    const show = (e: PointerEvent) => { render(); move(e); card.classList.add("g-on") }
+    const hide = () => card.classList.remove("g-on")
+    target.addEventListener("pointerenter", (e) => { if ((e as PointerEvent).pointerType === "mouse") show(e as PointerEvent) })
+    target.addEventListener("pointermove", (e) => { if ((e as PointerEvent).pointerType === "mouse") move(e as PointerEvent) })
+    target.addEventListener("pointerleave", (e) => { if ((e as PointerEvent).pointerType === "mouse") hide() })
+    let t: any = null
+    target.addEventListener("click", (e) => {
+        if ((e as PointerEvent).pointerType === "mouse") return
+        const r = target!.getBoundingClientRect()
+        render(); card.style.left = Math.min(r.left, window.innerWidth - 220) + "px"; card.style.top = r.top - 270 + "px"
+        card.classList.add("g-on"); clearTimeout(t); t = setTimeout(hide, 2600)
+    })
+    window.addEventListener("scroll", hide, { passive: true })
+}
+
 function setupTOC() {
     const items = Array.from(
         document.querySelectorAll<HTMLElement>('[data-framer-name^="TOC / "]')
@@ -1277,6 +1370,7 @@ function setupFX() {
     applyAccents()
     setupTOC()
     setupReveal()
+    setupPhotoHover()
 
     // CMS lists and page changes add layers after first paint: re-run (debounced).
     if (!watcher && typeof MutationObserver !== "undefined") {
@@ -1287,6 +1381,7 @@ function setupFX() {
                 applyAccents()
                 setupTOC()
                 setupReveal()
+                setupPhotoHover()
                 gridUpdate && gridUpdate()
             }, 120)
         })
