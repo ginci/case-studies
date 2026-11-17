@@ -42,7 +42,7 @@ const PW = img("pg-modal@1x.png"), PT = img("pg-tip-crop@1x.png"), PX = img("pg-
 const T = img("treasury-fixed@1x.png"), M = img("merchant@1x.png"), K = img("kychub@1x.png"), MR = img("m-review@1x.png"), MI = img("m-info@1x.png")
 const scenes = {
   cover: { w: 1120, h: 760, dpr: 2, html:
-    win({ x: 64, y: 70, w: 860, h: 640, src: T, url: "app.tranzakt.finance/<b>overview</b>" }) +
+    win({ x: 64, y: 70, w: 860, h: 640, src: M, url: "merchant.tranzakt.finance/<b>dashboard</b>" }) +
     phone({ x: 826, y: 168, w: 248, src: MR }) },
   treasury: { w: 880, h: 460, dpr: 2, html:
     win({ x: 70, y: 46, w: 740, h: 460, src: T, url: "app.tranzakt.finance/<b>overview</b>" }) },
@@ -56,7 +56,7 @@ const scenes = {
     phone({ x: 470, y: 58, w: 170, src: PT, pt: 30 }) +
     phone({ x: 664, y: 34, w: 170, src: PX, pt: 30 }) },
   preview: { w: 380, h: 285, dpr: 3, html:
-    win({ x: 30, y: 30, w: 420, h: 300, src: T, url: "app.tranzakt.finance/<b>overview</b>", zoom: 1.45, crop: 44, left: 96 }) },
+    win({ x: 30, y: 30, w: 420, h: 300, src: M, url: "merchant.tranzakt.finance/<b>dashboard</b>", zoom: 1.45, crop: 44, left: 96 }) },
 }
 ;(async () => {
   fs.mkdirSync(path.join(__dirname, "out"), { recursive: true })

@@ -481,3 +481,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - Figma connector: "tool call limit on the Starter plan".
 - To finish: export the frames above at 2× into the scratchpad `fig/src` as `<name>-top.png`, add scenes to `case-mocks.cjs`, run it, then upload like `hiimg.mjs` does.
 - Not published yet.
+
+## 17 Nov 2026: Tranzakt repositioned around the Business Suite
+- Gift: Tranzakt is B2B payments. The live core is the Business Suite (merchant dashboard, payment links, collections). Treasury isn't live.
+- CMS rewritten:
+  - index line, lede, result, stats
+  - S01–S03
+  - S06 is now "Business Suite"; S09 is "Treasury (not yet live)"
+  - S07 Checkout and S08 Verification unchanged
+- Images: S06 and S09 swapped. Cover and Preview re-rendered with the merchant dashboard (`mockups/mock.cjs` cover/preview scenes now use `merchant@1x.png`).
+- Review notes: `drafts/tranzakt-rewrite-2026-11-17.md`. Previous field values: `drafts/tranzakt-cms-before-2026-11-17.json`.
+- Not published yet.
