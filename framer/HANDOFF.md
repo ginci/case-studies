@@ -493,3 +493,37 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Review notes: `drafts/tranzakt-rewrite-2026-11-17.md`. Previous field values: `drafts/tranzakt-cms-before-2026-11-17.json`.
 - Not published yet.
 - Update, same day: Gift asked to drop Treasury entirely. S09 label/title/body/image cleared and the Treasury line removed from the S02 scope. Published (fab5e7124). Live sidebar: The problem › Approach › Business Suite › Checkout › Verification › Results. No Treasury text on the page.
+
+## 17 Nov 2026: one page margin, Shots tab, phone type scale (uploaded, not published)
+**Margins.** Every page now lines up with the Home hero.
+- Canvas: desktop sections on Work, Case study and Playground/Shots item pages use 80px side padding (was 120 on several). Page wrappers are 0.
+- CSS (ThemeToggle, ≥1200px): sections inside "Page content column", "Case study page" and "Playground / Index" get `max(80px, (100% − 1200px)/2 + 80px)` side padding, which equals Home's 1200 column + 80 padding. Backgrounds stay full-bleed. The nav is skipped when it's the floating pill.
+- Checked by injecting the rule live: content and logo start at 120/200/440px at 1280/1440/1920 on Home, Work and case studies.
+- Tablet (32) and phone (20) already matched.
+
+**Work tabs: Case studies / Shots.**
+- `WorkTabs.tsx`: second tab is "Shots", hash `#shots` (`#playground` still works). It shows the "Shots list" layer and hides "Work list" plus the hover preview. "Playground list" stays hidden.
+- New code component `Shots.tsx` (Framer file I4NQo6B), in the "Shots list" frame under the Work list:
+  - masonry grid of rounded tiles (3 / 2 / 1 columns)
+  - each tile is a phone or browser mockup; tiles rise in on scroll and devices float gently
+  - placeholders shimmer; reduced-motion is respected
+- Property panel → Shots: per item Title, Device (phone/browser), Screenshot, Video (mp4/webm, autoplay, muted, loop) and Link. With no items it shows 6 placeholders.
+- On the Work page the "Case studies" label is hidden and the tabs are visible.
+
+**Phone type scale (canvas phone breakpoints only).**
+
+| Text | Size |
+|---|---|
+| Hand headline size | 28 → 24 |
+| Case title | 36 → 30 |
+| Next title | 32 → 26 |
+| Work title | 28 → 24 |
+| Contact email | 28 → 22 |
+| Locked title | 24 → 21 |
+| Arrows | 32 / 24 → 22 / 20 |
+| Names | 20 → 18 |
+| About statement | 20 → 18 |
+| Section labels | 19 → 17 |
+| Contact heading | 18 → 17 |
+| Lede, outcomes label/result | 18 → 16 |
+| Locked body | 17 → 16 |

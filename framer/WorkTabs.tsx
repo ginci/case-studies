@@ -1,14 +1,15 @@
 import { useEffect, useState, type CSSProperties } from "react"
 import { addPropertyControls, ControlType } from "framer"
 
-// Work page tabs: "Case studies" / "Playground". Shows the layer named "Work list" or "Playground list".
-// The choice is kept in the URL hash (#playground) so the tab can be linked to and survives back/forward.
+// Work page tabs: "Case studies" / "Shots". Shows the layer named "Work list" or "Shots list".
+// The choice is kept in the URL hash (#shots) so the tab can be linked to and survives back/forward.
+// The old "Playground list" stays hidden.
 
 export default function WorkTabs(props: { first: string; second: string; style?: CSSProperties }) {
-    const { first = "Case studies", second = "Playground" } = props
+    const { first = "Case studies", second = "Shots" } = props
     const [tab, setTab] = useState<0 | 1>(0)
     useEffect(() => {
-        const read = () => setTab(window.location.hash === "#playground" ? 1 : 0)
+        const read = () => setTab(window.location.hash === "#shots" || window.location.hash === "#playground" ? 1 : 0)
         read()
         window.addEventListener("hashchange", read)
         return () => { window.removeEventListener("hashchange", read); document.documentElement.removeAttribute("data-g-tab") }
@@ -16,7 +17,7 @@ export default function WorkTabs(props: { first: string; second: string; style?:
     useEffect(() => { document.documentElement.toggleAttribute("data-g-tab", tab === 1) }, [tab])
     const pick = (t: 0 | 1) => {
         setTab(t)
-        history.replaceState(null, "", t === 1 ? "#playground" : window.location.pathname + window.location.search)
+        history.replaceState(null, "", t === 1 ? "#shots" : window.location.pathname + window.location.search)
     }
     const btn = (t: 0 | 1, label: string) => (
         <button key={t} role="tab" aria-selected={tab === t} onClick={() => pick(t)}
@@ -31,8 +32,10 @@ export default function WorkTabs(props: { first: string; second: string; style?:
 .g-tab:hover { color: #F4F3EE; }
 .g-tab[aria-selected="true"] { background: #F4F3EE; color: #121211; }
 .g-tab:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 2px; }
-html[data-g-tab] [data-framer-name="Work list"], html:not([data-g-tab]) [data-framer-name="Playground list"] { display: none !important; }
-@media (prefers-reduced-motion: reduce) { .g-tab { transition: none; } }
+html[data-g-tab] [data-framer-name="Work list"], html[data-g-tab] [data-framer-name^="Hover preview"], html:not([data-g-tab]) [data-framer-name="Shots list"], [data-framer-name="Playground list"] { display: none !important; }
+html[data-g-tab] [data-framer-name="Shots list"] { animation: g-tab-in .45s ease both; }
+@keyframes g-tab-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .g-tab { transition: none; } html[data-g-tab] [data-framer-name="Shots list"] { animation: none; } }
 `}</style>
             {btn(0, first)}
             {btn(1, second)}
@@ -40,7 +43,7 @@ html[data-g-tab] [data-framer-name="Work list"], html:not([data-g-tab]) [data-fr
     )
 }
 
-WorkTabs.defaultProps = { first: "Case studies", second: "Playground" }
+WorkTabs.defaultProps = { first: "Case studies", second: "Shots" }
 addPropertyControls(WorkTabs, {
     first: { type: ControlType.String, title: "Tab 1" },
     second: { type: ControlType.String, title: "Tab 2" },

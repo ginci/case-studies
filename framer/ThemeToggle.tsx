@@ -415,6 +415,22 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 }
 
 
+/* ---------- One page margin everywhere: every page lines up with the Home hero ----------
+   Home sits in a 1200px column with 80px padding. On wider screens, the other pages' full-width sections get the same
+   left/right inset (backgrounds stay full-bleed). Below 1200px the canvas paddings already match. */
+@media (min-width: 1200px) {
+  ${N("Page content column")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}),
+  ${N("Case study page")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}),
+  ${N("Playground / Index")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}),
+  html:not([data-g-scrolled]) ${N("Page content column")} > ${N("Nav (fixed)")},
+  html:not([data-g-scrolled]) ${N("Case study page")} > ${N("Nav (fixed)")},
+  html:not([data-g-scrolled]) ${N("Playground / Index")} > ${N("Nav (fixed)")} {
+    padding-left: max(80px, calc((100% - 1200px) / 2 + 80px)) !important;
+    padding-right: max(80px, calc((100% - 1200px) / 2 + 80px)) !important;
+    max-width: none !important;
+  }
+}
+
 /* ---------- Tablet (810–1199) ---------- */
 @media (max-width: 1199px) {
   ${ROW} ${N("Meta")} { width: 220px !important; }
