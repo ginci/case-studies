@@ -1,2 +1,6 @@
 node_modules/
 .DS_Store
+
+# Full-quality renders from framer/mockups/case-mocks.cjs (JPEG copies are committed)
+framer/mockups/out/9mobile-*.png
+framer/mockups/out/nsia-*.png
