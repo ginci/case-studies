@@ -24,7 +24,7 @@ Written to the CMS, not published. The previous text is in `tranzakt-cms-before-
 4. **Business Suite** (new, first feature, merchant dashboard image): the to-do list that leads to a first payment, test API keys, the payment link page (type, amount, description, settlement account, customer details, copy/visit, invoices tab) and the payment email with a secure link.
 5. **Checkout:** unchanged.
 6. **Verification:** unchanged.
-7. **Treasury (not yet live)** (last, Treasury image): designed, not launched.
+7. ~~Treasury~~: removed at Gift's request (17 Nov); not on the site.
 
 ## Images
 - Cover and Preview now show the merchant dashboard (with the mobile verification screen) instead of Treasury.

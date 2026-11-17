@@ -492,3 +492,4 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Images: S06 and S09 swapped. Cover and Preview re-rendered with the merchant dashboard (`mockups/mock.cjs` cover/preview scenes now use `merchant@1x.png`).
 - Review notes: `drafts/tranzakt-rewrite-2026-11-17.md`. Previous field values: `drafts/tranzakt-cms-before-2026-11-17.json`.
 - Not published yet.
+- Update, same day: Gift asked to drop Treasury entirely. S09 label/title/body/image cleared and the Treasury line removed from the S02 scope. Published (fab5e7124). Live sidebar: The problem › Approach › Business Suite › Checkout › Verification › Results. No Treasury text on the page.
