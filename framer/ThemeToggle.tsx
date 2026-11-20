@@ -425,6 +425,12 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 #g-photo canvas { display: block; width: 100%; height: 100%; }
 @media (prefers-reduced-motion: reduce) { #g-photo { transition: opacity .15s ease; transform: rotate(-4deg); } }
 
+/* Nav byline ("by / Gift Njom / Lagos · time · GMT+1", inside the Logo component): shown at the top of the page,
+   folded away while the nav is the floating pill. */
+${N("Byline")} { max-width: 160px; overflow: hidden; white-space: nowrap; transition: opacity .3s ease, max-width .45s ${EASE}, margin .45s ${EASE}; }
+html[data-g-scrolled] ${N("Byline")} { opacity: 0; max-width: 0; margin-left: -8px; }
+@media (prefers-reduced-motion: reduce) { ${N("Byline")} { transition: none; } }
+
 /* ---------- One page margin everywhere: every page lines up with the Home hero ----------
    Home sits in a 1200px column with 80px padding. On wider screens, the other pages' full-width sections get the same
    left/right inset (backgrounds stay full-bleed). Below 1200px the canvas paddings already match. */

@@ -585,3 +585,13 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Phone hero top padding 96 → 32 (canvas and CSS) so the taller hero still fits; content stays at the bottom of the screen.
 - Gift's Framer comments can't be read through framer-api (no comments API or query type). Ask Gift to paste them.
 - Next conversation: splitting the full case studies into smaller pieces of work.
+
+## 20 Nov 2026: nav byline in the Logo component (uploaded, not published)
+- From Gift's Framer comment (Framer comments can't be read via framer-api, so the instructions came through chat).
+- The Logo component (`d0D1RTQxD`) now holds a "Byline" stack after the logo, in both variants, so it shows on every page. Variant 1 height is auto.
+  - Geist Mono 10px.
+  - The location line uses `withNowTime`: it shows live Lagos time where the text contains "00:00".
+- Gift then edited it on the canvas to: "by" hidden; "by Gift Njom"; "Lagos, GMT+1" (no time placeholder, so no clock). Gift's version is kept.
+- CSS: the byline folds away (opacity, max-width) while the nav is the floating pill and returns at the top.
+- Phone logo instance was fixed at 60×28 with an aspect ratio; it's now Fit, so the byline isn't clipped.
+- The nav mail button now shows a phone icon (Gift's edit).
