@@ -595,3 +595,8 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - CSS: the byline folds away (opacity, max-width) while the nav is the floating pill and returns at the top.
 - Phone logo instance was fixed at 60×28 with an aspect ratio; it's now Fit, so the byline isn't clipped.
 - The nav mail button now shows a phone icon (Gift's edit).
+
+## 20 Nov 2026: hero headline cycles Product designer. → Builder. → Vibe coder. (uploaded, not published)
+- Gift: after writing, wait 1 s, write it backwards, then write the next text; loop. Gift said "byproduct"; it was read as "Vibe coder." (matches the site description "Designer. Builder. Vibe coder"). Change it in `gen.cjs` if wrong.
+- `tools/hand-headline/build_cycle.cjs` generates the new `HandHeadline.tsx`. Controls: Size, Color, Weight, Speed, Hold (s), Start delay. Line height is gone: each phrase is a single line.
+- Timings: writing takes 2.1 / 1.2 / 1.5 s; full loop is about 13 s. Tested in a browser: the phrases cycle and erasing goes from the last letter back.
