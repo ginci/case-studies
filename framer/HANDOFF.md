@@ -573,3 +573,4 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 ## 20 Nov 2026: hero headline is now "Product designer." (published f3fd84425)
 - "Vibe coder." removed at Gift's request. HandHeadline regenerated with `tools/hand-headline/gen.cjs` lines `["Product designer.", "Product designer."]`: one line at every width, about 1.75 s write-on.
 - Still says "Vibe coder": the site's SEO/share description "Designer. Builder. Vibe coder" (Framer Site Settings → General → Description; used for Google and link previews).
+- Update, 20 Nov: canvas phone hero height set to 100vh (distribution End, padding 96/20/68/20), so the editor shows the content at the base of the screen like the live site. Live CSS overrides it with `height:auto` plus `min-height: calc(100svh - 70px)` so the 70px nav is accounted for. Uploaded, not published.
