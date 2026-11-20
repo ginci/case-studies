@@ -558,3 +558,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - The button ends 68px above the screen bottom on every phone, clear of the "Made in Framer" badge (about the bottom 57px). Use 20px if the badge is ever removed.
 - Canvas phone hero set to match: padding 96/20/68/20, distribution End. Desktop and tablet unchanged.
 - Tested by injecting the rule live: gap 68px on iPhone SE (568), iPhone 13 (664), 14 Pro Max (740) and Pixel 7 (839). Before, a fixed 160px top gave gaps from 23 to 294px.
+
+## 20 Nov 2026: status/music pills were hidden on phone; published b8fbfb88c
+- Cause: a "Content" frame (`jNJjtKXYa`, wrapping Status row + headline/lede in "01 Hero") was added on the canvas with a fixed 1040×229 size, overflow Clip and centred content.
+  - On phone the pills sat above its clipped box, so they were invisible, and the lede was cut off.
+  - Phone pills were also centred.
+- Fix (all breakpoints): width 100%, height Fit, overflow Visible, alignment and distribution Start. Gap 24 kept.
+- Verified live:
+  - pills visible and left-aligned at 20px (phone) / 200px (desktop); the full lede shows
+  - "More about me" sits 68px above the screen bottom on iPhone 13 and Pixel 7
+  - on iPhone SE (568px tall) the hero content is taller than the screen, so the button lands just below the fold
+- The status pill text is now "Creating" (changed on the canvas). Gift remembered it as "Available".
