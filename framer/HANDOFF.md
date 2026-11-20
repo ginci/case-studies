@@ -569,3 +569,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - "More about me" sits 68px above the screen bottom on iPhone 13 and Pixel 7
   - on iPhone SE (568px tall) the hero content is taller than the screen, so the button lands just below the fold
 - The status pill text is now "Creating" (changed on the canvas). Gift remembered it as "Available".
+
+## 20 Nov 2026: hero headline is now "Product designer." (published f3fd84425)
+- "Vibe coder." removed at Gift's request. HandHeadline regenerated with `tools/hand-headline/gen.cjs` lines `["Product designer.", "Product designer."]`: one line at every width, about 1.75 s write-on.
+- Still says "Vibe coder": the site's SEO/share description "Designer. Builder. Vibe coder" (Framer Site Settings → General → Description; used for Google and link previews).
