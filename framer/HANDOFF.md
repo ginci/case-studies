@@ -600,3 +600,11 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Gift: after writing, wait 1 s, write it backwards, then write the next text; loop. Gift said "byproduct"; it was read as "Vibe coder." (matches the site description "Designer. Builder. Vibe coder"). Change it in `gen.cjs` if wrong.
 - `tools/hand-headline/build_cycle.cjs` generates the new `HandHeadline.tsx`. Controls: Size, Color, Weight, Speed, Hold (s), Start delay. Line height is gone: each phrase is a single line.
 - Timings: writing takes 2.1 / 1.2 / 1.5 s; full loop is about 13 s. Tested in a browser: the phrases cycle and erasing goes from the last letter back.
+
+## 20 Nov 2026: published b8dce7623
+- Live and checked on desktop, iPhone 13 and iPhone SE:
+  - the headline cycles Product designer. → Builder. → Vibe coder. (phone widths 224 / 107 / 143)
+  - nav byline "by GIFT NJOM / Lagos, GMT+1" at the top of the page
+  - "Get in touch →" opens `mailto:ginciDesign@outlook.com?subject=Hello Gift`
+  - "More about me" sits 68px above the bottom on iPhone 13 and just below the fold on iPhone SE
+- Gift's canvas edits kept: the "Hero meta" row (Location / Focus) was deleted (location now lives in the nav byline). The button layer was renamed "Get in touch", so it's no longer covered by the `CTA / …` no-wrap rule; rename it back to "CTA / Get in touch" to restore that.
