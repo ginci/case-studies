@@ -574,3 +574,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - "Vibe coder." removed at Gift's request. HandHeadline regenerated with `tools/hand-headline/gen.cjs` lines `["Product designer.", "Product designer."]`: one line at every width, about 1.75 s write-on.
 - Still says "Vibe coder": the site's SEO/share description "Designer. Builder. Vibe coder" (Framer Site Settings → General → Description; used for Google and link previews).
 - Update, 20 Nov: canvas phone hero height set to 100vh (distribution End, padding 96/20/68/20), so the editor shows the content at the base of the screen like the live site. Live CSS overrides it with `height:auto` plus `min-height: calc(100svh - 70px)` so the 70px nav is accounted for. Uploaded, not published.
+
+## 20 Nov 2026: hero gets location, focus and "Get in touch" (uploaded, not published)
+- Added under the lede, in the hero's text stack (`BlF2lX0m3`), a "Hero footer" frame (gap 28):
+  - "Hero meta" row (wraps, gap 48): LOCATION "Lagos, GMT+1" · FOCUS "AI · Fintech · Commerce". Labels Geist Mono 11/0.06em grey; values Outfit 16 light.
+  - "CTA / Get in touch": solid light pill (#F4F3EE, text #121211, Outfit 15/500), link `mailto:ginciDesign@outlook.com?subject=Hello Gift`.
+- Third focus "Commerce" chosen from the work: Dado marketplace and Menu as a Service, 9mobile eShop.
+- Order is now: hero (… lede, meta, Get in touch) → "More about me" → work.
+- Location set to Lagos everywhere except Dado's story: the About pill line ("Senior product designer · Lagos, Nigeria") and the footer clocks on Home and Work ("Now · Lagos … WAT"). The clock time is unchanged (WAT = GMT+1).
+- Phone hero top padding 96 → 32 (canvas and CSS) so the taller hero still fits; content stays at the bottom of the screen.
+- Gift's Framer comments can't be read through framer-api (no comments API or query type). Ask Gift to paste them.
+- Next conversation: splitting the full case studies into smaller pieces of work.

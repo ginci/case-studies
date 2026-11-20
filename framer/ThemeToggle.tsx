@@ -461,7 +461,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
    base of the first screen on every phone (68px up, clear of the "Made in Framer" badge). svh = toolbars showing. */
 @media (max-width: 809px) {
   ${N("Home V2 / Index (dark)")} ${N("01 Hero")} { height: auto !important; min-height: calc(100vh - 70px) !important; min-height: calc(100svh - 70px) !important;
-    justify-content: flex-end !important; padding-top: 96px !important; padding-bottom: 68px !important; }
+    justify-content: flex-end !important; padding-top: 32px !important; padding-bottom: 68px !important; }
 }
 
 /* ---------- Phone (up to 809) ---------- */
@@ -1397,7 +1397,7 @@ function setupFX() {
 }
 
 // Apply to the footer's "Now" text layer. Any "--:--" (or a previous time)
-// in its text is replaced with the live time in Enugu (WAT). Everything else
+// in its text is replaced with the live time in Lagos (WAT, GMT+1). Everything else
 // in the line stays editable on the canvas.
 export function withNowTime(Component: any): ComponentType {
     return forwardRef((props: any, ref) => {
