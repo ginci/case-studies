@@ -457,6 +457,13 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 
 @media (min-width: 810px) and (max-width: 1199px) { html[data-g-scrolled] ${N("Nav (fixed)")} { max-width: calc(100% - 96px) !important; } } /* tablet: 16px inside the 32px margins */
 
+/* Phone hero fills the screen below the nav and sits its content at the bottom, so "More about me" rests at the
+   base of the first screen on every phone (68px up, clear of the "Made in Framer" badge). svh = toolbars showing. */
+@media (max-width: 809px) {
+  ${N("Home V2 / Index (dark)")} ${N("01 Hero")} { min-height: calc(100vh - 70px) !important; min-height: calc(100svh - 70px) !important;
+    justify-content: flex-end !important; padding-top: 96px !important; padding-bottom: 68px !important; }
+}
+
 /* ---------- Phone (up to 809) ---------- */
 @media (max-width: 809px) {
   #main * { max-width: 100%; }

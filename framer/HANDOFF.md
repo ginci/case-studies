@@ -552,3 +552,9 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - The About chip was "…Dates and titles live in my CV." It's now "…Want the full picture? **Explore my experience**." The chip link is mailto `ginciDesign@outlook.com?subject=Your experience` (no experience page or PDF exists yet; point it there when one does).
 - Socials "Read.cv ↗" → "Experience ↗". None of the socials have links yet.
 - The earlier notes above about the "CV" chip / "Download CV" are superseded by this.
+
+## 20 Nov 2026: phone hero puts "More about me" at the base of the first screen (uploaded, not published)
+- Phone (≤809px) Home hero: `min-height: calc(100svh - 70px)` (falls back to 100vh), content justified to the bottom, padding 96 top / 68 bottom.
+- The button ends 68px above the screen bottom on every phone, clear of the "Made in Framer" badge (about the bottom 57px). Use 20px if the badge is ever removed.
+- Canvas phone hero set to match: padding 96/20/68/20, distribution End. Desktop and tablet unchanged.
+- Tested by injecting the rule live: gap 68px on iPhone SE (568), iPhone 13 (664), 14 Pro Max (740) and Pixel 7 (839). Before, a fixed 160px top gave gaps from 23 to 294px.
