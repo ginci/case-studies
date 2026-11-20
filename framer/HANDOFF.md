@@ -608,3 +608,15 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - "Get in touch →" opens `mailto:ginciDesign@outlook.com?subject=Hello Gift`
   - "More about me" sits 68px above the bottom on iPhone 13 and just below the fold on iPhone SE
 - Gift's canvas edits kept: the "Hero meta" row (Location / Focus) was deleted (location now lives in the nav byline). The button layer was renamed "Get in touch", so it's no longer covered by the `CTA / …` no-wrap rule; rename it back to "CTA / Get in touch" to restore that.
+
+## 20 Nov 2026: hero fills the first screen, smoother nav, byline moved to the hero (published bd111fd7c)
+- "Get in touch" removed (Hero footer deleted).
+- Home hero fills the screen below the nav at every size (canvas: height 100vh, distribution End; CSS: `height:auto; min-height: calc(100svh - var(--g-nav-h))`). "More about me" rests 24px above the bottom (68px on phone, clear of the Framer badge).
+  - Canvas paddings: desktop 120/80/24/80, tablet 120/40/24/40, phone 32/20/68/20.
+  - JS measures the resting nav into `--g-nav-h` and `--g-nav-pad`.
+- Nav switch to and from the pill:
+  - `margin-bottom: calc(var(--g-nav-pad) - 20px)` (phone −16) offsets the padding change, so the page no longer shifts. Verified: content y is constant through the switch at 1440, 1280, 834 and 390.
+  - Radius 999 → 32 so it animates evenly; the blur fades (blur(0) at rest).
+  - Everything uses 0.55s on the site EASE.
+- Byline moved out of the nav: the Logo component's "Byline" is hidden (kept). A new absolute "Hero byline" sits right-aligned in the Status row ("by GIFT NJOM" / "Lagos, GMT+1", Geist Mono 11). The phone Status row is now 100% wide. The old fold-away CSS is removed.
+- Gift wants to review this placement before anything more changes on the byline.

@@ -210,7 +210,7 @@ ${LIGHT} #g-menu > div:first-child { background: rgba(255,255,255,0.55) !importa
 /* ---------- Nav ---------- */
 /* Nav sits darker than the page so it always reads as its own layer. */
 ${N("Nav (fixed)")} { z-index: 20 !important; }
-html:not([data-g-scrolled]) ${N("Nav (fixed)")} { background: transparent !important; border-color: transparent !important; box-shadow: none !important; }
+html:not([data-g-scrolled]) ${N("Nav (fixed)")} { background-color: rgba(11, 11, 10, 0) !important; border-color: transparent !important; box-shadow: 0 12px 40px rgba(0, 0, 0, 0) !important; backdrop-filter: blur(0px) saturate(1); -webkit-backdrop-filter: blur(0px) saturate(1); margin-bottom: 0 !important; }
 
 /* ---------- Work list: page background at rest, project surface on hover ---------- */
 ${ROW} {
@@ -345,7 +345,8 @@ ${N("Nav (fixed)")} {
 }
 html[data-g-scrolled] ${N("Nav (fixed)")} {
   top: 14px !important; max-width: calc(min(100%, 1200px) - 192px) !important; /* shrinks inward: 16px inside the 80px content margins */
-  border-radius: 999px !important; padding: 10px 10px 10px 24px !important;
+  border-radius: 32px !important; padding: 10px 10px 10px 24px !important;
+  margin-bottom: calc(var(--g-nav-pad, 64px) - 20px) !important; /* keeps the page from shifting while the nav shrinks */
   background-color: rgba(11, 11, 10, 0.92) !important; border-color: rgba(244, 243, 238, 0.12) !important;
   backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
@@ -366,8 +367,9 @@ html[data-g-scrolled] ${N("Nav (fixed)")} {
   ${S("Back to top")} { transition: background-color 0.3s ease; }
   ${S("Back to top")} * { transition: color 0.3s ease; }
   ${N("Nav (fixed)")} {
-    transition: max-width 0.7s ${EASE}, top 0.7s ${EASE}, border-radius 0.7s ${EASE}, padding 0.7s ${EASE},
-      background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.7s ease !important;
+    transition: max-width 0.55s ${EASE}, top 0.55s ${EASE}, border-radius 0.55s ${EASE}, padding 0.55s ${EASE}, margin 0.55s ${EASE},
+      background-color 0.55s ${EASE}, border-color 0.55s ${EASE}, box-shadow 0.55s ${EASE},
+      backdrop-filter 0.55s ${EASE}, -webkit-backdrop-filter 0.55s ${EASE} !important;
   }
   [data-g-rv] {
     opacity: 0 !important;
@@ -425,12 +427,6 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 #g-photo canvas { display: block; width: 100%; height: 100%; }
 @media (prefers-reduced-motion: reduce) { #g-photo { transition: opacity .15s ease; transform: rotate(-4deg); } }
 
-/* Nav byline ("by / Gift Njom / Lagos · time · GMT+1", inside the Logo component): shown at the top of the page,
-   folded away while the nav is the floating pill. */
-${N("Byline")} { max-width: 160px; overflow: hidden; white-space: nowrap; transition: opacity .3s ease, max-width .45s ${EASE}, margin .45s ${EASE}; }
-html[data-g-scrolled] ${N("Byline")} { opacity: 0; max-width: 0; margin-left: -8px; }
-@media (prefers-reduced-motion: reduce) { ${N("Byline")} { transition: none; } }
-
 /* ---------- One page margin everywhere: every page lines up with the Home hero ----------
    Home sits in a 1200px column with 80px padding. On wider screens, the other pages' full-width sections get the same
    left/right inset (backgrounds stay full-bleed). Below 1200px the canvas paddings already match. */
@@ -463,18 +459,22 @@ html[data-g-scrolled] ${N("Byline")} { opacity: 0; max-width: 0; margin-left: -8
 
 @media (min-width: 810px) and (max-width: 1199px) { html[data-g-scrolled] ${N("Nav (fixed)")} { max-width: calc(100% - 96px) !important; } } /* tablet: 16px inside the 32px margins */
 
+/* Home hero fills the first screen below the nav at every size, content at the bottom, so "More about me" rests
+   just above the bottom edge (24px; 68px on phones, clear of the "Made in Framer" badge). --g-nav-h is measured. */
+${N("Home V2 / Index (dark)")} ${N("01 Hero")} { height: auto !important; min-height: calc(100vh - var(--g-nav-h, 106px)) !important;
+  min-height: calc(100svh - var(--g-nav-h, 106px)) !important; justify-content: flex-end !important; }
+
 /* Phone hero fills the screen below the nav and sits its content at the bottom, so "More about me" rests at the
    base of the first screen on every phone (68px up, clear of the "Made in Framer" badge). svh = toolbars showing. */
 @media (max-width: 809px) {
-  ${N("Home V2 / Index (dark)")} ${N("01 Hero")} { height: auto !important; min-height: calc(100vh - 70px) !important; min-height: calc(100svh - 70px) !important;
-    justify-content: flex-end !important; padding-top: 32px !important; padding-bottom: 68px !important; }
+  ${N("Home V2 / Index (dark)")} ${N("01 Hero")} { padding-top: 32px !important; padding-bottom: 68px !important; }
 }
 
 /* ---------- Phone (up to 809) ---------- */
 @media (max-width: 809px) {
   #main * { max-width: 100%; }
   ${N("Nav (fixed)")} ${N("Work")}, ${N("Nav (fixed)")} ${N("About")}, ${N("Nav (fixed)")} ${N("Contact")} { display: none !important; }
-  html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 56px) !important; padding: 8px 8px 8px 16px !important; } /* 8px inside the 20px phone margins */
+  html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 56px) !important; padding: 8px 8px 8px 16px !important; margin-bottom: calc(var(--g-nav-pad, 32px) - 16px) !important; } /* 8px inside the 20px phone margins */
   ${N("Lede")} { width: 100% !important; }
   ${ROW} { padding-top: 22px !important; padding-bottom: 22px !important; gap: 14px !important;
     margin-left: -12px !important; margin-right: -12px !important; padding-left: 12px !important; padding-right: 12px !important; width: calc(100% + 24px) !important; }
@@ -1314,8 +1314,17 @@ function setupFX() {
         } else grid!.style.clipPath = ""
         // Hysteresis: the nav gets shorter when it becomes a pill, which shifts the page a little.
         // Separate on/off points stop that shift from flipping the state back (the "stuck halfway" nav).
-        const navOn = document.documentElement.hasAttribute("data-g-scrolled")
-        document.documentElement.toggleAttribute("data-g-scrolled", navOn ? y > 16 : y > 80)
+        const html = document.documentElement
+        const navOn = html.hasAttribute("data-g-scrolled")
+        const navEl = document.querySelector<HTMLElement>('[data-framer-name="Nav (fixed)"]')
+        const wn = window as any
+        if (navEl && !navOn && Date.now() - (wn.__gNavT || 0) > 900) {
+            const cs = getComputedStyle(navEl)
+            html.style.setProperty("--g-nav-pad", parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + "px")
+            html.style.setProperty("--g-nav-h", navEl.offsetHeight + "px")
+        }
+        const navNext = navOn ? y > 16 : y > 80
+        if (navNext !== navOn) { wn.__gNavT = Date.now(); html.toggleAttribute("data-g-scrolled", navNext) }
     }
 
     const w = window as any
