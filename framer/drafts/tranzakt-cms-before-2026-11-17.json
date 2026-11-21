@@ -1,0 +1,332 @@
+{
+ "Title": {
+  "id": "du9EvMkz1",
+  "type": "string",
+  "value": "Tranzakt finance"
+ },
+ "Order": {
+  "id": "XS7Lpaz9d",
+  "type": "number",
+  "value": 1
+ },
+ "Index line": {
+  "id": "XGXSst49a",
+  "type": "string",
+  "value": "B2B fintech. Multi-bank treasury, payments and merchant onboarding"
+ },
+ "Accent": {
+  "id": "xnnklerlZ",
+  "type": "color",
+  "value": "rgb(111, 208, 140)"
+ },
+ "Case study label": {
+  "id": "VryiWWp8h",
+  "type": "string",
+  "value": "Case study 01 / 05"
+ },
+ "Read time": {
+  "id": "yYNMQhu_f",
+  "type": "string",
+  "value": "[6] min read"
+ },
+ "Industry": {
+  "id": "u1MquzwNn",
+  "type": "string",
+  "value": "B2B fintech, Nigeria"
+ },
+ "Lede": {
+  "id": "HS9d0RZ8Y",
+  "type": "string",
+  "value": "Leading product design for a B2B fintech platform that gives Nigerian businesses one login and one view across 30+ bank accounts, from treasury and collections to merchant onboarding."
+ },
+ "Result": {
+  "id": "QGgpKmG5L",
+  "type": "string",
+  "value": "One login across 30+ banks, one verification flow for every business type, and a checkout that shows only the fee you pay."
+ },
+ "Client": {
+  "id": "kqaKupdHO",
+  "type": "string",
+  "value": "Tranzakt (Tenece Professional Services)"
+ },
+ "Role": {
+  "id": "dgdf3jfyE",
+  "type": "string",
+  "value": "Senior Product Designer"
+ },
+ "Timeline": {
+  "id": "pzy08Fc84",
+  "type": "string",
+  "value": "[2026 – present]"
+ },
+ "Team": {
+  "id": "NBMXT9ucn",
+  "type": "string",
+  "value": ""
+ },
+ "Platforms": {
+  "id": "DKx8fU2dY",
+  "type": "string",
+  "value": "Web, iOS, Android"
+ },
+ "Stats": {
+  "id": "cjPDGnHGF",
+  "type": "formattedText",
+  "value": "<ul dir=\"auto\"><li data-preset-tag=\"p\"><p>30+ banks under one login</p></li><li data-preset-tag=\"p\"><p>2 user types: customers &amp; merchants</p></li><li data-preset-tag=\"p\"><p>9 treasury screens</p></li><li data-preset-tag=\"p\"><p>4 payment methods, web = mobile</p></li></ul>"
+ },
+ "Cover": {
+  "id": "kXdExFERy",
+  "type": "image",
+  "value": "https://framerusercontent.com/images/LLIVWeXsNfgKrRgs91yskSGUU.png"
+ },
+ "Preview": {
+  "id": "nlu4VcR1f",
+  "type": "image",
+  "value": "https://framerusercontent.com/images/UogogeNAHN0W23Z9Cx6LaHOrXU.png"
+ },
+ "Locked": {
+  "id": "mcZC3Y6oI",
+  "type": "boolean",
+  "value": false
+ },
+ "S01 label": {
+  "id": "nrUjYdr8A",
+  "type": "string",
+  "value": "The problem"
+ },
+ "S01 title": {
+  "id": "qQ0MF4OmZ",
+  "type": "string",
+  "value": "Nigerian businesses keep money in several banks, each with its own portal and its own version of the balance, so finance teams reconcile by hand and only see their real position at month end."
+ },
+ "S01 body": {
+  "id": "q4BzfvLRM",
+  "type": "formattedText",
+  "value": "<p dir=\"auto\">Finance teams switch between bank portals all day. A simple question, “how much do we have right now?”, takes a spreadsheet and a morning.</p><p dir=\"auto\">Inside Tranzakt, several products were being designed at the same time, under KYC/KYB and CBN rules, with a small engineering team. Without one set of patterns, every new screen drifted, and a finance product that feels inconsistent does not earn trust.</p>"
+ },
+ "S02 label": {
+  "id": "Dw2KU3tIq",
+  "type": "string",
+  "value": "Approach"
+ },
+ "S02 title": {
+  "id": "UU2FThH_C",
+  "type": "string",
+  "value": "I started from the one question each user opens the product to answer, put that answer first, and reused one interaction model everywhere, so the platform stayed consistent while it was still being built."
+ },
+ "S02 body": {
+  "id": "YrL1tFc2A",
+  "type": "formattedText",
+  "value": "<ol dir=\"auto\"><li data-preset-tag=\"p\"><p><strong>Lead with the answer.</strong> Each screen opens on what the user came to find out, before any chart or table.</p></li><li data-preset-tag=\"p\"><p><strong>One interaction model.</strong> Inspect in a side drawer, create in a full-screen modal, on every product.</p></li><li data-preset-tag=\"p\"><p><strong>Every state, not just the happy path.</strong> Empty, in review, failed and action needed are all designed.</p></li><li data-preset-tag=\"p\"><p><strong>Web and mobile identical.</strong> Each flow is designed and built once.</p></li></ol><p dir=\"auto\"><strong>Scope:</strong> treasury, payment gateway checkout, KYC/KYB verification and the merchant dashboard, for two user types: customers who pay and merchants who get paid.</p>"
+ },
+ "S03 label": {
+  "id": "noF6zvXul",
+  "type": "string",
+  "value": "Results"
+ },
+ "S03 title": {
+  "id": "O0OOAlIt3",
+  "type": "string",
+  "value": "The platform now works as one: finance teams see every bank in one place, merchants get verified without dead ends, and customers never meet a surprise fee."
+ },
+ "S03 body": {
+  "id": "PzwhaMUAS",
+  "type": "formattedText",
+  "value": "<ul dir=\"auto\"><li data-preset-tag=\"p\"><p><strong>One view of the money:</strong> finance teams see every bank on one screen instead of logging in to each portal.</p></li><li data-preset-tag=\"p\"><p><strong>Verification that doesn’t stall:</strong> rejected documents come back as a clear re-upload task, not a dead end.</p></li><li data-preset-tag=\"p\"><p><strong>No surprise fees:</strong> customers see the fee for the method they chose, when they choose it.</p></li><li data-preset-tag=\"p\"><p><strong>A faster first day for merchants:</strong> four clear actions, and integration from day one.</p></li></ul>"
+ },
+ "S04 label": {
+  "id": "kiPKzFNUu",
+  "type": "string",
+  "value": ""
+ },
+ "S04 title": {
+  "id": "uJZ4nvnAH",
+  "type": "string",
+  "value": ""
+ },
+ "S04 body": {
+  "id": "SIwwv0T31",
+  "type": "formattedText",
+  "value": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ "S05 label": {
+  "id": "NquUVl8eI",
+  "type": "string",
+  "value": ""
+ },
+ "S05 title": {
+  "id": "Bb8SiuHIW",
+  "type": "string",
+  "value": ""
+ },
+ "S05 body": {
+  "id": "sFU1KTRdT",
+  "type": "formattedText",
+  "value": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ "S06 label": {
+  "id": "hJ3HjAcYl",
+  "type": "string",
+  "value": "Treasury"
+ },
+ "S06 title": {
+  "id": "PIUgAoO6b",
+  "type": "string",
+  "value": "One dashboard shows a company’s position across every bank, leading with the consolidated balance and the five numbers finance teams check daily."
+ },
+ "S06 body": {
+  "id": "gP5g5n0WG",
+  "type": "formattedText",
+  "value": "<p dir=\"auto\"><strong>Problem:</strong> finance teams logged in to each bank to work out where they stood.</p><p dir=\"auto\"><strong>Solution:</strong> the consolidated balance comes first, then balance, liquidity, inflows, outflows and net position. All nine screens share one pattern: inspect in a side drawer, create in a full-screen modal.</p><p dir=\"auto\"><strong>Result:</strong> a company’s position across every bank on one screen, and a pattern learned once for all nine screens.</p>"
+ },
+ "S07 label": {
+  "id": "gC0GZzTRf",
+  "type": "string",
+  "value": "Checkout"
+ },
+ "S07 title": {
+  "id": "Z21GipOaN",
+  "type": "string",
+  "value": "Checkout shows the base amount first and reveals the fee only for the payment method the customer picks."
+ },
+ "S07 body": {
+  "id": "Qp5eiy_Td",
+  "type": "formattedText",
+  "value": "<p dir=\"auto\"><strong>Problem:</strong> a table of every channel’s fees up front made checkout feel expensive and confusing.</p><p dir=\"auto\"><strong>Solution:</strong> card, transfer, USSD and bank, identical on web and mobile. The fee appears only for the chosen method, a copy button appears only where people copy a number, and single-use transfer accounts show their 30-minute expiry.</p><p dir=\"auto\"><strong>Result:</strong> customers see exactly what they will pay before they pay it.</p>"
+ },
+ "S08 label": {
+  "id": "q3lsPpCNe",
+  "type": "string",
+  "value": "Verification"
+ },
+ "S08 title": {
+  "id": "Oo9ihMvpZ",
+  "type": "string",
+  "value": "One verification module serves personal, business and government accounts across every product, and turns a rejected document into a clear next step."
+ },
+ "S08 body": {
+  "id": "Rvhj5OvYy",
+  "type": "formattedText",
+  "value": "<p dir=\"auto\"><strong>Problem:</strong> verification stalled onboarding, and a rejected document ended in a generic email.</p><p dir=\"auto\"><strong>Solution:</strong> Nigerian compliance data (BVN, NIN, CAC, SCUML) specified field by field, every state mapped, and a status hub after submission. Anything rejected lands in a “needs your attention” queue with one-tap re-upload.</p><p dir=\"auto\"><strong>Result:</strong> merchants always know where they stand and what to do next.</p>"
+ },
+ "S09 label": {
+  "id": "At39TFte8",
+  "type": "string",
+  "value": "Merchant dashboard"
+ },
+ "S09 title": {
+  "id": "GuZj069y9",
+  "type": "string",
+  "value": "A new merchant’s first screen is a short to-do list that leads to their first payment, not a wall of empty charts."
+ },
+ "S09 body": {
+  "id": "NeW5C4vHY",
+  "type": "formattedText",
+  "value": "<p dir=\"auto\"><strong>Problem:</strong> a new merchant has no data yet, so an analytics dashboard opens empty.</p><p dir=\"auto\"><strong>Solution:</strong> account setup progress at the top, then the four actions that lead to a first payment: link a bank account, create a collection, create a payment link and contact support. Test API keys sit on the same page.</p><p dir=\"auto\"><strong>Result:</strong> developers can start integrating before verification finishes.</p>"
+ },
+ "S10 label": {
+  "id": "CWO2zuVou",
+  "type": "string",
+  "value": ""
+ },
+ "S10 title": {
+  "id": "BnK3iMUJd",
+  "type": "string",
+  "value": ""
+ },
+ "S10 body": {
+  "id": "IcUZCnbZT",
+  "type": "formattedText",
+  "value": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ "S06 image": {
+  "id": "QLX9BpGgv",
+  "type": "image",
+  "value": "https://framerusercontent.com/images/XeWtb36phibf9xX61C6RTu9lKxU.png"
+ },
+ "S07 image": {
+  "id": "Tj8hLqi_r",
+  "type": "image",
+  "value": "https://framerusercontent.com/images/4iNP9xHEGRC4z7H1kygjKd9w4.png"
+ },
+ "S08 image": {
+  "id": "T3hxzTIob",
+  "type": "image",
+  "value": "https://framerusercontent.com/images/5CJ84FaxOwqV29K1y0idR1tYrc.png"
+ },
+ "S09 image": {
+  "id": "ACDAxsCVR",
+  "type": "image",
+  "value": "https://framerusercontent.com/images/LiTD79BsziN2922axPbvJlrm9hg.png"
+ },
+ "Step 1 label": {
+  "id": "qXIewlhV_",
+  "type": "string",
+  "value": "01"
+ },
+ "Step 1 title": {
+  "id": "sXmOCP3gr",
+  "type": "string",
+  "value": "[Discover]"
+ },
+ "Step 1 line": {
+  "id": "VUFQ95Re_",
+  "type": "string",
+  "value": "[One line on what you learned first]"
+ },
+ "Step 2 label": {
+  "id": "Nu2veKAwQ",
+  "type": "string",
+  "value": "02"
+ },
+ "Step 2 title": {
+  "id": "QdVB4oHGL",
+  "type": "string",
+  "value": "[Define]"
+ },
+ "Step 2 line": {
+  "id": "Kp7X38OhU",
+  "type": "string",
+  "value": "[One line on the problem you framed]"
+ },
+ "Step 3 label": {
+  "id": "we2PjejOm",
+  "type": "string",
+  "value": "03"
+ },
+ "Step 3 title": {
+  "id": "gm6AsVebu",
+  "type": "string",
+  "value": "[Design]"
+ },
+ "Step 3 line": {
+  "id": "EgZ2lLE19",
+  "type": "string",
+  "value": "[One line on how you explored and tested]"
+ },
+ "Step 4 label": {
+  "id": "CsrUOn_WN",
+  "type": "string",
+  "value": "04"
+ },
+ "Step 4 title": {
+  "id": "omgWa8N4x",
+  "type": "string",
+  "value": "[Deliver]"
+ },
+ "Step 4 line": {
+  "id": "J5RV5bUCl",
+  "type": "string",
+  "value": "[One line on handoff and launch]"
+ },
+ "Next project": {
+  "id": "STuqfNokd",
+  "type": "collectionReference",
+  "value": "9mobile"
+ },
+ "Live link": {
+  "id": "TwFjLXgkW",
+  "type": "link",
+  "value": "https://tranzakt.finance"
+ }
+}

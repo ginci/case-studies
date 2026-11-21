@@ -1,0 +1,48 @@
+### S01 title (qQ0MF4OmZ)
+Overview
+
+### S01 body (q4BzfvLRM)
+<p dir="auto"><strong>The challenge:</strong> Nigerian businesses run money across several banks, each with its own login, its own dashboard and its own idea of a balance. Tranzakt set out to give them one screen and one login, with enterprise-grade controls at SME pricing.</p><p dir="auto"><strong>My role:</strong> I lead product design across the platform for its two user types: customers, who pay through Tranzakt, and merchants, who get paid, verify their business and run their money on it. I own the work from problem framing with the founders and product team, through flows, interaction design and edge states, to design QA with engineering.</p><p dir="auto"><strong>What the design solved:</strong></p><ul dir="auto"><li data-preset-tag="p"><p><strong>One view of the money.</strong> Finance teams see their position across every bank on one screen instead of logging in to each portal.</p></li><li data-preset-tag="p"><p><strong>Verification that doesn't stall.</strong> One KYC/KYB module serves personal, business and government accounts across every product, and rejected documents come back as a clear re-upload task, not a dead end.</p></li><li data-preset-tag="p"><p><strong>No surprise fees.</strong> Customers see the fee for the payment method they chose, at the moment they choose it.</p></li><li data-preset-tag="p"><p><strong>A faster first day for merchants.</strong> New merchants land on the four actions that lead to a first payment, and developers can integrate with test keys before verification finishes.</p></li></ul><p dir="auto">[Add numbers here when you have them: verification completion, time to first payment, support tickets.]</p>
+
+### S02 title (UU2FThH_C)
+Context
+
+### S02 body (YrL1tFc2A)
+<p dir="auto">Nigerian businesses split their money across GTBank, Zenith, Access, UBA, FCMB and more. Finance teams reconcile by hand, switch between bank portals all day, and only see their real position at month end.</p><p dir="auto">Tranzakt answers with four products: <strong>Treasury</strong>, a consolidated multi-bank dashboard; <strong>Payment processing</strong>, collections by card, bank transfer and USSD; <strong>Tranzpay</strong>, payroll across every bank in one run; and the <strong>mobile app</strong> for balances and approvals on the go.</p>
+
+### S03 title (O0OOAlIt3)
+The problem
+
+### S03 body (PzwhaMUAS)
+<p dir="auto">Several products were being designed in parallel, against regulatory requirements (KYC/KYB, CBN rules) and a small engineering team. Without shared patterns, every surface drifted: competing greens, a growing font stack, and a new button for every screen.</p><p dir="auto">The hard part wasn't any single flow. It was keeping the platform coherent, compliant and trustworthy while it was still being invented, and deciding what each user type needed first.</p>
+
+### S04 title (uJZ4nvnAH)
+Scope
+
+### S04 body (SIwwv0T31)
+<ol dir="auto"><li data-preset-tag="p"><p>Consolidated login: one login across 30+ bank accounts</p></li><li data-preset-tag="p"><p>Payment gateway checkout (customers)</p></li><li data-preset-tag="p"><p>KYC/KYB onboarding updates</p></li><li data-preset-tag="p"><p>Merchant dashboard updates</p></li><li data-preset-tag="p"><p>Treasury management</p></li><li data-preset-tag="p"><p>[Other work: wallet &amp; payout, Tranzpay payroll, admin analytics, marketing website &amp; Careers. Confirm which you designed]</p></li></ol>
+
+### S06 title (PIUgAoO6b)
+A treasury command centre for every account at once
+
+### S06 body (gP5g5n0WG)
+<p dir="auto"><strong>Decision:</strong> lead with the verdict, not the charts. A finance team opens Treasury to answer one question, “where do we stand across every bank?”, so the consolidated balance is the largest thing on the page, before any scroll.</p><p dir="auto">Nine screens (dashboard, wallets, liquidity, transactions, payments, reconciliation, insights, reports and settings) built around one consolidated view of money across banks.</p><p dir="auto">The dashboard opens on the five numbers a finance team checks first: total balance, liquidity ratio, 24-hour inflows and outflows, and net position. Each has a trend line and its change since the last period. From there, every module follows one interaction model. A KPI card opens a drill-down drawer, and a transaction row opens a detail panel on the right. Anything that creates something, like a payment or a report, happens in a full-screen guided modal. Learn it once and it works the same on all nine screens.</p><ul dir="auto"><li data-preset-tag="p"><p>Five KPIs first: balance, liquidity, inflows, outflows, net</p></li><li data-preset-tag="p"><p>One interaction model across all nine screens</p></li><li data-preset-tag="p"><p>Inspect in a side drawer, create in a full-screen modal</p></li><li data-preset-tag="p"><p>Every insight card carries an action</p></li></ul>
+
+### S07 title (Z21GipOaN)
+A checkout that only shows the fee you'll actually pay
+
+### S07 body (Qp5eiy_Td)
+<p dir="auto">Card, Transfer, USSD and Bank — identical on web and mobile, with fees revealed only for the method you choose.</p><p dir="auto">Customers see the base amount until they pick a method. Then a small info icon opens a breakdown of that one transaction: base amount plus that channel's fee. No intimidating table of every channel's charges up front. The copy button beside the amount appears only on USSD and Transfer — the two methods where people genuinely need to copy a number into another app.</p><p dir="auto">Every method is designed end to end, from choosing it to the receipt, including the in-between states people usually see as a spinner: generating an account, confirming, confirmed. Transfer accounts are single-use and say so, with a visible 30-minute expiry.</p><ul dir="auto"><li data-preset-tag="p"><p>Base amount first; fee revealed per chosen method</p></li><li data-preset-tag="p"><p>Tooltip shows the current transaction only</p></li><li data-preset-tag="p"><p>Copy affordance only where copying happens</p></li><li data-preset-tag="p"><p>Four methods, matched across web and mobile</p></li></ul>
+
+### S08 title (Oo9ihMvpZ)
+One verification module for every product and user type
+
+### S08 body (Rvhj5OvYy)
+<p dir="auto">KYC/KYB for Personal, Business and Government users: six sections, every state mapped, one module shared across the platform.</p><p dir="auto">The verification module serves every Tranzakt product, so its copy never names one. Six onboarding sections specify Nigerian compliance data (BVN, NIN, CAC, SCUML) field by field. Progress-tracking widgets were removed to cut clutter, and failed documents get one clear message rather than per-document admin notes, which keeps review scalable. Each user type is mapped through success, failed submission, in review, action required, edge cases, and save &amp; quit. Mobile uses exactly the same fields as web.</p><p dir="auto">The latest update adds a status hub. After submitting, merchants see exactly where they are (submitting, under review, action needed, verified), and anything rejected surfaces in a “needs your attention” queue with a one-tap re-upload, instead of a generic failure email.</p><ul dir="auto"><li data-preset-tag="p"><p>One generic module serving every product</p></li><li data-preset-tag="p"><p>Tracking widgets removed</p></li><li data-preset-tag="p"><p>One clear failure message, not per-document notes</p></li><li data-preset-tag="p"><p>Mobile fields identical to web</p></li></ul>
+
+### S09 title (GuZj069y9)
+Merchant dashboard: a to-do list before a chart wall
+
+### S09 body (NeW5C4vHY)
+<p dir="auto">A new merchant has no data yet, so an analytics dashboard would open on empty charts. I designed the first-run dashboard around what unblocks them instead.</p><p dir="auto">Account setup sits at the top with its progress across personal, identity and business details. Below it, a to-do list of the four actions that lead to a first payment: link a bank account, create a collection, create a payment link, and contact support. Developers get their test API keys on the same page, so integration can start before verification finishes.</p><p dir="auto">The longer-term direction is AI-assisted: every insight explains what's happening, recommends an action and executes only when the merchant agrees, backed by a pattern study of Stripe, Mercury, Ramp, Cleo, Intuit, Lorikeet and Revolut. [Add the merchant dashboard updates you shipped.]</p><ul dir="auto"><li data-preset-tag="p"><p>Design for the empty state first: it's every merchant's first day</p></li><li data-preset-tag="p"><p>Actions above analytics</p></li><li data-preset-tag="p"><p>Developers unblocked before verification completes</p></li><li data-preset-tag="p"><p>Explain → Recommend → Execute for AI insights</p></li></ul>
+

@@ -1,0 +1,190 @@
+### Title
+Dado Foods
+### Order
+2
+### Index line
+Food delivery. One order model across customer, vendor and rider apps
+### Accent
+rgb(232, 114, 31)
+### Case study label
+Case study 02 / 05
+### Read time
+[12] min read
+### Kicker
+Food delivery · Product design
+### Lede
+One food platform, five products: customer, vendor and rider apps, web ordering and an ops dashboard.
+### Result
+One order model shared by five products: customers only see what can be cooked, vendors can't miss a new order, and riders work from one screen instead of phone calls.
+### Client
+Dado Foods (dado.ng)
+### Role
+Lead product designer
+### Timeline
+[Year] · [Duration]
+### Team
+Lead designer, 2 engineers per platform, the founders and the operations team
+### Platforms
+iOS, Android, Web, Admin
+### Stats
+5 products, one order model
+
+7 shared order statuses
+
+[2 cities: Enugu &amp; Lagos]
+
+[12] research conversations
+
+
+### Locked
+false
+### S01 label
+Overview
+### S01 title
+Overview
+### S01 body
+Five apps that share one order.
+Problem: Customers couldn’t see what was available, vendors missed orders, riders worked from phone calls.
+Solution: One order model and status language across customer, vendor, rider, web and admin.
+What the design solved: customers stopped ordering dishes that were already sold out, vendors stopped losing new orders in a rush, and riders stopped calling customers for directions. Every surface now speaks the same seven order statuses.
+I led product design from first sketches to launch, working with two engineers per platform, the founders and the operations team. I owned research, flows, UI, the component library and design QA.
+
+### S02 label
+Context
+### S02 title
+Context
+### S02 body
+Food delivery in Enugu runs on trust and phone calls.
+Most vendors took orders over WhatsApp and calls. Payment was a mix of transfer and cash on delivery, and riders were independent, often switching between platforms during the day. Dado wanted to bring the local favourites online without losing what made them work: personal, fast and flexible.
+
+### S03 label
+Problem
+### S03 title
+The problem
+### S03 body
+Everyone was guessing.
+Customers ordered meals that were already sold out and waited without knowing where their food was.
+
+Vendors lost orders in busy hours because new orders looked the same as accepted ones.
+
+Riders called customers for directions and had no clear view of their earnings or hours.
+
+Operations couldn’t see where an order got stuck, so support was slow and reactive.
+
+[Sample quote, replace with a real one:] “By the time I know the soup is finished, the customer has already paid.”
+
+### S04 label
+Scope
+### S04 title
+Scope
+### S04 body
+Five products, one order
+Customer app
+
+Vendor app
+
+Rider app
+
+Web ordering (dado.ng)
+
+Operations dashboard
+
+What success looked like:
+An order’s status is the same, and visible, on every surface.
+
+A vendor can update availability in under ten seconds during a rush.
+
+A first-time customer can order without help.
+
+
+### S05 label
+Process
+### S05 title
+Process
+### S05 body
+From a status map to five products.
+I interviewed customers, vendors and riders, rode along on delivery runs and spent a lunch rush in a partner kitchen ([twelve] conversations, [three] rides, one kitchen shift; sample numbers). Three findings shaped the product: availability changes by the hour, not the day; riders need fewer taps, not more features; and customers forgive a delay if they can see it.
+
+### S06 label
+Ordering
+### S06 title
+Customers only see what can be cooked now
+### S06 body
+Availability lives on the menu, not in settings. Vendors toggle “In stock” on each dish, and customers only see what can be cooked now.
+A “New” order can’t hide. New orders sit in a dark card at the top of the vendor’s list with the total and a single “Process order” action.
+[Describe the rest of the ordering flow: menu, cart, checkout and payment, and the decisions behind it.]
+Availability toggled per dish, on the menu
+
+New orders in a dark card with one action
+
+[Key decision 3]
+
+
+### S07 label
+Order tracking
+### S07 title
+Seven statuses, one language on every surface
+### S07 body
+One order model: seven statuses, shared by every app, so an order reads the same for the customer, vendor, rider and operations.
+Riders get a map, a timer and one button. Route, distance and time sit above everything else. “Go offline” is always one tap away.
+[Describe what the customer sees while waiting: the estimate and the plain-language status at each step.]
+Seven statuses shared by all five products
+
+Rider view: map, timer, one button
+
+“Go offline” always one tap away
+
+
+### S08 label
+Website
+### S08 title
+[The dado.ng website]
+### S08 body
+[One line on what the site does for customers]
+
+### S09 label
+Brand
+### S09 title
+[Brand & visual identity]
+### S09 body
+[One line on the look and feel, and why]
+
+### S10 label
+Learnings
+### S10 title
+What I'd do next
+### S10 body
+What I’d do again, and differently.
+Again: design the data model before the screens. Agreeing on seven statuses saved weeks of rework.
+
+Differently: test with riders on low-end Android phones earlier.
+
+
+### Step 1 label
+Discover
+### Step 1 title
+Interviews and ride-alongs
+### Step 1 line
+Mapped every handoff an order goes through.
+### Step 2 label
+Define
+### Step 2 title
+One order model
+### Step 2 line
+Seven statuses, shared by every app.
+### Step 3 label
+Design
+### Step 3 title
+Flows, then UI
+### Step 3 line
+Customer first, then vendor, rider and admin.
+### Step 4 label
+Deliver
+### Step 4 title
+Library and QA
+### Step 4 line
+Shared components and weekly design QA.
+### Next project
+tranzakt
+### Live link
+https://dado.ng
