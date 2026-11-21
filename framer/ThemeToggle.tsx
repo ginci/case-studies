@@ -427,6 +427,23 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 #g-photo canvas { display: block; width: 100%; height: 100%; }
 @media (prefers-reduced-motion: reduce) { #g-photo { transition: opacity .15s ease; transform: rotate(-4deg); } }
 
+/* Nav byline "by GIFT NJOM" pinned under the logo (absolute, so the nav height never changes). It fades and lifts
+   away while the nav is the floating pill, and comes back at the top. Opacity + transform only, so it stays smooth. */
+${N("Byline")} { white-space: nowrap; pointer-events: none; transition: opacity .45s ${EASE}, transform .55s ${EASE}; }
+html[data-g-scrolled] ${N("Byline")} { opacity: 0; transform: translateY(-6px); }
+@media (prefers-reduced-motion: reduce) { ${N("Byline")} { transition: opacity .2s linear; } html[data-g-scrolled] ${N("Byline")} { transform: none; } }
+
+/* Nav call button: the call icon and the calendar icon ("Book icon") take turns, crossfading with a small turn.
+   Both sit in the same spot; the ring shake on the svg keeps running. Reduced motion: call icon only. */
+${N("Nav (fixed)")} ${N("Call icon")}, ${N("Nav (fixed)")} ${N("Book icon")} { will-change: opacity, transform; }
+@media (prefers-reduced-motion: no-preference) {
+  ${N("Nav (fixed)")} ${N("Call icon")} { animation: g-icon-a 8s ${EASE} infinite; }
+  ${N("Nav (fixed)")} ${N("Book icon")} { animation: g-icon-b 8s ${EASE} infinite; }
+}
+@media (prefers-reduced-motion: reduce) { ${N("Nav (fixed)")} ${N("Book icon")} { opacity: 0; } }
+@keyframes g-icon-a { 0%, 42% { opacity: 1; transform: none; } 50%, 92% { opacity: 0; transform: scale(.55) rotate(-30deg); } 100% { opacity: 1; transform: none; } }
+@keyframes g-icon-b { 0%, 42% { opacity: 0; transform: scale(.55) rotate(30deg); } 50%, 92% { opacity: 1; transform: none; } 100% { opacity: 0; transform: scale(.55) rotate(30deg); } }
+
 /* ---------- One page margin everywhere: every page lines up with the Home hero ----------
    Home sits in a 1200px column with 80px padding. On wider screens, the other pages' full-width sections get the same
    left/right inset (backgrounds stay full-bleed). Below 1200px the canvas paddings already match. */

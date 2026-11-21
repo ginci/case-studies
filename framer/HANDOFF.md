@@ -620,3 +620,18 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - Everything uses 0.55s on the site EASE.
 - Byline moved out of the nav: the Logo component's "Byline" is hidden (kept). A new absolute "Hero byline" sits right-aligned in the Status row ("by GIFT NJOM" / "Lagos, GMT+1", Geist Mono 11). The phone Status row is now 100% wide. The old fold-away CSS is removed.
 - Gift wants to review this placement before anything more changes on the byline.
+
+## 21 Nov 2026: byline under the logo, call/calendar icon swap, About size fix (uploaded, not published)
+- Byline: Gift didn't like it in the hero, so the "Hero byline" was deleted.
+  - The Logo component's "Byline" is visible again, pinned under the logo (absolute, left 0, bottom −15px), so the nav height doesn't change. It reads "ginci designs / by GIFT NJOM"; the location line is hidden.
+  - It fades and lifts away (opacity + translateY, 0.45–0.55s) while the nav is the pill.
+  - "Lagos, GMT+1" isn't shown anywhere now.
+- Nav call button (Home, Work, Case study, Shots item; all breakpoints):
+  - the first icon is named "Call icon" (Phone Call)
+  - the "Book icon" (Calendar) is visible and pinned in the centre (12px, or 10px on the 36px phone button)
+  - CSS `g-icon-a` / `g-icon-b`: the icons take turns every 8s with a fade + 30° turn; the ring shake stays
+  - reduced motion shows the call icon only
+  - Work, Case and Shots item pages had a mail icon, now Phone Call
+  - folder pages (not live) unchanged
+- About: the third paragraph ("Away from the screen…", Gift's edit with 4ourfits) had no font size stored, so it rendered at 16px. Its runs now set 26 (desktop) / 24 (tablet) / 18 (phone) to match.
+- Hero headline size unchanged, at Gift's request.
