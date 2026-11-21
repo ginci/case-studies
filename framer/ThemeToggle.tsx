@@ -479,11 +479,12 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 @keyframes g-drift { from { translate: 0 0; } to { translate: 0 -10px; } }
 
 /* ---------- One page margin everywhere ----------
-   Desktop (1200px and up): every page uses the same fluid side margin, --g-m = clamp(80px, 8.333vw, 160px)
-   (120px at 1440, 160px at 1920). Full-width sections get it as padding, so backgrounds stay full-bleed. Below 1200px
-   the canvas paddings apply. The resting nav keeps max-width 100% (not "none") so its width animates to the pill. */
+   Desktop (1200px and up): every page uses the same side margin, --g-m = the original 1200px column with 80px padding,
+   less 16px each side (Gift, 21 Nov): max(64px, (100vw - 1200px) / 2 + 64px) → 104 / 184 / 424px at 1280 / 1440 / 1920.
+   Full-width sections get it as padding, so backgrounds stay full-bleed. Below 1200px the canvas paddings apply.
+   The resting nav keeps max-width 100% (not "none") so its width animates to the pill. */
 @media (min-width: 1200px) {
-  :root { --g-m: clamp(80px, 8.333vw, 160px); }
+  :root { --g-m: max(64px, calc((100vw - 1200px) / 2 + 64px)); }
   ${N("Page content column")} { max-width: none !important; }
   ${N("Page content column")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}),
   ${N("Case study page")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}),
@@ -1352,7 +1353,7 @@ function setupFX() {
             html.style.setProperty("--g-nav-h", navEl.offsetHeight + "px")
             // pill width as a plain px value, so the width animates both ways (a min() formula can't be interpolated)
             const pw = navEl.parentElement ? navEl.parentElement.clientWidth : window.innerWidth
-            const m = Math.min(160, Math.max(80, window.innerWidth * 0.08333)) // same as --g-m
+            const m = Math.max(64, (window.innerWidth - 1200) / 2 + 64) // same as --g-m
             html.style.setProperty("--g-pill-w", pw - 2 * m - 32 + "px") // 16px inside the content margins
         }
         // switch back as soon as the visitor is near the top (the page no longer shifts, so little hysteresis is needed)

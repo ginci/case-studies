@@ -697,3 +697,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Published a4ca396fd. Verified on Home, Work and Tranzakt:
   - 1440: text at 120px; "Get in touch" button (133px) with the byline visible at rest; the pill sits 135..1305 (≈16px inside the content) and the button folds to the ~42px icon
   - phone: text at 20px, 36px icon button, byline visible, pill 28..362
+
+## 21 Nov 2026: margin back to the original, less 16px a side (uploaded, not published)
+- Gift found 120px too wide. `--g-m` is now `max(64px, calc((100vw - 1200px) / 2 + 64px))`: the original 1200 column with 80px padding, 16px narrower each side → 104 / 184 / 424px at 1280 / 1440 / 1920. The pill JS uses the same formula.
+- Tablet and phone unchanged. Tested by injecting the rule live on Home, Work and Tranzakt: edges match, no horizontal scroll.
