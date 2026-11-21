@@ -478,24 +478,22 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 @keyframes g-breathe { 0%, 100% { opacity: .62; } 50% { opacity: .9; } }
 @keyframes g-drift { from { translate: 0 0; } to { translate: 0 -10px; } }
 
-/* ---------- One page margin everywhere: every page lines up with the Home hero ----------
-   Home sits in a 1200px column with 80px padding. On wider screens, the other pages' full-width sections get the same
-   left/right inset (backgrounds stay full-bleed). Below 1200px the canvas paddings already match. The resting nav gets
-   the same padding but keeps max-width 100% (not "none"), so its width can animate to and from the floating pill. */
+/* ---------- One page margin everywhere ----------
+   Desktop (1200px and up): every page uses the same fluid side margin, --g-m = clamp(80px, 8.333vw, 160px)
+   (120px at 1440, 160px at 1920). Full-width sections get it as padding, so backgrounds stay full-bleed. Below 1200px
+   the canvas paddings apply. The resting nav keeps max-width 100% (not "none") so its width animates to the pill. */
 @media (min-width: 1200px) {
+  :root { --g-m: clamp(80px, 8.333vw, 160px); }
+  ${N("Page content column")} { max-width: none !important; }
   ${N("Page content column")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}),
   ${N("Case study page")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}),
   ${N("Playground / Index")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}) {
-    padding-left: max(80px, calc((100% - 1200px) / 2 + 80px)) !important;
-    padding-right: max(80px, calc((100% - 1200px) / 2 + 80px)) !important;
-    max-width: none !important;
+    padding-left: var(--g-m) !important; padding-right: var(--g-m) !important; max-width: none !important;
   }
   html:not([data-g-scrolled]) ${N("Page content column")} > ${N("Nav (fixed)")},
   html:not([data-g-scrolled]) ${N("Case study page")} > ${N("Nav (fixed)")},
   html:not([data-g-scrolled]) ${N("Playground / Index")} > ${N("Nav (fixed)")} {
-    padding-left: max(80px, calc((100% - 1200px) / 2 + 80px)) !important;
-    padding-right: max(80px, calc((100% - 1200px) / 2 + 80px)) !important;
-    max-width: 100% !important;
+    padding-left: var(--g-m) !important; padding-right: var(--g-m) !important; max-width: 100% !important;
   }
 }
 
@@ -1354,7 +1352,8 @@ function setupFX() {
             html.style.setProperty("--g-nav-h", navEl.offsetHeight + "px")
             // pill width as a plain px value, so the width animates both ways (a min() formula can't be interpolated)
             const pw = navEl.parentElement ? navEl.parentElement.clientWidth : window.innerWidth
-            html.style.setProperty("--g-pill-w", Math.min(pw, 1200) - 192 + "px")
+            const m = Math.min(160, Math.max(80, window.innerWidth * 0.08333)) // same as --g-m
+            html.style.setProperty("--g-pill-w", pw - 2 * m - 32 + "px") // 16px inside the content margins
         }
         // switch back as soon as the visitor is near the top (the page no longer shifts, so little hysteresis is needed)
         const navNext = navOn ? y > 32 : y > 56

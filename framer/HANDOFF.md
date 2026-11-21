@@ -684,3 +684,13 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - desktop hero is 80% of the screen (canvas 80.25vh); phone hero still fills the screen below the nav
   - both "Dots" run g-twinkle, g-breathe and g-drift, out of step
   - scrolling up step by step, the phone nav starts widening on the first frame after crossing the threshold and eases 334 → 390 with no stall (desktop headless frames too sparse to time)
+
+## 21 Nov 2026: wider content (fluid margin) and one nav on every page (uploaded, not published)
+- Desktop margin is now fluid: `--g-m: clamp(80px, 8.333vw, 160px)`, which gives 107 / 120 / 160px at 1280 / 1440 / 1920. Was 200px at 1440.
+  - Applies to Home (its "Page content column" 1200 cap is lifted in CSS), Work, Case study and Shots item.
+  - The pill width (`--g-pill-w`) is the content width minus 32.
+  - Tested by injecting the rule live: text, logo and button edges match on all three pages; no horizontal scroll.
+- Nav made identical to Home on Work, Case study and Shots item, on all breakpoints:
+  - nav padding 32/80, overflow visible (byline isn't clipped)
+  - button: auto width, padding 0 12, gap 8; label "Get in touch" (Outfit 500 16, Home's style); icons 16×20 with Book pinned right 12 / top 10
+  - phone: 36px icon-only (label hidden, padding 0 10, Book right 10 / top 8)
