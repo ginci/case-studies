@@ -3,7 +3,10 @@ const fs = require("fs")
 const { upem, lines } = JSON.parse(fs.readFileSync("glyphs.json", "utf8"))
 let ymin = 1e9, ymax = -1e9
 for (const l of lines) for (const g of l.glyphs) { const n = g.d.match(/-?\d+(\.\d+)?/g).map(Number); for (let i = 1; i < n.length; i += 2) { ymin = Math.min(ymin, n[i] + g.y); ymax = Math.max(ymax, n[i] + g.y) } }
-const pad = 20, top = ymax + pad, bottom = -ymin + pad, SIDE = 30
+const pad = 20, top = ymax + pad, SIDE = 30
+// Space kept below the baseline. Deeper descenders (the "g" tail) hang below the box, so the copy under the
+// headline can sit close for every phrase. Was -ymin + pad (about 600 units).
+const bottom = 400
 const phrases = lines.map(l => {
   let t = 0, prevCl = -1
   const glyphs = l.glyphs.map(g => {

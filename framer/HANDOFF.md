@@ -646,3 +646,8 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - byline opacity 1 at the top, 0 when scrolled, 1 back at the top (desktop, tablet, phone)
   - call/calendar icons alternate
   - About paragraphs 26/26/26, 24/24/24, 18/18/18
+
+## 21 Nov 2026: tighter headline → intro spacing (uploaded, not published)
+- The Playwrite AR descenders go 583 units below the baseline, and the headline box reserved about 600 units (29px at 48px) for every phrase, even ones without descenders.
+- `build_cycle.cjs` now keeps `bottom = 400`. Deeper tails (the "g" in "designer") hang below the box; the SVG overflow is visible.
+- COPY stack gap (headline → lede) 16 → 8px on all breakpoints.
