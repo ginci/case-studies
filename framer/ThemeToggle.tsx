@@ -429,8 +429,9 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 
 /* Nav byline "by GIFT NJOM" pinned under the logo (absolute, so the nav height never changes). It fades and lifts
    away while the nav is the floating pill, and comes back at the top. Opacity + transform only, so it stays smooth. */
+${N("Nav (fixed)")} { overflow: visible !important; }
 ${N("Byline")} { white-space: nowrap; pointer-events: none; transition: opacity .45s ${EASE}, transform .55s ${EASE}; }
-html[data-g-scrolled] ${N("Byline")} { opacity: 0; transform: translateY(-6px); }
+html[data-g-scrolled] ${N("Byline")} { opacity: 0 !important; transform: translateY(-6px) !important; }
 @media (prefers-reduced-motion: reduce) { ${N("Byline")} { transition: opacity .2s linear; } html[data-g-scrolled] ${N("Byline")} { transform: none; } }
 
 /* Nav call button: the call icon and the calendar icon ("Book icon") take turns, crossfading with a small turn.
@@ -443,6 +444,11 @@ ${N("Nav (fixed)")} ${N("Call icon")}, ${N("Nav (fixed)")} ${N("Book icon")} { w
 @media (prefers-reduced-motion: reduce) { ${N("Nav (fixed)")} ${N("Book icon")} { opacity: 0; } }
 @keyframes g-icon-a { 0%, 42% { opacity: 1; transform: none; } 50%, 92% { opacity: 0; transform: scale(.55) rotate(-30deg); } 100% { opacity: 1; transform: none; } }
 @keyframes g-icon-b { 0%, 42% { opacity: 0; transform: scale(.55) rotate(30deg); } 50%, 92% { opacity: 1; transform: none; } 100% { opacity: 0; transform: scale(.55) rotate(30deg); } }
+
+/* About statement: every paragraph uses the statement's size (one paragraph had lost its own size in Framer). */
+${N("Statement (word reveal on scroll)")} p { font-size: 26px !important; }
+@media (max-width: 1199px) { ${N("Statement (word reveal on scroll)")} p { font-size: 24px !important; } }
+@media (max-width: 809px) { ${N("Statement (word reveal on scroll)")} p { font-size: 18px !important; } }
 
 /* ---------- One page margin everywhere: every page lines up with the Home hero ----------
    Home sits in a 1200px column with 80px padding. On wider screens, the other pages' full-width sections get the same

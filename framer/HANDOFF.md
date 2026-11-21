@@ -635,3 +635,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - folder pages (not live) unchanged
 - About: the third paragraph ("Away from the screen…", Gift's edit with 4ourfits) had no font size stored, so it rendered at 16px. Its runs now set 26 (desktop) / 24 (tablet) / 18 (phone) to match.
 - Hero headline size unchanged, at Gift's request.
+
+## 21 Nov 2026: byline matches the logo width; published 5708f13d5
+- Byline under the logo is now two lines: "by" (grey) / "GIFT NJOM" (light), Geist Mono 9px, letter-spacing 0.02em, so "GIFT NJOM" is 50px wide, the same as the logo. Pinned at bottom −26px, gap 1px.
+- Nav overflow is visible (CSS for all pages, canvas on Home) so the phone nav doesn't clip the second line.
+- The byline fade needed `!important` (Framer sets opacity inline).
+- About statement paragraphs are forced to one size per breakpoint in CSS (26 / 24 / 18), because the phone/tablet run sizes didn't stick in Framer.
+- Verified live:
+  - logo 50.0 vs name 50.2 (desktop), 50.0 vs 50.0 (phone)
+  - byline opacity 1 at the top, 0 when scrolled, 1 back at the top (desktop, tablet, phone)
+  - call/calendar icons alternate
+  - About paragraphs 26/26/26, 24/24/24, 18/18/18
