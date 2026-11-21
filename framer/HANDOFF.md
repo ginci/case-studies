@@ -701,3 +701,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 ## 21 Nov 2026: margin back to the original, less 16px a side (uploaded, not published)
 - Gift found 120px too wide. `--g-m` is now `max(64px, calc((100vw - 1200px) / 2 + 64px))`: the original 1200 column with 80px padding, 16px narrower each side → 104 / 184 / 424px at 1280 / 1440 / 1920. The pill JS uses the same formula.
 - Tablet and phone unchanged. Tested by injecting the rule live on Home, Work and Tranzakt: edges match, no horizontal scroll.
+
+## 21 Nov 2026: layout draft "Home B" at /home-b (canvas only, not published)
+- Cloned Home (`augiA20Il`) → page `JIUEvpsxe`, path `/home-b`, name "Home B (layout draft)". The real Home is untouched. The page frame is renamed back to "Home V2 / Index (dark)" so the site code styles it like Home.
+- Layout ("Index"):
+  - Hero split (`CMFDwKIb0`, horizontal, gap 80): left = Content (pills, headline, intro); right = "Hero index" (440px) with the Featured work header, the CMS Work list and the hover preview, moved out of "03 Work".
+  - Rows compacted: padding 14, name 22, arrow 18, number 12.
+  - "03 Work" is hidden; the hero is auto height (padding 160/80/24).
+  - Then: More about me ribbon → About → Folders → Contact → Footer.
+- Tablet/phone: split stacks vertically, index full width; hero padding 96/40 (tablet), 48/20 (phone).
+- Screenshots: `mockups/out/home-b-desktop.png`, `mockups/out/home-b-phone.png`.
+- To adopt it: swap the paths (Home → /home-a, Home B → /) or copy the layout into Home. To drop it: delete the page.
