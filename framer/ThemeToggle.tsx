@@ -1133,7 +1133,7 @@ function drawHalftone(cv: HTMLCanvasElement, img: HTMLImageElement | null) {
     sx.fillStyle = "#000"; sx.fillRect(0, 0, W, H)
     if (img && img.naturalWidth) {
         const r = Math.max(W / img.naturalWidth, H / img.naturalHeight), w = img.naturalWidth * r, h = img.naturalHeight * r
-        sx.filter = "grayscale(1) contrast(1.15)"; sx.drawImage(img, (W - w) / 2, (H - h) / 2.6, w, h); sx.filter = "none"
+        sx.filter = "grayscale(1) brightness(1.3) contrast(1.25)"; sx.drawImage(img, (W - w) / 2, (H - h) / 2.6, w, h); sx.filter = "none"
     } else {
         const g = sx.createRadialGradient(W / 2, H * 0.36, 4, W / 2, H * 0.36, W * 0.3); g.addColorStop(0, "#d8d8d8"); g.addColorStop(1, "#5a5a5a")
         sx.fillStyle = g; sx.beginPath(); sx.ellipse(W / 2, H * 0.37, W * 0.2, H * 0.17, 0, 0, Math.PI * 2); sx.fill()

@@ -651,3 +651,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - The Playwrite AR descenders go 583 units below the baseline, and the headline box reserved about 600 units (29px at 48px) for every phrase, even ones without descenders.
 - `build_cycle.cjs` now keeps `bottom = 400`. Deeper tails (the "g" in "designer") hang below the box; the SVG overflow is visible.
 - COPY stack gap (headline → lede) 16 → 8px on all breakpoints.
+
+## 21 Nov 2026: new hero and About copy, AI glyphs, real photo in the hover (published 71b52d783)
+- Headline cycles "Product designer." → "Fintech & AI." → "Idea to prototype."
+  - Playwrite AR's cursive capitals look like "a" and "l", so `gen.cjs` swaps the glyphs for "AI" to the font's plain print capitals: A gid 5 (advance 877), I gid 11 (advance 394).
+- Intro (all breakpoints): "I'm Gift, a senior product designer with six years shaping products people trust with their money. I design payments at Tranzakt and use AI to turn ideas into working prototypes, fast." The "Gift" run (hover target) and the Tranzakt chip are kept.
+- About statement:
+  1. "I make complex products feel simple. Six years in, I still design for the moment a confusing screen finally clicks."
+  2. "Good design respects people's time: no manual, no support call. I ask sharp questions, prototype fast and keep only what earns its place."
+  3. "Off screen, I style and shoot for 4ourfits, my fashion line. It keeps my eye honest: if it doesn't look right, it isn't done. ⏎ Want the full picture? [Take a look at my experience]."
+- Photo hover: Gift's image is on "Hover photo (set fill to your photo)". The halftone source is now brightness 1.3 / contrast 1.25 so the face reads. Verified live.
+- How code and canvas relate: see the chat summary, 21 Nov. Rule of thumb: canvas for layout, content and sizes; code only for behaviour (animation, hover, scroll state). Any code rule that sets layout should be moved back to the canvas.
