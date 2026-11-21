@@ -680,3 +680,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Nav return delay had two causes: the nav only switched back within 16px of the top (hysteresis 16/80), and the curve started slowly. Now the thresholds are 32 (off) / 56 (on) and `NAVEASE = cubic-bezier(0.22,1,0.36,1)` (moves at once, soft landing), 0.6s.
 - Hero: Gift set desktop/tablet height to 80.25vh in the canvas. The CSS that forced `min-height: 100svh − nav` now only applies on phones, so the canvas height rules desktop and tablet.
 - "Dots" (constellation images Gift added top and bottom of Home, opacity 0.8): CSS adds `g-twinkle` (a light band drifting across via a mask, 14s), `g-breathe` (opacity .62–.9, 7s) and `g-drift` (−10px float, 26s). The second image runs out of step. Off for reduced motion.
+- Published 8959b1ec6. Verified:
+  - desktop hero is 80% of the screen (canvas 80.25vh); phone hero still fills the screen below the nav
+  - both "Dots" run g-twinkle, g-breathe and g-drift, out of step
+  - scrolling up step by step, the phone nav starts widening on the first frame after crossing the threshold and eases 334 → 390 with no stall (desktop headless frames too sparse to time)
