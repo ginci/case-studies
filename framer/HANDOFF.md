@@ -662,3 +662,16 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   3. "Off screen, I style and shoot for 4ourfits, my fashion line. It keeps my eye honest: if it doesn't look right, it isn't done. ⏎ Want the full picture? [Take a look at my experience]."
 - Photo hover: Gift's image is on "Hover photo (set fill to your photo)". The halftone source is now brightness 1.3 / contrast 1.25 so the face reads. Verified live.
 - How code and canvas relate: see the chat summary, 21 Nov. Rule of thumb: canvas for layout, content and sizes; code only for behaviour (animation, hover, scroll state). Any code rule that sets layout should be moved back to the canvas.
+
+## 21 Nov 2026: plain photo, nav button folds to icon, byline fade, smooth nav both ways, top blur (published a3409e0ba)
+- Photo hover: the halftone is removed. The card shows Gift's image as uploaded (`<img>`, object-fit cover, 200×250, −4° tilt). With no photo nothing pops up.
+- Nav "Get in touch" (Gift re-added the label):
+  - At rest: label + call/calendar icon swap. The Book icon is pinned right 12 / top 10 over the Call icon; button gap 8.
+  - Floating pill: the label folds (max-width 140 → 0, opacity) into the round 40px icon button; the icons keep swapping.
+  - Phone: label hidden (36px icon button).
+  - The selector is prefixed with `#main` to beat the CTA no-wrap rule.
+- Byline (Gift moved it to the right of the logo): opacity fade only, 0.5s.
+- Nav switch both ways: one curve `NAVEASE = cubic-bezier(0.45,0,0.2,1)`, 0.7s.
+  - Two things made desktop snap: the pill width `calc(min(100%,1200px) - 192px)` can't be interpolated, so it's now `--g-pill-w` measured in JS; and the margin rule set the resting nav to `max-width: none`, now 100%.
+  - Verified frame by frame: phone eases 334 → 390 over about 0.6s both ways. Desktop shows mid values (headless runs the shader in software, so its frames are sparse).
+- Top blur: `#g-topblur` (fixed, 96px / 76px on phone, `backdrop-filter: blur(3px)`, mask fading down), placed next to the nav in the same stacking layer (z 19 under the nav's 20). It only appears while the nav floats.

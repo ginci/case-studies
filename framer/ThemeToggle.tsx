@@ -22,6 +22,7 @@ const ARROW_LIGHT =
     "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23F4F3EE' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m13 6 6 6-6 6'/%3E%3C/svg%3E\")"
 const ARROW_DARK =
     "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23121211' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m13 6 6 6-6 6'/%3E%3C/svg%3E\")"
+const NAVEASE = "cubic-bezier(0.45, 0, 0.2, 1)" // slow in, soft landing: used for both directions of the nav switch
 const N = (name: string) => `[data-framer-name="${name}"]`
 const S = (prefix: string) => `[data-framer-name^="${prefix}"]`
 const EASE = "cubic-bezier(0.16, 1, 0.3, 1)"
@@ -344,7 +345,7 @@ ${N("Nav (fixed)")} {
   border: 1px solid transparent !important; box-sizing: border-box !important;
 }
 html[data-g-scrolled] ${N("Nav (fixed)")} {
-  top: 14px !important; max-width: calc(min(100%, 1200px) - 192px) !important; /* shrinks inward: 16px inside the 80px content margins */
+  top: 14px !important; max-width: var(--g-pill-w, calc(min(100%, 1200px) - 192px)) !important; /* shrinks inward: 16px inside the 80px content margins */
   border-radius: 32px !important; padding: 10px 10px 10px 24px !important;
   margin-bottom: calc(var(--g-nav-pad, 64px) - 20px) !important; /* keeps the page from shifting while the nav shrinks */
   background-color: rgba(11, 11, 10, 0.92) !important; border-color: rgba(244, 243, 238, 0.12) !important;
@@ -367,9 +368,9 @@ html[data-g-scrolled] ${N("Nav (fixed)")} {
   ${S("Back to top")} { transition: background-color 0.3s ease; }
   ${S("Back to top")} * { transition: color 0.3s ease; }
   ${N("Nav (fixed)")} {
-    transition: max-width 0.55s ${EASE}, top 0.55s ${EASE}, border-radius 0.55s ${EASE}, padding 0.55s ${EASE}, margin 0.55s ${EASE},
-      background-color 0.55s ${EASE}, border-color 0.55s ${EASE}, box-shadow 0.55s ${EASE},
-      backdrop-filter 0.55s ${EASE}, -webkit-backdrop-filter 0.55s ${EASE} !important;
+    transition: max-width 0.7s ${NAVEASE}, top 0.7s ${NAVEASE}, border-radius 0.7s ${NAVEASE}, padding 0.7s ${NAVEASE}, margin 0.7s ${NAVEASE},
+      background-color 0.7s ${NAVEASE}, border-color 0.7s ${NAVEASE}, box-shadow 0.7s ${NAVEASE},
+      backdrop-filter 0.7s ${NAVEASE}, -webkit-backdrop-filter 0.7s ${NAVEASE} !important;
   }
   [data-g-rv] {
     opacity: 0 !important;
@@ -417,22 +418,21 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 }
 
 
-/* Hero: halftone portrait on hover over "Gift" (built by setupPhotoHover) */
+/* Hero: photo on hover over "Gift" (built by setupPhotoHover) */
 [data-g-photo] { cursor: default; text-decoration: underline dotted rgba(244, 243, 238, 0.45); text-underline-offset: 4px; }
 [data-framer-name^="Hover photo"] { position: absolute !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important; overflow: hidden !important; }
 #g-photo { position: fixed; z-index: 60; width: 200px; height: 250px; border-radius: 14px; overflow: hidden; pointer-events: none;
   background: #121211; box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(244,243,238,.12);
   opacity: 0; transform: rotate(-4deg) scale(.86); transform-origin: 0 100%; transition: opacity .22s ease, transform .32s cubic-bezier(.2,.8,.2,1); }
 #g-photo.g-on { opacity: 1; transform: rotate(-4deg) scale(1); }
-#g-photo canvas { display: block; width: 100%; height: 100%; }
+#g-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
 @media (prefers-reduced-motion: reduce) { #g-photo { transition: opacity .15s ease; transform: rotate(-4deg); } }
 
 /* Nav byline "by GIFT NJOM" pinned under the logo (absolute, so the nav height never changes). It fades and lifts
    away while the nav is the floating pill, and comes back at the top. Opacity + transform only, so it stays smooth. */
 ${N("Nav (fixed)")} { overflow: visible !important; }
-${N("Byline")} { white-space: nowrap; pointer-events: none; transition: opacity .45s ${EASE}, transform .55s ${EASE}; }
-html[data-g-scrolled] ${N("Byline")} { opacity: 0 !important; transform: translateY(-6px) !important; }
-@media (prefers-reduced-motion: reduce) { ${N("Byline")} { transition: opacity .2s linear; } html[data-g-scrolled] ${N("Byline")} { transform: none; } }
+${N("Byline")} { white-space: nowrap; pointer-events: none; transition: opacity .5s ease; }
+html[data-g-scrolled] ${N("Byline")} { opacity: 0 !important; }
 
 /* Nav call button: the call icon and the calendar icon ("Book icon") take turns, crossfading with a small turn.
    Both sit in the same spot; the ring shake on the svg keeps running. Reduced motion: call icon only. */
@@ -450,19 +450,40 @@ ${N("Statement (word reveal on scroll)")} p { font-size: 26px !important; }
 @media (max-width: 1199px) { ${N("Statement (word reveal on scroll)")} p { font-size: 24px !important; } }
 @media (max-width: 809px) { ${N("Statement (word reveal on scroll)")} p { font-size: 18px !important; } }
 
+/* Nav "Get in touch" button: at rest it shows the label and the swapping call/calendar icon. While the nav is the
+   floating pill the label folds away and it becomes the round icon button; the icons keep swapping. */
+#main ${N("Nav (fixed)")} ${S("CTA / Email")} > ${N("Email me")} { display: block; max-width: 140px !important; min-width: 0 !important; overflow: hidden; white-space: nowrap;
+  transition: max-width 0.7s ${NAVEASE}, opacity 0.45s ease, margin 0.7s ${NAVEASE}; }
+${N("Nav (fixed)")} ${S("CTA / Email")} { transition: padding 0.7s ${NAVEASE}, gap 0.7s ${NAVEASE} !important; }
+html[data-g-scrolled] #main ${N("Nav (fixed)")} ${S("CTA / Email")} > ${N("Email me")} { max-width: 0 !important; opacity: 0 !important; margin-right: -8px !important; }
+html[data-g-scrolled] ${N("Nav (fixed)")} ${S("CTA / Email")} { padding-left: 12px !important; padding-right: 12px !important; }
+
+/* A very light blur band at the top of the screen, behind the floating nav. Only while the nav floats. */
+#g-topblur { position: fixed; left: 0; right: 0; top: 0; height: 96px; z-index: 19; pointer-events: none; opacity: 0;
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent); mask-image: linear-gradient(to bottom, #000 40%, transparent);
+  transition: opacity 0.7s ${NAVEASE}; }
+html[data-g-scrolled] #g-topblur { opacity: 1; }
+@media (max-width: 809px) { #g-topblur { height: 76px; } }
+
 /* ---------- One page margin everywhere: every page lines up with the Home hero ----------
    Home sits in a 1200px column with 80px padding. On wider screens, the other pages' full-width sections get the same
-   left/right inset (backgrounds stay full-bleed). Below 1200px the canvas paddings already match. */
+   left/right inset (backgrounds stay full-bleed). Below 1200px the canvas paddings already match. The resting nav gets
+   the same padding but keeps max-width 100% (not "none"), so its width can animate to and from the floating pill. */
 @media (min-width: 1200px) {
   ${N("Page content column")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}),
   ${N("Case study page")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}),
-  ${N("Playground / Index")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}),
+  ${N("Playground / Index")} > :not([data-framer-name^="Background"]):not(${N("Nav (fixed)")}) {
+    padding-left: max(80px, calc((100% - 1200px) / 2 + 80px)) !important;
+    padding-right: max(80px, calc((100% - 1200px) / 2 + 80px)) !important;
+    max-width: none !important;
+  }
   html:not([data-g-scrolled]) ${N("Page content column")} > ${N("Nav (fixed)")},
   html:not([data-g-scrolled]) ${N("Case study page")} > ${N("Nav (fixed)")},
   html:not([data-g-scrolled]) ${N("Playground / Index")} > ${N("Nav (fixed)")} {
     padding-left: max(80px, calc((100% - 1200px) / 2 + 80px)) !important;
     padding-right: max(80px, calc((100% - 1200px) / 2 + 80px)) !important;
-    max-width: none !important;
+    max-width: 100% !important;
   }
 }
 
@@ -1120,38 +1141,10 @@ function applyAccents() {
 }
 
 // Case study TOC: click to jump, and mark the section in view.
-// ---------- Hero: hovering "Gift" in the lede shows a small halftone portrait that follows the cursor ----------
+// ---------- Hero: hovering "Gift" in the lede shows Gift's photo (as uploaded, no effects) following the cursor ----------
 // The photo comes from the layer "Hover photo (set fill to your photo)" in the hero (kept off screen); without one,
 // a halftone silhouette is shown. The halftone is drawn on a canvas at runtime. Touch: tap "Gift" to show it briefly.
 let photoCard: HTMLDivElement | null = null
-let photoDrawnFrom = ""
-function drawHalftone(cv: HTMLCanvasElement, img: HTMLImageElement | null) {
-    const W = cv.width, H = cv.height, ctx = cv.getContext("2d")
-    if (!ctx) return
-    const src = document.createElement("canvas"); src.width = W; src.height = H
-    const sx = src.getContext("2d", { willReadFrequently: true } as any) as CanvasRenderingContext2D
-    sx.fillStyle = "#000"; sx.fillRect(0, 0, W, H)
-    if (img && img.naturalWidth) {
-        const r = Math.max(W / img.naturalWidth, H / img.naturalHeight), w = img.naturalWidth * r, h = img.naturalHeight * r
-        sx.filter = "grayscale(1) brightness(1.3) contrast(1.25)"; sx.drawImage(img, (W - w) / 2, (H - h) / 2.6, w, h); sx.filter = "none"
-    } else {
-        const g = sx.createRadialGradient(W / 2, H * 0.36, 4, W / 2, H * 0.36, W * 0.3); g.addColorStop(0, "#d8d8d8"); g.addColorStop(1, "#5a5a5a")
-        sx.fillStyle = g; sx.beginPath(); sx.ellipse(W / 2, H * 0.37, W * 0.2, H * 0.17, 0, 0, Math.PI * 2); sx.fill()
-        const b = sx.createLinearGradient(0, H * 0.6, 0, H); b.addColorStop(0, "#9a9a9a"); b.addColorStop(1, "#3a3a3a")
-        sx.fillStyle = b; sx.beginPath(); sx.ellipse(W / 2, H * 1.02, W * 0.46, H * 0.42, 0, Math.PI, 0); sx.fill()
-    }
-    let data: Uint8ClampedArray
-    try { data = sx.getImageData(0, 0, W, H).data } catch { return } // cross-origin image without CORS: keep the CSS fallback
-    ctx.fillStyle = "#121211"; ctx.fillRect(0, 0, W, H); ctx.fillStyle = "#F4F3EE"
-    const step = Math.round(W / 46), ang = Math.PI / 4, cos = Math.cos(ang), sin = Math.sin(ang), R = Math.hypot(W, H)
-    for (let u = -R; u < R; u += step) for (let v = -R; v < R; v += step) {
-        const x = W / 2 + u * cos - v * sin, y = H / 2 + u * sin + v * cos
-        if (x < 0 || y < 0 || x >= W || y >= H) continue
-        const i = (Math.floor(y) * W + Math.floor(x)) * 4, l = (data[i] * 0.3 + data[i + 1] * 0.59 + data[i + 2] * 0.11) / 255
-        const rad = (step / 2) * Math.sqrt(l) * 1.05
-        if (rad > 0.35) { ctx.beginPath(); ctx.arc(x, y, rad, 0, Math.PI * 2); ctx.fill() }
-    }
-}
 function photoSource(): string {
     const holder = document.querySelector('[data-framer-name^="Hover photo"]') as HTMLElement | null
     const im = holder?.querySelector("img") as HTMLImageElement | null
@@ -1174,21 +1167,17 @@ function setupPhotoHover() {
     target.setAttribute("data-g-photo", "on")
     if (!photoCard) {
         photoCard = document.createElement("div"); photoCard.id = "g-photo"; photoCard.setAttribute("aria-hidden", "true")
-        const cv = document.createElement("canvas"); cv.width = 400; cv.height = 500; photoCard.appendChild(cv)
+        const im = document.createElement("img"); im.alt = ""; im.decoding = "async"; photoCard.appendChild(im)
         document.body.appendChild(photoCard)
     }
-    const card = photoCard, cv = card.querySelector("canvas") as HTMLCanvasElement
+    const card = photoCard, img = card.querySelector("img") as HTMLImageElement
     const render = () => {
         const url = photoSource()
-        if (photoDrawnFrom === (url || "none")) return
-        photoDrawnFrom = url || "none"
-        if (!url) { drawHalftone(cv, null); return }
-        const img = new Image(); img.crossOrigin = "anonymous"
-        img.onload = () => drawHalftone(cv, img); img.onerror = () => drawHalftone(cv, null)
-        img.src = url.includes("framerusercontent.com") ? url.split("?")[0] + "?scale-down-to=1024" : url
+        if (url && img.getAttribute("src") !== url) img.src = url.includes("framerusercontent.com") ? url.split("?")[0] + "?scale-down-to=1024" : url
+        return !!url
     }
     const move = (e: PointerEvent) => { card.style.left = Math.min(e.clientX + 28, window.innerWidth - 230) + "px"; card.style.top = Math.max(12, e.clientY - 276) + "px" }
-    const show = (e: PointerEvent) => { render(); move(e); card.classList.add("g-on") }
+    const show = (e: PointerEvent) => { if (!render()) return; move(e); card.classList.add("g-on") }
     const hide = () => card.classList.remove("g-on")
     target.addEventListener("pointerenter", (e) => { if ((e as PointerEvent).pointerType === "mouse") show(e as PointerEvent) })
     target.addEventListener("pointermove", (e) => { if ((e as PointerEvent).pointerType === "mouse") move(e as PointerEvent) })
@@ -1197,7 +1186,8 @@ function setupPhotoHover() {
     target.addEventListener("click", (e) => {
         if ((e as PointerEvent).pointerType === "mouse") return
         const r = target!.getBoundingClientRect()
-        render(); card.style.left = Math.min(r.left, window.innerWidth - 220) + "px"; card.style.top = r.top - 270 + "px"
+        if (!render()) return
+        card.style.left = Math.min(r.left, window.innerWidth - 220) + "px"; card.style.top = r.top - 270 + "px"
         card.classList.add("g-on"); clearTimeout(t); t = setTimeout(hide, 2600)
     })
     window.addEventListener("scroll", hide, { passive: true })
@@ -1338,6 +1328,9 @@ function setupFX() {
         // Hysteresis: the nav gets shorter when it becomes a pill, which shifts the page a little.
         // Separate on/off points stop that shift from flipping the state back (the "stuck halfway" nav).
         const html = document.documentElement
+        const navHost = document.querySelector<HTMLElement>('[data-framer-name="Nav (fixed)"]')?.parentElement
+        let tb = document.getElementById("g-topblur")
+        if (navHost && (!tb || tb.parentElement !== navHost)) { tb?.remove(); tb = document.createElement("div"); tb.id = "g-topblur"; tb.setAttribute("aria-hidden", "true"); navHost.appendChild(tb) }
         const navOn = html.hasAttribute("data-g-scrolled")
         const navEl = document.querySelector<HTMLElement>('[data-framer-name="Nav (fixed)"]')
         const wn = window as any
@@ -1345,6 +1338,9 @@ function setupFX() {
             const cs = getComputedStyle(navEl)
             html.style.setProperty("--g-nav-pad", parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + "px")
             html.style.setProperty("--g-nav-h", navEl.offsetHeight + "px")
+            // pill width as a plain px value, so the width animates both ways (a min() formula can't be interpolated)
+            const pw = navEl.parentElement ? navEl.parentElement.clientWidth : window.innerWidth
+            html.style.setProperty("--g-pill-w", Math.min(pw, 1200) - 192 + "px")
         }
         const navNext = navOn ? y > 16 : y > 80
         if (navNext !== navOn) { wn.__gNavT = Date.now(); html.toggleAttribute("data-g-scrolled", navNext) }
