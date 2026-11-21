@@ -694,3 +694,6 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - nav padding 32/80, overflow visible (byline isn't clipped)
   - button: auto width, padding 0 12, gap 8; label "Get in touch" (Outfit 500 16, Home's style); icons 16×20 with Book pinned right 12 / top 10
   - phone: 36px icon-only (label hidden, padding 0 10, Book right 10 / top 8)
+- Published a4ca396fd. Verified on Home, Work and Tranzakt:
+  - 1440: text at 120px; "Get in touch" button (133px) with the byline visible at rest; the pill sits 135..1305 (≈16px inside the content) and the button folds to the ~42px icon
+  - phone: text at 20px, 36px icon button, byline visible, pill 28..362
