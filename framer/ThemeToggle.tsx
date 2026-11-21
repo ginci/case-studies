@@ -22,7 +22,7 @@ const ARROW_LIGHT =
     "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23F4F3EE' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m13 6 6 6-6 6'/%3E%3C/svg%3E\")"
 const ARROW_DARK =
     "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23121211' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m13 6 6 6-6 6'/%3E%3C/svg%3E\")"
-const NAVEASE = "cubic-bezier(0.45, 0, 0.2, 1)" // slow in, soft landing: used for both directions of the nav switch
+const NAVEASE = "cubic-bezier(0.22, 1, 0.36, 1)" // starts moving at once, soft landing: both directions of the nav switch
 const N = (name: string) => `[data-framer-name="${name}"]`
 const S = (prefix: string) => `[data-framer-name^="${prefix}"]`
 const EASE = "cubic-bezier(0.16, 1, 0.3, 1)"
@@ -368,9 +368,9 @@ html[data-g-scrolled] ${N("Nav (fixed)")} {
   ${S("Back to top")} { transition: background-color 0.3s ease; }
   ${S("Back to top")} * { transition: color 0.3s ease; }
   ${N("Nav (fixed)")} {
-    transition: max-width 0.7s ${NAVEASE}, top 0.7s ${NAVEASE}, border-radius 0.7s ${NAVEASE}, padding 0.7s ${NAVEASE}, margin 0.7s ${NAVEASE},
-      background-color 0.7s ${NAVEASE}, border-color 0.7s ${NAVEASE}, box-shadow 0.7s ${NAVEASE},
-      backdrop-filter 0.7s ${NAVEASE}, -webkit-backdrop-filter 0.7s ${NAVEASE} !important;
+    transition: max-width 0.6s ${NAVEASE}, top 0.6s ${NAVEASE}, border-radius 0.6s ${NAVEASE}, padding 0.6s ${NAVEASE}, margin 0.6s ${NAVEASE},
+      background-color 0.6s ${NAVEASE}, border-color 0.6s ${NAVEASE}, box-shadow 0.6s ${NAVEASE},
+      backdrop-filter 0.6s ${NAVEASE}, -webkit-backdrop-filter 0.6s ${NAVEASE} !important;
   }
   [data-g-rv] {
     opacity: 0 !important;
@@ -466,6 +466,18 @@ html[data-g-scrolled] ${N("Nav (fixed)")} ${S("CTA / Email")} { padding-left: 12
 html[data-g-scrolled] #g-topblur { opacity: 1; }
 @media (max-width: 809px) { #g-topblur { height: 76px; } }
 
+/* Constellation "Dots" images (top and bottom of Home): slow breathing, a soft band of light that drifts across so
+   different stars brighten in turn, and a few pixels of float. The two images run out of step. Off for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  ${N("Dots")} { -webkit-mask-image: linear-gradient(105deg, rgba(0,0,0,.55) 35%, #000 50%, rgba(0,0,0,.55) 65%); mask-image: linear-gradient(105deg, rgba(0,0,0,.55) 35%, #000 50%, rgba(0,0,0,.55) 65%);
+    -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+    animation: g-twinkle 14s linear infinite, g-breathe 7s ease-in-out infinite, g-drift 26s ease-in-out infinite alternate; }
+  ${N("Dots")} ~ ${N("Dots")} { animation-delay: -6s, -3.5s, -13s; animation-direction: reverse, normal, alternate-reverse; }
+}
+@keyframes g-twinkle { from { -webkit-mask-position: 100% 0; mask-position: 100% 0; } to { -webkit-mask-position: -200% 0; mask-position: -200% 0; } }
+@keyframes g-breathe { 0%, 100% { opacity: .62; } 50% { opacity: .9; } }
+@keyframes g-drift { from { translate: 0 0; } to { translate: 0 -10px; } }
+
 /* ---------- One page margin everywhere: every page lines up with the Home hero ----------
    Home sits in a 1200px column with 80px padding. On wider screens, the other pages' full-width sections get the same
    left/right inset (backgrounds stay full-bleed). Below 1200px the canvas paddings already match. The resting nav gets
@@ -503,10 +515,12 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 
 @media (min-width: 810px) and (max-width: 1199px) { html[data-g-scrolled] ${N("Nav (fixed)")} { max-width: calc(100% - 96px) !important; } } /* tablet: 16px inside the 32px margins */
 
-/* Home hero fills the first screen below the nav at every size, content at the bottom, so "More about me" rests
-   just above the bottom edge (24px; 68px on phones, clear of the "Made in Framer" badge). --g-nav-h is measured. */
-${N("Home V2 / Index (dark)")} ${N("01 Hero")} { height: auto !important; min-height: calc(100vh - var(--g-nav-h, 106px)) !important;
-  min-height: calc(100svh - var(--g-nav-h, 106px)) !important; justify-content: flex-end !important; }
+/* Home hero: desktop and tablet follow the canvas height (Gift set 80.25vh). On phones it fills the screen below the nav
+   with content at the bottom, so "More about me" rests 68px above the edge, clear of the "Made in Framer" badge. */
+@media (max-width: 809px) {
+  ${N("Home V2 / Index (dark)")} ${N("01 Hero")} { height: auto !important; min-height: calc(100vh - var(--g-nav-h, 70px)) !important;
+    min-height: calc(100svh - var(--g-nav-h, 70px)) !important; justify-content: flex-end !important; }
+}
 
 /* Phone hero fills the screen below the nav and sits its content at the bottom, so "More about me" rests at the
    base of the first screen on every phone (68px up, clear of the "Made in Framer" badge). svh = toolbars showing. */
@@ -1342,7 +1356,8 @@ function setupFX() {
             const pw = navEl.parentElement ? navEl.parentElement.clientWidth : window.innerWidth
             html.style.setProperty("--g-pill-w", Math.min(pw, 1200) - 192 + "px")
         }
-        const navNext = navOn ? y > 16 : y > 80
+        // switch back as soon as the visitor is near the top (the page no longer shifts, so little hysteresis is needed)
+        const navNext = navOn ? y > 32 : y > 56
         if (navNext !== navOn) { wn.__gNavT = Date.now(); html.toggleAttribute("data-g-scrolled", navNext) }
     }
 

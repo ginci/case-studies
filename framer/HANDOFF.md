@@ -675,3 +675,8 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - Two things made desktop snap: the pill width `calc(min(100%,1200px) - 192px)` can't be interpolated, so it's now `--g-pill-w` measured in JS; and the margin rule set the resting nav to `max-width: none`, now 100%.
   - Verified frame by frame: phone eases 334 → 390 over about 0.6s both ways. Desktop shows mid values (headless runs the shader in software, so its frames are sparse).
 - Top blur: `#g-topblur` (fixed, 96px / 76px on phone, `backdrop-filter: blur(3px)`, mask fading down), placed next to the nav in the same stacking layer (z 19 under the nav's 20). It only appears while the nav floats.
+
+## 21 Nov 2026: no delay on the nav's return, hero follows canvas height, twinkling constellations (uploaded, not published)
+- Nav return delay had two causes: the nav only switched back within 16px of the top (hysteresis 16/80), and the curve started slowly. Now the thresholds are 32 (off) / 56 (on) and `NAVEASE = cubic-bezier(0.22,1,0.36,1)` (moves at once, soft landing), 0.6s.
+- Hero: Gift set desktop/tablet height to 80.25vh in the canvas. The CSS that forced `min-height: 100svh − nav` now only applies on phones, so the canvas height rules desktop and tablet.
+- "Dots" (constellation images Gift added top and bottom of Home, opacity 0.8): CSS adds `g-twinkle` (a light band drifting across via a mask, 14s), `g-breathe` (opacity .62–.9, 7s) and `g-drift` (−10px float, 26s). The second image runs out of step. Off for reduced motion.
