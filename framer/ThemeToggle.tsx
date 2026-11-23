@@ -42,6 +42,8 @@ ${LIGHT} { filter: invert(1) hue-rotate(180deg); background: #EDEDEE; }
 ${LIGHT} img, ${LIGHT} video, ${LIGHT} picture { filter: invert(1) hue-rotate(180deg); }
 /* The logo artwork is an SVG image fill ("Logo art"): let it invert with the page so it turns dark in light mode. */
 ${LIGHT} [data-framer-name="Logo art"] img { filter: none !important; }
+/* Phone: smaller logo (Gift 23 Nov). 60x30 on desktop/tablet, 48x24 on phones. */
+@media (max-width: 809px) { [data-framer-name="Logo art"] { width: 48px !important; height: 24px !important; } }
 ${N("Menu button")} { display: none !important; }
 .g-pill-btn:hover { color: #F4F3EE !important; }
 .g-pill-btn:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 1px; }
@@ -551,13 +553,13 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
    theme, and (through the page-wide invert) a darker tint on the light theme. */
 #g-grid { position: fixed !important; inset: 0; z-index: 0 !important; padding: 0 !important; margin: 0 !important; max-width: none !important;
   pointer-events: none; opacity: 1; mix-blend-mode: overlay; --g-ink: 255, 255, 255; }
-html:has(${N("Case study page")}) #g-grid { opacity: 0.6; }
+html:has(${N("Case study page")}) #g-grid { opacity: 0.8; }
 /* Each rail is a maze route of straight runs and right-angle turns (new on every visit), drawn in as the page scrolls. */
 #g-grid svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 #g-grid path { fill: none; stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linecap: square; stroke-linejoin: miter; }
-#g-grid path.g-base { stroke: rgba(var(--g-ink), 0.10); }
-#g-grid path.g-draw { stroke: rgba(var(--g-ink), 0.55); }
-${LIGHT} #g-grid path.g-base { stroke: rgba(var(--g-ink), 0.12); }
+#g-grid path.g-base { stroke: rgba(var(--g-ink), 0.30); }
+#g-grid path.g-draw { stroke: rgba(var(--g-ink), 0.75); }
+${LIGHT} #g-grid path.g-base { stroke: rgba(var(--g-ink), 0.32); }
 #g-grid s {
   position: absolute; left: -2px; top: -2px; width: 5px; height: 5px; border-radius: 50%;
   background: rgba(var(--g-ink), 0.6);

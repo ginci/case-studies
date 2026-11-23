@@ -734,3 +734,6 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - JS moves `#g-grid` into the page frame right after the last "Background shader" layer (re-checked on every scroll), so it sits above the gradient and behind all content (content column is z 1). `#g-grid` is fixed, z 0, with `!important` so the case-study child rules don't pad or re-stack it.
 - `mix-blend-mode: overlay` with white strokes (base 0.10, drawn 0.55): lines are a lighter tint of the gradient on dark, a darker tint on light (via the page invert). Case studies opacity 0.6.
 - Maze cells max(30, min(84, band/3.4)) px; vertical runs 2–5 cells; sideways runs favour the far columns.
+
+## 23 Nov 2026: grid stronger by 0.2 (published 65c04384a)
+- Strokes: base 0.30 (light 0.32), drawn 0.75; case studies opacity 0.8. Kept the logo thread's phone logo rules.
