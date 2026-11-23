@@ -161,12 +161,8 @@ html:not([data-g-about]) ${N("04 About")} {
   html:not([data-g-about]) ${N("04 About")} { transition: max-height 0.5s ${EASE}, opacity 0.25s ease, padding 0.5s ${EASE}, visibility 0s linear 0.5s !important; }
 }
 ${N("About toggle")} { position: relative !important; }
-/* Ribbon runs edge to edge of the screen at every size, so the button sits dead centre */
 ${N("About toggle")} > ${S("CTA / More about me")}, ${N("About toggle")} > ${N("More about me")} { flex-shrink: 0 !important; }
-${N("About toggle")} ${N("Dotted line")} { flex: 1 1 0 !important; min-width: 16px; }
 @media (max-width: 809px) { ${N("About toggle")} ${N("More about me")}, ${N("About toggle")} ${S("CTA / More about me")} { padding: 8px 20px 8px 16px !important; } }
-${N("About toggle")} ${N("Dotted line")} { background: none !important; height: 0 !important; border-top: 1px dotted rgba(244, 243, 238, 0.36) !important; }
-/* the ribbon runs to the screen edges: pull it out over the hero's side padding */
 ${S("CTA / More about me")} {
   background-color: #121211 !important; border: 1px solid rgba(244, 243, 238, 0.18) !important; text-transform: uppercase;
 }
@@ -310,8 +306,6 @@ ${N("Steps")} > *::before {
 ${N("04 About")}, ${N("04 About")} > *, ${N("04 About")} > * > * { overflow: visible !important; }
 
 /* ---------- Sections: surfaces, hairline, spacing ---------- */
-${N("03 Work (index)")}, ${N("02 Portrait")}, ${N("04 About")}, ${N("05 Contact")} { border-top: 0 !important; }
-${N("06 Footer")} { border-top: 1px solid rgba(244, 243, 238, 0.1) !important; }
 
 /* Light theme: the scrolled nav pill is pure white (black before the page-wide invert). */
 html[data-ginci-theme="light"][data-g-scrolled] ${N("Nav (fixed)")} {
@@ -501,8 +495,6 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 /* ---------- Tablet (810–1199) ---------- */
 @media (max-width: 1199px) {
   ${ROW} ${N("Meta")} { width: 220px !important; }
-  ${N("04 About")} { flex-direction: column !important; gap: 32px !important; }
-  ${N("04 About")} > * { width: 100% !important; }
   ${N("Header")} p, ${N("Header")} h1, ${N("Header")} *, ${N("Facts")} * { white-space: normal !important; }
   ${N("Header")} > *, ${N("Header")} > * > * { max-width: 100% !important; }
   ${S("TOC")} { display: none !important; }
@@ -521,18 +513,11 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
     min-height: calc(100svh - var(--g-nav-h, 70px)) !important; justify-content: flex-end !important; }
 }
 
-/* Phone hero fills the screen below the nav and sits its content at the bottom, so "More about me" rests at the
-   base of the first screen on every phone (68px up, clear of the "Made in Framer" badge). svh = toolbars showing. */
-@media (max-width: 809px) {
-  ${N("Home V2 / Index (dark)")} ${N("01 Hero")} { padding-top: 32px !important; padding-bottom: 68px !important; }
-}
 
 /* ---------- Phone (up to 809) ---------- */
 @media (max-width: 809px) {
   #main * { max-width: 100%; }
-  ${N("Nav (fixed)")} ${N("Work")}, ${N("Nav (fixed)")} ${N("About")}, ${N("Nav (fixed)")} ${N("Contact")} { display: none !important; }
   html[data-g-scrolled] ${N("Nav (fixed)")} { top: 10px !important; max-width: calc(100% - 56px) !important; padding: 8px 8px 8px 16px !important; margin-bottom: calc(var(--g-nav-pad, 32px) - 16px) !important; } /* 8px inside the 20px phone margins */
-  ${N("Lede")} { width: 100% !important; }
   ${ROW} { padding-top: 22px !important; padding-bottom: 22px !important; gap: 14px !important;
     margin-left: -12px !important; margin-right: -12px !important; padding-left: 12px !important; padding-right: 12px !important; width: calc(100% + 24px) !important; }
   ${ROW}::after { left: 12px; right: 12px; }
@@ -543,7 +528,6 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
   ${S("Exp / ")} { flex-wrap: wrap !important; row-gap: 4px !important; }
   ${S("Exp / ")} > :first-child { width: 100% !important; flex: 0 0 100% !important; }
   ${N("05 Contact")} > :first-child, ${N("05 Contact")} > :first-child * { white-space: normal !important; width: 100% !important; }
-  ${N("Socials")} { flex-wrap: wrap !important; row-gap: 12px !important; column-gap: 24px !important; }
   ${N("Steps")} { flex-direction: column !important; padding-top: 0 !important; padding-left: 52px !important; gap: 32px !important; }
   ${N("Steps")}::before { left: 15px; right: auto; top: 6px; bottom: 6px; width: 1px; height: auto; }
   ${N("Steps")} > * { width: 100% !important; min-width: 0 !important; }
@@ -560,7 +544,7 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 }
 /* Signature rails: four hairline tracks; lines 1 and 3 draw down from the top,
    2 and 4 draw up from the bottom, each led by a glowing point. Staggered. */
-#g-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; --g-ink: 244, 243, 238; }
+#g-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.3; --g-ink: 244, 243, 238; } /* lighter, Gift 23 Nov */
 html:has(${N("Case study page")}) #g-grid { opacity: 0.2; }
 ${LIGHT} #g-grid b { background: rgba(var(--g-ink), 0.09) !important; }
 #g-grid b { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(var(--g-ink), 0.022); }

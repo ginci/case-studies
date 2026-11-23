@@ -712,3 +712,14 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Tablet/phone: split stacks vertically, index full width; hero padding 96/40 (tablet), 48/20 (phone).
 - Screenshots: `mockups/out/home-b-desktop.png`, `mockups/out/home-b-phone.png`.
 - To adopt it: swap the paths (Home → /home-a, Home B → /) or copy the layout into Home. To drop it: delete the page.
+
+## 23 Nov 2026: layout polish batch + canvas-first cleanup (published 9d4915388, live)
+- Desktop margin `--g-m = max(64px, (100vw − 1200px)/2 + 64px)` is live: text at 184px at 1440. Tablet/phone unchanged.
+- Grid rails: `#g-grid` opacity 0.3 (case studies keep 0.2).
+- Folders: `columns` is now "Max per row" (set to 4 on all breakpoints). All four sit in one row when each gets ≥180px, else two per row. The component measures its parent, not itself. 1440: 4 × 256px; phone: 2 × 171px.
+- Contact (canvas): divider (0.3px top border) removed on all breakpoints. Email + socials sit lower: desktop padding 160/80/72, gap 120; tablet 120/32/56, gap 96; phone 72/20/40, gap 64.
+- Phone footer (canvas): one row, © left, Back to top right; padding 24/20/72 so the Framer badge doesn't cover the button.
+- About toggle: both "Dotted line" layers deleted; the button now sits left under the intro. Top padding 40 / 32 / 24.
+- Removed CSS that repeated canvas settings (canvas now wins): About toggle dotted-line rules, section `border-top: 0` and footer border, phone hero padding, tablet About direction/gap/width, phone nav-link hiding, phone Lede width, phone Socials wrap/gaps. 177 → 167 `!important`.
+- Still code-controlled on purpose: desktop side margin (`--g-m`, one value for all pages), About statement font sizes (Framer runs don't hold them), nav pill, grid, grain, theme, reveal, case-study tablet/phone layout.
+- Publishing kit: `tools/kit/` (`node upload.mjs publish`). `publish()` updates the live domain directly.

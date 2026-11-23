@@ -88,8 +88,10 @@ export default function Folders(props: { folders: Folder[]; accent: string; colu
     useEffect(() => {
         const el = grid.current
         if (!el || typeof ResizeObserver === "undefined") return
+        // Measure the space the component is given (its parent), not the grid, whose width depends on the column count.
+        const box = el.parentElement || el
         const ro = new ResizeObserver((e) => setGridW(e[0].contentRect.width))
-        ro.observe(el)
+        ro.observe(box)
         return () => ro.disconnect()
     }, [])
     useEffect(() => {
@@ -106,14 +108,17 @@ export default function Folders(props: { folders: Folder[]; accent: string; colu
         window.addEventListener("keydown", key)
         return () => window.removeEventListener("keydown", key)
     }, [folders, props.comingSoon])
-    // Fit: shrink the folder so it never overflows its column (two per row on phones).
-    const cols = props.columns || 2
+    // Columns = the most per row. All of them sit on one row when each gets at least 180px;
+    // otherwise they wrap to two per row (never a lone folder on a row of its own).
+    const max = props.columns || 4
     const gap = gridW && gridW < 520 ? 8 : 16
+    const fits = (n: number) => !gridW || (gridW - gap * (n - 1)) / n >= 180
+    const cols = fits(max) ? max : Math.min(max, 2)
     const colW = gridW ? (gridW - gap * (cols - 1)) / cols : 9999
     const s = Math.max(0.5, Math.min(1, (colW - 20) / 176))
     const compact = s < 0.95
     return (
-        <div ref={grid} className="g-folders" style={{ ...props.style, display: "grid", gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`, gap, width: "100%", maxWidth: 760, margin: "0 auto" }}>
+        <div ref={grid} className="g-folders" style={{ ...props.style, display: "grid", gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`, gap, width: "100%", maxWidth: cols > 2 ? "none" : 760, margin: "0 auto" }}>
             {folders.map((f, i) => {
                 const open = fine && hover === i
                 return (
@@ -153,12 +158,12 @@ const DEFAULTS: Folder[] = [
     { title: "Photography", meta: "[Camera]", shortcut: "P", link: "/photography", kind: "photos", cards: [], photos: [{}, {}, {}], captions: ["[Place]", "[Place]", "[Place]"] },
     { title: "Other outlets", meta: "3 outlets", shortcut: "O", link: "/outlets", kind: "cards", cards: ["GNC Merch", "GNC Scenes", "Ginci Designs"], photos: [], captions: [] },
 ]
-Folders.defaultProps = { folders: DEFAULTS, accent: "#E8501A", columns: 2, comingSoon: false }
+Folders.defaultProps = { folders: DEFAULTS, accent: "#E8501A", columns: 4, comingSoon: false }
 
 addPropertyControls(Folders, {
     comingSoon: { type: ControlType.Boolean, title: "Coming soon", enabledTitle: "Yes", disabledTitle: "No" },
     accent: { type: ControlType.Color, title: "Card dot" },
-    columns: { type: ControlType.Number, title: "Columns", min: 1, max: 4, step: 1, displayStepper: true },
+    columns: { type: ControlType.Number, title: "Max per row", min: 1, max: 4, step: 1, displayStepper: true },
     folders: {
         type: ControlType.Array,
         title: "Folders",
