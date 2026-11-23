@@ -1,0 +1,2 @@
+import fs from "node:fs"; import { go } from "./fx.mjs"
+await go(async f => { for (const id of process.argv.slice(2)) { try { const r = await f.screenshot(id, { scale: 4 }); const b = r.data ?? r.bytes ?? r; fs.writeFileSync(`/tmp/claude-0/shot-${id}.png`, Buffer.from(b.buffer ? b : Buffer.from(b, "base64"))); console.log("ok", id, Object.keys(r)) } catch (e) { console.log("fail", id, e.message) } } })

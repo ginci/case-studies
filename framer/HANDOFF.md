@@ -723,3 +723,11 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Removed CSS that repeated canvas settings (canvas now wins): About toggle dotted-line rules, section `border-top: 0` and footer border, phone hero padding, tablet About direction/gap/width, phone nav-link hiding, phone Lede width, phone Socials wrap/gaps. 177 → 167 `!important`.
 - Still code-controlled on purpose: desktop side margin (`--g-m`, one value for all pages), About statement font sizes (Framer runs don't hold them), nav pill, grid, grain, theme, reveal, case-study tablet/phone layout.
 - Publishing kit: `tools/kit/` (`node upload.mjs publish`). `publish()` updates the live domain directly.
+
+## 23 Nov 2026: logo rework (published 92d42f42e, live)
+- Artwork: the small "DESIGNS" now starts in the gap under the g's bar (x≈12.1 of 58), letters 10% bigger, right edge on the last i. Same 58×29 artboard. SVG: project files `logo-preview-2026-11-23/logo-new.svg`.
+- New component "Logo mark" (`A898H4rvE`) shows both versions side by side: variant "New" (primary, 60.32×30.16) and "Original" (58×29). Both are SVG image fills (the API can't import SVG as vectors or clone vector sets).
+- Nav Logo component (`d0D1RTQxD`): its "Container" frame is renamed "Logo art" and carries the new SVG as its fill, 4% bigger (60.32×30.16; Variant 2 84.5×42.25). The old vector inside is hidden, not deleted. To go back: clear the fill and show the vector again.
+- Layers inside a component can be edited with setAttributes, but not used as a parent (addComponentInstance/setParent fail), so the nav can't hold a "Logo mark" instance via the API.
+- CSS: `${LIGHT} [data-framer-name="Logo art"] img { filter: none }` so the image inverts with the page in light mode.
+- Verified live: 60×30 at desktop and phone, dark and light themes, no old vector showing.

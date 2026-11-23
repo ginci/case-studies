@@ -40,6 +40,8 @@ ${LIGHT} body { background: transparent; }
 #main { overflow-x: clip; }
 ${LIGHT} { filter: invert(1) hue-rotate(180deg); background: #EDEDEE; }
 ${LIGHT} img, ${LIGHT} video, ${LIGHT} picture { filter: invert(1) hue-rotate(180deg); }
+/* The logo artwork is an SVG image fill ("Logo art"): let it invert with the page so it turns dark in light mode. */
+${LIGHT} [data-framer-name="Logo art"] img { filter: none !important; }
 ${N("Menu button")} { display: none !important; }
 .g-pill-btn:hover { color: #F4F3EE !important; }
 .g-pill-btn:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 1px; }
@@ -544,39 +546,25 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 }
 /* Signature rails: four hairline tracks; lines 1 and 3 draw down from the top,
    2 and 4 draw up from the bottom, each led by a glowing point. Staggered. */
-#g-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.3; --g-ink: 244, 243, 238; } /* lighter, Gift 23 Nov */
-html:has(${N("Case study page")}) #g-grid { opacity: 0.2; }
-${LIGHT} #g-grid b { background: rgba(var(--g-ink), 0.09) !important; }
-#g-grid b { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(var(--g-ink), 0.022); }
-#g-grid b:nth-child(1) { left: 20%; }
-#g-grid b:nth-child(2) { left: 40%; }
-#g-grid b:nth-child(3) { left: 60%; }
-#g-grid b:nth-child(4) { left: 80%; }
-#g-grid i {
-  position: absolute; left: 0; top: 0; width: 1px; height: 100%;
-  transform-origin: top center; transform: scaleY(var(--g-p, 0));
-  background: linear-gradient(to bottom, rgba(var(--g-ink), 0), rgba(var(--g-ink), 0.14));
-}
-#g-grid b:nth-child(even) i {
-  transform-origin: bottom center;
-  background: linear-gradient(to top, rgba(var(--g-ink), 0), rgba(var(--g-ink), 0.14));
-}
+#g-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6; --g-ink: 244, 243, 238; } /* Gift 23 Nov: stronger again */
+html:has(${N("Case study page")}) #g-grid { opacity: 0.35; }
+/* Each rail is a wandering SVG path (a new random route on every visit), drawn in as the page scrolls. */
+#g-grid svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+#g-grid path { fill: none; stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linecap: round; }
+#g-grid path.g-base { stroke: rgba(var(--g-ink), 0.05); }
+#g-grid path.g-draw { stroke: rgba(var(--g-ink), 0.22); }
+${LIGHT} #g-grid path.g-base { stroke: rgba(var(--g-ink), 0.12); }
 #g-grid s {
   position: absolute; left: -2px; top: -2px; width: 5px; height: 5px; border-radius: 50%;
   background: rgba(var(--g-ink), 0.6);
   box-shadow: 0 0 6px 1px rgba(var(--g-ink), 0.4), 0 0 22px 5px rgba(var(--g-ink), 0.12);
-  transform: translateY(var(--g-y, 0px)); opacity: var(--g-o, 0); transition: opacity 0.3s ease;
+  transform: translate(var(--g-x, 0px), var(--g-y, 0px)); opacity: var(--g-o, 0); transition: opacity 0.3s ease;
 }
-#g-grid u {
-  position: absolute; left: -1px; width: 3px; height: 3px; border-radius: 50%;
-  background: rgba(var(--g-ink), 0.22); top: -1px;
-}
-#g-grid b:nth-child(even) u { top: auto; bottom: -1px; }
 @media (prefers-reduced-motion: no-preference) {
   #g-grid s { animation: g-pulse 2.8s ease-in-out infinite; }
-  #g-grid b:nth-child(2) s { animation-delay: -0.7s; }
-  #g-grid b:nth-child(3) s { animation-delay: -1.4s; }
-  #g-grid b:nth-child(4) s { animation-delay: -2.1s; }
+  #g-grid s:nth-of-type(2) { animation-delay: -0.7s; }
+  #g-grid s:nth-of-type(3) { animation-delay: -1.4s; }
+  #g-grid s:nth-of-type(4) { animation-delay: -2.1s; }
 }
 @keyframes g-pulse {
   0%, 100% { box-shadow: 0 0 6px 1px rgba(var(--g-ink), 0.4), 0 0 22px 5px rgba(var(--g-ink), 0.12); }
@@ -1298,21 +1286,65 @@ function setupFX() {
         grid.setAttribute("aria-hidden", "true")
         document.body.appendChild(grid)
     }
-    if (!grid.querySelector("b")) {
-        grid.innerHTML = "<b><u></u><i></i><s></s></b>".repeat(4)
+    // Rails: four wandering paths. Each visit gets a new random route: the line leaves its column (20/40/60/80%),
+    // drifts sideways in soft curves (never more than ~5% of the width) and comes back near it at the far end.
+    // Rails 1 and 3 draw down from the top, 2 and 4 up from the bottom; a glowing point leads each one.
+    const NS = "http://www.w3.org/2000/svg"
+    if (!grid.querySelector("svg")) {
+        grid.innerHTML = ""
+        const svg = document.createElementNS(NS, "svg")
+        for (let i = 0; i < 4; i++) {
+            const base = document.createElementNS(NS, "path"); base.setAttribute("class", "g-base")
+            const draw = document.createElementNS(NS, "path"); draw.setAttribute("class", "g-draw")
+            svg.appendChild(base); svg.appendChild(draw)
+        }
+        grid.appendChild(svg)
+        for (let i = 0; i < 4; i++) grid.appendChild(document.createElement("s"))
     }
-    const rails = Array.from(grid.querySelectorAll("b")) as HTMLElement[]
+    const svgEl = grid.querySelector("svg") as SVGSVGElement
+    const bases = Array.from(grid.querySelectorAll("path.g-base")) as SVGPathElement[]
+    const draws = Array.from(grid.querySelectorAll("path.g-draw")) as SVGPathElement[]
+    const dots = Array.from(grid.querySelectorAll("s")) as HTMLElement[]
+    const seeds = (grid as any).__gSeeds || ((grid as any).__gSeeds = [0, 1, 2, 3].map(() =>
+        Array.from({ length: 9 }, () => Math.random() * 2 - 1)))
+    const lens = [0, 0, 0, 0]
+    let builtW = 0, builtH = 0
+    const build = () => {
+        const w = window.innerWidth, h = window.innerHeight
+        if (w === builtW && h === builtH) return
+        builtW = w; builtH = h
+        svgEl.setAttribute("viewBox", `0 0 ${w} ${h}`)
+        const amp = Math.min(w * 0.05, 72)
+        seeds.forEach((r: number[], i: number) => {
+            const x0 = w * (0.2 + 0.2 * i)
+            const n = r.length - 1
+            const pts = r.map((v, k) => [x0 + (k === 0 || k === n ? v * amp * 0.25 : v * amp), (h * k) / n])
+            if (i % 2 === 1) pts.reverse() // even rails start at the bottom
+            let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`
+            for (let k = 0; k < pts.length - 1; k++) { // Catmull-Rom → cubic Bézier: smooth curves through every point
+                const p0 = pts[Math.max(0, k - 1)], p1 = pts[k], p2 = pts[k + 1], p3 = pts[Math.min(pts.length - 1, k + 2)]
+                const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6]
+                const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6]
+                d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`
+            }
+            bases[i].setAttribute("d", d); draws[i].setAttribute("d", d)
+            lens[i] = draws[i].getTotalLength()
+            draws[i].style.strokeDasharray = `${lens[i]} ${lens[i]}`
+        })
+    }
     gridUpdate = () => {
+        build()
         const vh = window.innerHeight
         const y = window.scrollY
         const max = document.documentElement.scrollHeight - vh
         const p = reduce || max <= 0 ? 1 : Math.min(1, Math.max(0, y / max))
-        rails.forEach((b, i) => {
+        draws.forEach((path, i) => {
             const q = Math.min(1, Math.max(0, (p - i * 0.04) / 0.88))
-            const down = i % 2 === 0
-            b.style.setProperty("--g-p", q.toFixed(4))
-            b.style.setProperty("--g-y", ((down ? q : 1 - q) * vh).toFixed(1) + "px")
-            b.style.setProperty("--g-o", q > 0.002 ? "1" : "0")
+            path.style.strokeDashoffset = (lens[i] * (1 - q)).toFixed(1)
+            const pt = path.getPointAtLength(lens[i] * q)
+            dots[i].style.setProperty("--g-x", pt.x.toFixed(1) + "px")
+            dots[i].style.setProperty("--g-y", pt.y.toFixed(1) + "px")
+            dots[i].style.setProperty("--g-o", q > 0.002 && q < 0.998 ? "1" : "0")
         })
         const top = document.querySelector<HTMLElement>(
             '[data-framer-name="01 Hero"], [data-framer-name="Header"], [data-framer-name="Shelf header"]'
