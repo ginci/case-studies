@@ -731,3 +731,4 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Layers inside a component can be edited with setAttributes, but not used as a parent (addComponentInstance/setParent fail), so the nav can't hold a "Logo mark" instance via the API.
 - CSS: `${LIGHT} [data-framer-name="Logo art"] img { filter: none }` so the image inverts with the page in light mode.
 - Verified live: 60×30 at desktop and phone, dark and light themes, no old vector showing.
+- 23 Nov (later): phone logo reduced to 48×24 via CSS (`@media (max-width: 809px) [data-framer-name="Logo art"]`); desktop/tablet stay 60×30. Published ebb8fe9cb, verified on iPhone 13 (dark + light).

@@ -42,6 +42,8 @@ ${LIGHT} { filter: invert(1) hue-rotate(180deg); background: #EDEDEE; }
 ${LIGHT} img, ${LIGHT} video, ${LIGHT} picture { filter: invert(1) hue-rotate(180deg); }
 /* The logo artwork is an SVG image fill ("Logo art"): let it invert with the page so it turns dark in light mode. */
 ${LIGHT} [data-framer-name="Logo art"] img { filter: none !important; }
+/* Phone: smaller logo (Gift 23 Nov). 60x30 on desktop/tablet, 48x24 on phones. */
+@media (max-width: 809px) { [data-framer-name="Logo art"] { width: 48px !important; height: 24px !important; } }
 ${N("Menu button")} { display: none !important; }
 .g-pill-btn:hover { color: #F4F3EE !important; }
 .g-pill-btn:focus-visible { outline: 2px solid #F4F3EE; outline-offset: 1px; }
@@ -546,13 +548,17 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 }
 /* Signature rails: four hairline tracks; lines 1 and 3 draw down from the top,
    2 and 4 draw up from the bottom, each led by a glowing point. Staggered. */
-#g-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6; --g-ink: 244, 243, 238; } /* Gift 23 Nov: stronger again */
-html:has(${N("Case study page")}) #g-grid { opacity: 0.35; }
-/* Each rail is a wandering SVG path (a new random route on every visit), drawn in as the page scrolls. */
+/* The grid sits behind the content, directly above the shader gradient (JS moves it into the page frame, after the
+   shaders). Overlay blending takes each line's colour from what is under it: a lighter tint of the gradient on the dark
+   theme, and (through the page-wide invert) a darker tint on the light theme. */
+#g-grid { position: fixed !important; inset: 0; z-index: 0 !important; padding: 0 !important; margin: 0 !important; max-width: none !important;
+  pointer-events: none; opacity: 1; mix-blend-mode: overlay; --g-ink: 255, 255, 255; }
+html:has(${N("Case study page")}) #g-grid { opacity: 0.6; }
+/* Each rail is a maze route of straight runs and right-angle turns (new on every visit), drawn in as the page scrolls. */
 #g-grid svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-#g-grid path { fill: none; stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linecap: round; }
-#g-grid path.g-base { stroke: rgba(var(--g-ink), 0.05); }
-#g-grid path.g-draw { stroke: rgba(var(--g-ink), 0.22); }
+#g-grid path { fill: none; stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linecap: square; stroke-linejoin: miter; }
+#g-grid path.g-base { stroke: rgba(var(--g-ink), 0.10); }
+#g-grid path.g-draw { stroke: rgba(var(--g-ink), 0.55); }
 ${LIGHT} #g-grid path.g-base { stroke: rgba(var(--g-ink), 0.12); }
 #g-grid s {
   position: absolute; left: -2px; top: -2px; width: 5px; height: 5px; border-radius: 50%;
@@ -1286,9 +1292,17 @@ function setupFX() {
         grid.setAttribute("aria-hidden", "true")
         document.body.appendChild(grid)
     }
-    // Rails: four wandering paths. Each visit gets a new random route: the line leaves its column (20/40/60/80%),
-    // drifts sideways in soft curves (never more than ~5% of the width) and comes back near it at the far end.
-    // Rails 1 and 3 draw down from the top, 2 and 4 up from the bottom; a glowing point leads each one.
+    // Keep the grid in the page frame right after the background shaders: behind the content, above the gradient.
+    const placeGrid = () => {
+        const sh = document.querySelectorAll('[data-framer-name^="Background shader"]')
+        const last = sh[sh.length - 1]
+        if (last && last.parentElement && grid!.previousElementSibling !== last) last.after(grid!)
+    }
+    placeGrid()
+    // Rails: four maze routes. Each line walks a grid of cells inside its own fifth of the screen in straight runs
+    // with right-angle turns (down, left, right, sometimes back up), like a path through a maze, and never crosses
+    // itself. A new route on every visit. Rails 1 and 3 travel from the top down, 2 and 4 from the bottom up;
+    // scrolling draws them in, led by a glowing point.
     const NS = "http://www.w3.org/2000/svg"
     if (!grid.querySelector("svg")) {
         grid.innerHTML = ""
@@ -1305,8 +1319,39 @@ function setupFX() {
     const bases = Array.from(grid.querySelectorAll("path.g-base")) as SVGPathElement[]
     const draws = Array.from(grid.querySelectorAll("path.g-draw")) as SVGPathElement[]
     const dots = Array.from(grid.querySelectorAll("s")) as HTMLElement[]
-    const seeds = (grid as any).__gSeeds || ((grid as any).__gSeeds = [0, 1, 2, 3].map(() =>
-        Array.from({ length: 9 }, () => Math.random() * 2 - 1)))
+    const seeds: number[] = (grid as any).__gSeeds || ((grid as any).__gSeeds = [0, 1, 2, 3].map(() => (Math.random() * 2 ** 31) | 0))
+    const rng = (a: number) => () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296 }
+    const maze = (cols: number, rows: number, startCol: number, rand: () => number) => {
+        // Alternates straight runs: a vertical run (mostly down 2–5 cells, now and then back up 1–2), then a sideways
+        // run to another column. Every run ends in a right-angle turn and the route never crosses itself.
+        const seen = new Uint8Array(cols * rows)
+        const free = (c: number, r: number) => c >= 0 && c < cols && r >= 0 && r < rows && !seen[r * cols + c]
+        let c = startCol, r = 0
+        const pts: number[][] = [[c, r]]
+        seen[c] = 1
+        const go = (dc: number, dr: number, n: number) => { for (let k = 0; k < n; k++) { c += dc; r += dr; seen[r * cols + c] = 1 } pts.push([c, r]) }
+        const runFree = (dc: number, dr: number, n: number) => { for (let k = 1; k <= n; k++) if (!free(c + dc * k, r + dr * k)) return false; return true }
+        let guard = rows * 6
+        while (r < rows - 1 && guard-- > 0) {
+            // vertical run
+            const up = r > 2 && rand() < 0.2 ? 1 + Math.floor(rand() * 2) : 0
+            if (up && runFree(0, -1, up)) go(0, -1, up)
+            else {
+                const down = Math.min(rows - 1 - r, 2 + Math.floor(rand() * 4))
+                let n = down; while (n > 0 && !runFree(0, 1, n)) n--
+                if (n > 0) go(0, 1, n)
+                else if (free(c, r + 1) || r + 1 <= rows - 1) { c = c; r = r + 1; seen[r * cols + c] = 1; pts.push([c, r]) } // rare: squeeze through
+            }
+            if (r >= rows - 1) break
+            // sideways run to a column whose next step down is open
+            const targets = Array.from({ length: cols }, (_, k) => k).filter((k) => k !== c).sort((x, y) => Math.abs(y - c) + rand() * 1.5 - (Math.abs(x - c) + rand() * 1.5)) // favour long sideways runs
+            for (const t of targets) {
+                const dc = t > c ? 1 : -1, n = Math.abs(t - c)
+                if (runFree(dc, 0, n) && free(t, r + 1)) { go(dc, 0, n); break }
+            }
+        }
+        return pts
+    }
     const lens = [0, 0, 0, 0]
     let builtW = 0, builtH = 0
     const build = () => {
@@ -1314,25 +1359,27 @@ function setupFX() {
         if (w === builtW && h === builtH) return
         builtW = w; builtH = h
         svgEl.setAttribute("viewBox", `0 0 ${w} ${h}`)
-        const amp = Math.min(w * 0.05, 72)
-        seeds.forEach((r: number[], i: number) => {
-            const x0 = w * (0.2 + 0.2 * i)
-            const n = r.length - 1
-            const pts = r.map((v, k) => [x0 + (k === 0 || k === n ? v * amp * 0.25 : v * amp), (h * k) / n])
-            if (i % 2 === 1) pts.reverse() // even rails start at the bottom
-            let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`
-            for (let k = 0; k < pts.length - 1; k++) { // Catmull-Rom → cubic Bézier: smooth curves through every point
-                const p0 = pts[Math.max(0, k - 1)], p1 = pts[k], p2 = pts[k + 1], p3 = pts[Math.min(pts.length - 1, k + 2)]
-                const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6]
-                const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6]
-                d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`
-            }
+        const band = w * 0.2
+        const cell = Math.max(30, Math.min(84, band / 3.4)) // long runs: ~84px cells at 1440, 30px on phones
+        const cols = Math.max(3, Math.round(band / cell))
+        const rows = Math.max(4, Math.round(h / cell) + 1)
+        const stepY = h / (rows - 1)
+        seeds.forEach((seed, i) => {
+            const rand = rng(seed)
+            const x0 = w * (0.2 + 0.2 * i) - ((cols - 1) * cell) / 2 // band centred on the rail's old column
+            let pts = maze(cols, rows, Math.floor(cols / 2), rand).map(([c, r]) => [x0 + c * cell, r * stepY])
+            if (i % 2 === 1) pts = pts.map(([x, y]) => [x, h - y]) // rails 2 and 4 start at the bottom
+            // keep only the corners
+            const keep = pts.filter((p, k) => k === 0 || k === pts.length - 1 ||
+                !((pts[k - 1][0] === p[0] && p[0] === pts[k + 1][0]) || (pts[k - 1][1] === p[1] && p[1] === pts[k + 1][1])))
+            const d = keep.map((p, k) => `${k ? "L" : "M"}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ")
             bases[i].setAttribute("d", d); draws[i].setAttribute("d", d)
             lens[i] = draws[i].getTotalLength()
             draws[i].style.strokeDasharray = `${lens[i]} ${lens[i]}`
         })
     }
     gridUpdate = () => {
+        placeGrid()
         build()
         const vh = window.innerHeight
         const y = window.scrollY
