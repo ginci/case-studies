@@ -729,3 +729,8 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 
 ## 23 Nov 2026: maze grid rails (published 5c090735f, live)
 - Gift didn't want curves: each rail is now a maze route of straight runs with right-angle turns inside its own fifth of the screen (cells 18–40px). Alternates a vertical run (mostly down 1–4 cells, sometimes back up 1–2) and a sideways run; never crosses itself; seeded random per visit (mulberry32). Rails 2/4 start at the bottom. Opacity 0.6 unchanged.
+
+## 23 Nov 2026: grid behind content, overlay blend, longer maze runs (published fbdac9abc, live)
+- JS moves `#g-grid` into the page frame right after the last "Background shader" layer (re-checked on every scroll), so it sits above the gradient and behind all content (content column is z 1). `#g-grid` is fixed, z 0, with `!important` so the case-study child rules don't pad or re-stack it.
+- `mix-blend-mode: overlay` with white strokes (base 0.10, drawn 0.55): lines are a lighter tint of the gradient on dark, a darker tint on light (via the page invert). Case studies opacity 0.6.
+- Maze cells max(30, min(84, band/3.4)) px; vertical runs 2–5 cells; sideways runs favour the far columns.

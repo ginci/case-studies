@@ -546,13 +546,17 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 }
 /* Signature rails: four hairline tracks; lines 1 and 3 draw down from the top,
    2 and 4 draw up from the bottom, each led by a glowing point. Staggered. */
-#g-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6; --g-ink: 244, 243, 238; } /* Gift 23 Nov: stronger again */
-html:has(${N("Case study page")}) #g-grid { opacity: 0.35; }
+/* The grid sits behind the content, directly above the shader gradient (JS moves it into the page frame, after the
+   shaders). Overlay blending takes each line's colour from what is under it: a lighter tint of the gradient on the dark
+   theme, and (through the page-wide invert) a darker tint on the light theme. */
+#g-grid { position: fixed !important; inset: 0; z-index: 0 !important; padding: 0 !important; margin: 0 !important; max-width: none !important;
+  pointer-events: none; opacity: 1; mix-blend-mode: overlay; --g-ink: 255, 255, 255; }
+html:has(${N("Case study page")}) #g-grid { opacity: 0.6; }
 /* Each rail is a maze route of straight runs and right-angle turns (new on every visit), drawn in as the page scrolls. */
 #g-grid svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 #g-grid path { fill: none; stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linecap: square; stroke-linejoin: miter; }
-#g-grid path.g-base { stroke: rgba(var(--g-ink), 0.05); }
-#g-grid path.g-draw { stroke: rgba(var(--g-ink), 0.22); }
+#g-grid path.g-base { stroke: rgba(var(--g-ink), 0.10); }
+#g-grid path.g-draw { stroke: rgba(var(--g-ink), 0.55); }
 ${LIGHT} #g-grid path.g-base { stroke: rgba(var(--g-ink), 0.12); }
 #g-grid s {
   position: absolute; left: -2px; top: -2px; width: 5px; height: 5px; border-radius: 50%;
@@ -1286,6 +1290,13 @@ function setupFX() {
         grid.setAttribute("aria-hidden", "true")
         document.body.appendChild(grid)
     }
+    // Keep the grid in the page frame right after the background shaders: behind the content, above the gradient.
+    const placeGrid = () => {
+        const sh = document.querySelectorAll('[data-framer-name^="Background shader"]')
+        const last = sh[sh.length - 1]
+        if (last && last.parentElement && grid!.previousElementSibling !== last) last.after(grid!)
+    }
+    placeGrid()
     // Rails: four maze routes. Each line walks a grid of cells inside its own fifth of the screen in straight runs
     // with right-angle turns (down, left, right, sometimes back up), like a path through a maze, and never crosses
     // itself. A new route on every visit. Rails 1 and 3 travel from the top down, 2 and 4 from the bottom up;
@@ -1309,7 +1320,7 @@ function setupFX() {
     const seeds: number[] = (grid as any).__gSeeds || ((grid as any).__gSeeds = [0, 1, 2, 3].map(() => (Math.random() * 2 ** 31) | 0))
     const rng = (a: number) => () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296 }
     const maze = (cols: number, rows: number, startCol: number, rand: () => number) => {
-        // Alternates straight runs: a vertical run (mostly down 1–4 cells, now and then back up 1–2), then a sideways
+        // Alternates straight runs: a vertical run (mostly down 2–5 cells, now and then back up 1–2), then a sideways
         // run to another column. Every run ends in a right-angle turn and the route never crosses itself.
         const seen = new Uint8Array(cols * rows)
         const free = (c: number, r: number) => c >= 0 && c < cols && r >= 0 && r < rows && !seen[r * cols + c]
@@ -1321,17 +1332,17 @@ function setupFX() {
         let guard = rows * 6
         while (r < rows - 1 && guard-- > 0) {
             // vertical run
-            const up = r > 2 && rand() < 0.22 ? 1 + Math.floor(rand() * 2) : 0
+            const up = r > 2 && rand() < 0.2 ? 1 + Math.floor(rand() * 2) : 0
             if (up && runFree(0, -1, up)) go(0, -1, up)
             else {
-                const down = Math.min(rows - 1 - r, 1 + Math.floor(rand() * 4))
+                const down = Math.min(rows - 1 - r, 2 + Math.floor(rand() * 4))
                 let n = down; while (n > 0 && !runFree(0, 1, n)) n--
                 if (n > 0) go(0, 1, n)
                 else if (free(c, r + 1) || r + 1 <= rows - 1) { c = c; r = r + 1; seen[r * cols + c] = 1; pts.push([c, r]) } // rare: squeeze through
             }
             if (r >= rows - 1) break
             // sideways run to a column whose next step down is open
-            const targets = Array.from({ length: cols }, (_, k) => k).filter((k) => k !== c).sort(() => rand() - 0.5)
+            const targets = Array.from({ length: cols }, (_, k) => k).filter((k) => k !== c).sort((x, y) => Math.abs(y - c) + rand() * 1.5 - (Math.abs(x - c) + rand() * 1.5)) // favour long sideways runs
             for (const t of targets) {
                 const dc = t > c ? 1 : -1, n = Math.abs(t - c)
                 if (runFree(dc, 0, n) && free(t, r + 1)) { go(dc, 0, n); break }
@@ -1347,8 +1358,8 @@ function setupFX() {
         builtW = w; builtH = h
         svgEl.setAttribute("viewBox", `0 0 ${w} ${h}`)
         const band = w * 0.2
-        const cell = Math.max(18, Math.min(40, band / 6))
-        const cols = Math.max(2, Math.floor((band - cell) / cell) + 1)
+        const cell = Math.max(30, Math.min(84, band / 3.4)) // long runs: ~84px cells at 1440, 30px on phones
+        const cols = Math.max(3, Math.round(band / cell))
         const rows = Math.max(4, Math.round(h / cell) + 1)
         const stepY = h / (rows - 1)
         seeds.forEach((seed, i) => {
@@ -1366,6 +1377,7 @@ function setupFX() {
         })
     }
     gridUpdate = () => {
+        placeGrid()
         build()
         const vh = window.innerHeight
         const y = window.scrollY
