@@ -723,3 +723,6 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Removed CSS that repeated canvas settings (canvas now wins): About toggle dotted-line rules, section `border-top: 0` and footer border, phone hero padding, tablet About direction/gap/width, phone nav-link hiding, phone Lede width, phone Socials wrap/gaps. 177 → 167 `!important`.
 - Still code-controlled on purpose: desktop side margin (`--g-m`, one value for all pages), About statement font sizes (Framer runs don't hold them), nav pill, grid, grain, theme, reveal, case-study tablet/phone layout.
 - Publishing kit: `tools/kit/` (`node upload.mjs publish`). `publish()` updates the live domain directly.
+
+## 23 Nov 2026: wandering grid rails (published 431d19e74, live)
+- `#g-grid` opacity 0.6 (case studies 0.35). Rails are now SVG paths: each starts near its column (20/40/60/80%), wanders up to min(5% width, 72px) sideways through 9 random points (Catmull-Rom curves), new route every visit. Still drawn by scroll (stroke-dashoffset), rails 1/3 from the top, 2/4 from the bottom, glowing dot follows the path (getPointAtLength).
