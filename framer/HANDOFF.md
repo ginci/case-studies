@@ -726,3 +726,6 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 
 ## 23 Nov 2026: wandering grid rails (published 431d19e74, live)
 - `#g-grid` opacity 0.6 (case studies 0.35). Rails are now SVG paths: each starts near its column (20/40/60/80%), wanders up to min(5% width, 72px) sideways through 9 random points (Catmull-Rom curves), new route every visit. Still drawn by scroll (stroke-dashoffset), rails 1/3 from the top, 2/4 from the bottom, glowing dot follows the path (getPointAtLength).
+
+## 23 Nov 2026: maze grid rails (published 5c090735f, live)
+- Gift didn't want curves: each rail is now a maze route of straight runs with right-angle turns inside its own fifth of the screen (cells 18–40px). Alternates a vertical run (mostly down 1–4 cells, sometimes back up 1–2) and a sideways run; never crosses itself; seeded random per visit (mulberry32). Rails 2/4 start at the bottom. Opacity 0.6 unchanged.
