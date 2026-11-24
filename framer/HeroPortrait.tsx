@@ -121,8 +121,9 @@ export default function HeroPortrait(props: {
             const mc = mix.getContext("2d")!
             mc.globalAlpha = 1; mc.drawImage(duo, 0, 0)
             if (swap > 0) { mc.globalAlpha = swap; mc.drawImage(real, 0, 0); mc.globalAlpha = 1 }
+            P = Math.max(0, Math.min(1, P))
             const k = 1 - Math.abs(P - 0.5) * 2 // 0 at the ends, 1 in the middle
-            const li = Math.min(LEVELS.length - 1, Math.floor(k * LEVELS.length))
+            const li = Math.max(0, Math.min(LEVELS.length - 1, Math.floor(k * LEVELS.length)))
             if (li !== lastLevel) { // re-tear the border at each step while it moves
                 lastLevel = li
                 buildMask(li === 0 ? seed : seed + li * 7919 + (P > 0.5 ? 1 : 0), li / LEVELS.length)
@@ -147,7 +148,7 @@ export default function HeroPortrait(props: {
             ctx.globalCompositeOperation = "source-over"
         }
         const frame = (now: number) => {
-            const k = Math.min(1, (now - t0) / dur)
+            const k = Math.max(0, Math.min(1, (now - t0) / dur)) // rAF time can be a hair earlier than t0
             P = from + (to - from) * k
             draw()
             raf = k < 1 ? requestAnimationFrame(frame) : 0
@@ -167,6 +168,29 @@ export default function HeroPortrait(props: {
         layout()
 
         const cleanups: (() => void)[] = []
+        // Make sure the trigger word exists. The site script usually wraps "Gift" in the hero text; where it hasn't
+        // run (Framer preview, or before it loads), this component wraps the first "Gift" in the hero itself.
+        const ensureTrigger = () => {
+            if (document.querySelector(trigger)) return true
+            const scope = el.closest('[data-framer-name="01 Hero"]') || document.body
+            const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT)
+            let n: Node | null
+            while ((n = walker.nextNode())) {
+                const t = n as Text, i = t.data.search(/\bGift\b/)
+                if (i < 0 || (t.parentElement && t.parentElement.closest("[data-g-photo]"))) continue
+                const word = t.splitText(i); word.splitText(4)
+                const span = document.createElement("span")
+                span.setAttribute("data-g-photo", ""); span.style.cursor = "default"
+                word.parentNode!.replaceChild(span, word); span.appendChild(word)
+                return true
+            }
+            return false
+        }
+        if (!ensureTrigger()) {
+            let tries = 0
+            const iv = setInterval(() => { if (ensureTrigger() || ++tries > 20) clearInterval(iv) }, 500)
+            cleanups.push(() => clearInterval(iv))
+        }
         const onTrigger = (t: EventTarget | null) => !!(t && (t as Element).closest && (t as Element).closest(trigger))
         if (fine) {
             const over = (e: Event) => { if (onTrigger(e.target)) animate(1, 1300) }
