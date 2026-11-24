@@ -434,6 +434,8 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
   background: #121211; box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(244,243,238,.12);
   opacity: 0; transform: rotate(-4deg) scale(.86); transform-origin: 0 100%; transition: opacity .22s ease, transform .32s cubic-bezier(.2,.8,.2,1); }
 #g-photo.g-on { opacity: 1; transform: rotate(-4deg) scale(1); }
+/* Pages with the pixelating hero photo use "Gift" as its trigger instead of the pop-up card */
+html[data-g-portrait] #g-photo { display: none !important; }
 #g-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
 @media (prefers-reduced-motion: reduce) { #g-photo { transition: opacity .15s ease; transform: rotate(-4deg); } }
 
@@ -1241,9 +1243,9 @@ function setupEmailFill() {
         for (const ch of Array.from(t.data)) { const sp = document.createElement("span"); sp.className = "g-ch"; sp.textContent = ch; frag.appendChild(sp); chars.push(sp) }
         t.replaceWith(frag)
     })
-    // Medium pace: the whole address in about 1.5s. One clock drives both the letters and the underline: the line's
+    // Brisk pace: the whole address in about 1s. One clock drives both the letters and the underline: the line's
     // edge glides along under the letters as they light up (and back as they dim), so the two always move together.
-    const step = Math.min(110, 1500 / chars.length)
+    const step = Math.min(75, 1050 / chars.length)
     const line = document.querySelector<HTMLElement>('[data-framer-name="Email underline"]')
     let pos = 0, target = 0, raf = 0, last = 0, lit = 0
     let edges: number[] = [], lineW = 0

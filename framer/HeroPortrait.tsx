@@ -1,22 +1,24 @@
 import { useEffect, useRef, type CSSProperties } from "react"
 import { addPropertyControls, ControlType } from "framer"
 
-// Gift's photo, melted into the hero background. At rest it is a faint duotone in the shader's colours with soft,
-// feathered edges, so it reads as part of the gradient. Hovering it reveals the real photo pixel by pixel: each square
-// first appears as a solid block of its colour, then sharpens into the photo. Leaving runs the same steps backwards.
-// Touch screens: the reveal plays on its own while the photo is on screen (reveal, hold, hide, rest, repeat), restarts
-// when the photo is touched, and stops when it scrolls away.
+// Gift's photo, hidden until asked for. Hovering the word "Gift" in the hero text makes the photo pixelate in: it
+// appears as big coarse blocks that step down to smaller and smaller pixels until the photo is sharp. Moving off "Gift"
+// runs it backwards: the photo breaks back into blocks and dissolves into the page. No frame, no mask: just the photo.
+// Touch screens: plays on its own while on screen (reveal, hold, hide, rest, repeat); a tap restarts it; it stops
+// when scrolled away.
 
 const DEFAULT_IMG = "https://framerusercontent.com/images/WdZdO386BLTzVBtQgoYDpSSrZ2s.jpg"
+// pixel sizes the photo steps through, coarse to sharp
+const LEVELS = [72, 56, 44, 34, 26, 20, 15, 11, 8, 6, 4, 3, 2, 1]
 
 export default function HeroPortrait(props: {
     image?: { src: string; alt?: string } | string
-    pixel: number
-    rest: number
+    speed: number
     position: string
+    trigger: string
     style?: CSSProperties
 }) {
-    const { pixel = 16, rest = 0.3, position = "50% 30%" } = props
+    const { speed = 1, position = "50% 30%", trigger = "[data-g-photo]" } = props
     const src = typeof props.image === "string" ? props.image : props.image?.src || DEFAULT_IMG
     const box = useRef<HTMLDivElement | null>(null)
     const cvs = useRef<HTMLCanvasElement | null>(null)
@@ -26,129 +28,98 @@ export default function HeroPortrait(props: {
         if (!el || !canvas || typeof window === "undefined") return
         const ctx = canvas.getContext("2d")
         if (!ctx) return
+        document.documentElement.setAttribute("data-g-portrait", "")
         const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
         const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches
         const [px, py] = position.split(/\s+/).map((v) => (parseFloat(v) || 50) / 100)
         const img = new Image()
         img.decoding = "async"
         img.src = src
-        const mosaic = document.createElement("canvas")
-        let W = 0, H = 0, cols = 0, rows = 0, cell = pixel, dpr = 1
-        let sx = 0, sy = 0, sw = 0, sh = 0 // the part of the photo that covers the box (object-fit: cover)
-        let order = new Float32Array(0)
-        let P = 0, from = 0, to = 0, t0 = 0, dur = 1, raf = 0, ready = false
-        let origin: [number, number] = [0.5, 0.4]
-        const SPREAD = 0.45 // how long each square takes, as a share of the whole reveal
+        const small = document.createElement("canvas")
+        const sctx = small.getContext("2d")!
+        let W = 0, H = 0, dpr = 1, ready = false
+        let sx = 0, sy = 0, sw = 0, sh = 0
+        let P = 0, from = 0, to = 0, t0 = 0, dur = 1, raf = 0
 
         const layout = () => {
             const b = el.getBoundingClientRect()
             dpr = Math.min(2, window.devicePixelRatio || 1)
             W = Math.max(1, Math.round(b.width)); H = Math.max(1, Math.round(b.height))
-            canvas.width = W * dpr; canvas.height = H * dpr
-            cell = Math.max(8, W < 500 ? Math.round(pixel * 0.8) : pixel)
-            cols = Math.ceil(W / cell); rows = Math.ceil(H / cell)
+            canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr)
             if (img.naturalWidth) {
                 const s = Math.max(W / img.naturalWidth, H / img.naturalHeight)
                 sw = W / s; sh = H / s
                 sx = (img.naturalWidth - sw) * px; sy = (img.naturalHeight - sh) * py
-                mosaic.width = cols; mosaic.height = rows
-                const m = mosaic.getContext("2d")!
-                m.imageSmoothingEnabled = true
-                m.drawImage(img, sx, sy, (cols * cell / W) * sw, (rows * cell / H) * sh, 0, 0, cols, rows)
             }
-            shuffle()
             draw()
         }
-        const shuffle = () => {
-            order = new Float32Array(cols * rows)
-            const [ox, oy] = origin
-            for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-                const dx = (c + 0.5) / cols - ox, dy = ((r + 0.5) / rows - oy) * (H / Math.max(1, W))
-                order[r * cols + c] = Math.min(1, 0.55 * Math.random() + 0.45 * Math.min(1, Math.hypot(dx, dy) * 1.6))
-            }
-        }
         const draw = () => {
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-            ctx.clearRect(0, 0, W, H)
-            if (!ready || P <= 0) return
-            ctx.imageSmoothingEnabled = false
-            const kx = sw / W, ky = sh / H
-            for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-                const u = Math.max(0, Math.min(1, (P * (1 + SPREAD) - order[r * cols + c]) / SPREAD))
-                if (u <= 0) continue
-                const x = c * cell, y = r * cell
-                if (u < 0.5) { // a solid block of this square's colour fades in
-                    ctx.globalAlpha = u * 2
-                    ctx.drawImage(mosaic, c, r, 1, 1, x, y, cell, cell)
-                } else { // the block sharpens into the photo
-                    ctx.globalAlpha = 1
-                    ctx.drawImage(mosaic, c, r, 1, 1, x, y, cell, cell)
-                    ctx.globalAlpha = (u - 0.5) * 2
-                    ctx.drawImage(img, sx + x * kx, sy + y * ky, cell * kx, cell * ky, x, y, cell, cell)
-                }
+            ctx.setTransform(1, 0, 0, 1, 0, 0)
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            if (!ready || P <= 0.001) return
+            // opacity comes in during the first, coarsest steps; then the pixels shrink until the photo is sharp
+            ctx.globalAlpha = Math.min(1, P / 0.3)
+            const q = Math.max(0, Math.min(1, (P - 0.08) / 0.92))
+            const level = LEVELS[Math.min(LEVELS.length - 1, Math.floor(q * LEVELS.length))]
+            const block = Math.max(1, (W < 500 ? 0.75 : 1) * level) * dpr
+            if (block <= 1.01 * dpr) {
+                ctx.imageSmoothingEnabled = true
+                ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height)
+            } else {
+                const cw = Math.max(1, Math.ceil(canvas.width / block)), ch = Math.max(1, Math.ceil(canvas.height / block))
+                small.width = cw; small.height = ch
+                sctx.imageSmoothingEnabled = true
+                sctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch)
+                ctx.imageSmoothingEnabled = false
+                ctx.drawImage(small, 0, 0, cw, ch, 0, 0, cw * block, ch * block)
             }
             ctx.globalAlpha = 1
-            // keep the revealed photo in the page's palette: a light teal-to-blue tint on the drawn squares only
-            ctx.globalCompositeOperation = "source-atop"
-            const g = ctx.createLinearGradient(0, 0, W, H)
-            g.addColorStop(0, "rgba(0, 191, 188, 0.14)"); g.addColorStop(1, "rgba(0, 39, 130, 0.22)")
-            ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
-            // and let the bright wall behind the face sink into the dark page towards the edges
-            const v = ctx.createRadialGradient(W * 0.54, H * 0.4, Math.min(W, H) * 0.18, W * 0.54, H * 0.44, Math.max(W, H) * 0.55)
-            v.addColorStop(0, "rgba(18, 18, 17, 0)"); v.addColorStop(1, "rgba(18, 18, 17, 0.75)")
-            ctx.fillStyle = v; ctx.fillRect(0, 0, W, H)
-            ctx.globalCompositeOperation = "source-over"
         }
         const frame = (now: number) => {
             const k = Math.min(1, (now - t0) / dur)
-            const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2
-            P = from + (to - from) * e
+            P = from + (to - from) * k
             draw()
             raf = k < 1 ? requestAnimationFrame(frame) : 0
         }
         const animate = (target: number, ms: number) => {
-            if (to === target && raf) return
+            if (to === target && (raf || P === target)) return
             cancelAnimationFrame(raf)
             from = P; to = target; t0 = performance.now()
-            dur = reduce ? 1 : ms * Math.max(0.25, Math.abs(target - P))
+            dur = reduce ? 1 : (ms / Math.max(0.2, speed)) * Math.max(0.2, Math.abs(target - P))
             raf = requestAnimationFrame(frame)
         }
         img.onload = () => { ready = true; layout() }
-        if (img.complete && img.naturalWidth) { ready = true }
+        if (img.complete && img.naturalWidth) ready = true
         const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => layout()) : null
         ro?.observe(el)
         layout()
 
         const cleanups: (() => void)[] = []
-        const inside = (x: number, y: number) => {
-            const b = el.getBoundingClientRect()
-            // the visible, feathered part of the photo: an ellipse inside the box
-            const nx = (x - b.left) / b.width - 0.54, ny = (y - b.top) / b.height - 0.44
-            return (nx * nx) / 0.16 + (ny * ny) / 0.16 < 1 ? [(x - b.left) / b.width, (y - b.top) / b.height] as [number, number] : null
-        }
+        const onTrigger = (t: EventTarget | null) => !!(t && (t as Element).closest && (t as Element).closest(trigger))
         if (fine) {
-            // Listen on the window: the hero text sits above the photo and would otherwise swallow the pointer.
-            let over = false
-            const move = (e: PointerEvent) => {
-                const hit = inside(e.clientX, e.clientY)
-                if (hit && !over) { over = true; if (P < 0.05) { origin = hit; shuffle() } animate(1, 1100) }
-                else if (!hit && over) { over = false; animate(0, 900) }
+            // Delegated, so it works whenever the "Gift" word is (re)rendered.
+            const over = (e: Event) => { if (onTrigger(e.target)) animate(1, 1000) }
+            const out = (e: PointerEvent | FocusEvent) => {
+                if (onTrigger(e.target) && !onTrigger((e as any).relatedTarget)) animate(0, 800)
             }
-            const leave = () => { if (over) { over = false; animate(0, 900) } }
-            window.addEventListener("pointermove", move, { passive: true })
-            document.documentElement.addEventListener("pointerleave", leave)
-            cleanups.push(() => { window.removeEventListener("pointermove", move); document.documentElement.removeEventListener("pointerleave", leave) })
+            document.addEventListener("pointerover", over, { passive: true })
+            document.addEventListener("pointerout", out as any, { passive: true })
+            document.addEventListener("focusin", over)
+            document.addEventListener("focusout", out as any)
+            cleanups.push(() => {
+                document.removeEventListener("pointerover", over); document.removeEventListener("pointerout", out as any)
+                document.removeEventListener("focusin", over); document.removeEventListener("focusout", out as any)
+            })
         } else {
-            // Touch: loop while on screen. Reveal 1.3s, hold 1.8s, hide 1.1s, rest 1.4s.
+            // Touch: loop while on screen. Reveal 1.2s, hold 1.8s, hide 1s, rest 1.4s.
             let timers: any[] = [], visible = false
             const clear = () => { timers.forEach(clearTimeout); timers = [] }
             const cycle = () => {
                 clear()
                 if (!visible) return
-                origin = [0.3 + Math.random() * 0.4, 0.3 + Math.random() * 0.2]; shuffle()
-                animate(1, 1300)
-                timers.push(setTimeout(() => animate(0, 1100), 1300 + 1800))
-                timers.push(setTimeout(cycle, 1300 + 1800 + 1100 + 1400))
+                animate(1, 1200)
+                timers.push(setTimeout(() => animate(0, 1000), 1200 + 1800))
+                timers.push(setTimeout(cycle, 1200 + 1800 + 1000 + 1400))
             }
             const io = new IntersectionObserver((es) => es.forEach((e) => {
                 visible = e.isIntersecting
@@ -156,37 +127,32 @@ export default function HeroPortrait(props: {
                 else { clear(); cancelAnimationFrame(raf); raf = 0; P = 0; to = 0; draw() }
             }), { threshold: 0.35 })
             io.observe(el)
-            const tap = (e: PointerEvent) => { if (visible && inside(e.clientX, e.clientY)) { P = 0; draw(); cycle() } }
+            const tap = (e: PointerEvent) => {
+                const b = el.getBoundingClientRect()
+                const inBox = e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom
+                if (visible && (inBox || onTrigger(e.target))) { cancelAnimationFrame(raf); raf = 0; P = 0; to = 0; draw(); cycle() }
+            }
             window.addEventListener("pointerdown", tap, { passive: true })
             cleanups.push(() => { io.disconnect(); clear(); window.removeEventListener("pointerdown", tap) })
         }
-        return () => { cancelAnimationFrame(raf); ro?.disconnect(); cleanups.forEach((c) => c()) }
-    }, [src, pixel, position])
+        return () => {
+            cancelAnimationFrame(raf); ro?.disconnect(); cleanups.forEach((c) => c())
+            document.documentElement.removeAttribute("data-g-portrait")
+        }
+    }, [src, speed, position, trigger])
 
-    const edge = "radial-gradient(closest-side at 54% 44%, #000 25%, rgba(0,0,0,0.5) 62%, transparent 100%)"
-    const softEdge = "radial-gradient(closest-side at 54% 44%, #000 18%, rgba(0,0,0,0.65) 48%, rgba(0,0,0,0.22) 72%, transparent 92%)"
-    const img: CSSProperties = { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: position, display: "block", pointerEvents: "none", userSelect: "none" }
     return (
         <div ref={box} aria-hidden="true" style={{ ...props.style, position: "relative", width: "100%", height: "100%", overflow: "hidden", pointerEvents: "none" }}>
-            {/* resting layer: duotone in the shader colours, feathered into the background */}
-            <div style={{ position: "absolute", inset: 0, isolation: "isolate", opacity: rest, WebkitMaskImage: edge, maskImage: edge }}>
-                <img src={src} alt="" style={{ ...img, filter: "grayscale(1) contrast(1.15) brightness(0.85)" }} />
-                <div style={{ position: "absolute", inset: 0, mixBlendMode: "color",
-                    background: "radial-gradient(80% 70% at 70% 30%, #00BFBC, #0B3F6E 60%, #002782)" }} />
-                <div style={{ position: "absolute", inset: 0, mixBlendMode: "multiply", background: "linear-gradient(to bottom, rgba(18,18,17,0) 35%, rgba(18,18,17,0.9))" }} />
-            </div>
-            {/* reveal layer: the real photo, drawn square by square */}
-            <canvas ref={cvs} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block",
-                WebkitMaskImage: softEdge, maskImage: softEdge, filter: "brightness(0.9)" }} />
+            <canvas ref={cvs} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} />
         </div>
     )
 }
 
-HeroPortrait.defaultProps = { pixel: 16, rest: 0.3, position: "50% 30%" }
+HeroPortrait.defaultProps = { speed: 1, position: "50% 30%", trigger: "[data-g-photo]" }
 
 addPropertyControls(HeroPortrait, {
     image: { type: ControlType.ResponsiveImage, title: "Photo" },
-    pixel: { type: ControlType.Number, title: "Pixel size", min: 6, max: 48, step: 1, unit: "px" },
-    rest: { type: ControlType.Number, title: "Resting opacity", min: 0, max: 1, step: 0.02 },
+    speed: { type: ControlType.Number, title: "Speed", min: 0.4, max: 2.5, step: 0.1 },
     position: { type: ControlType.String, title: "Focus (x y)" },
+    trigger: { type: ControlType.String, title: "Hover trigger (CSS)" },
 })
