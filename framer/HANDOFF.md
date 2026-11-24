@@ -744,3 +744,9 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Strokes 0.1 lower: drawn 0.65, base 0.20 (light 0.22), case studies 0.7.
 - "05 Contact" gets a gradient to #0A0A09; "06 Footer" is #0A0A09. Home footer border removed on the canvas.
 - Email: `setupEmailFill` wraps each letter in `.g-ch` (opacity 0.22); hover lights them one by one (min(180ms, 3.6s/n) a step), leave dims them back from the last lit. Touch: fills when 60% in view.
+
+## 24 Nov 2026: hero exploration (draft pages, NOT published yet)
+- Home B (`JIUEvpsxe`, /home-b): headline instance fontSize 76 / 56 / 34 (desktop height 112px); the two About-toggle dotted lines hidden on all breakpoints; desktop About toggle top padding 56 → 32.
+- Photo variant: copy of Home B (`eX41MCiol`, Framer named it /home-b-2; the API can't rename paths). Hero index hidden on all breakpoints; new code component `HeroPortrait.tsx` (code file PHwTd9y) placed as first child of 01 Hero ("Hero portrait", absolute: desktop right 0, top/bottom 0, 56% wide; tablet 70% × 560; phone 100% × 440). Desktop Content max-width 600.
+- HeroPortrait: resting duotone (grayscale + shader-colour "color" blend, 0.3 opacity, closest-side feathered mask) + a cursor-following soft circle revealing the photo (lightly tinted so it isn't a white spotlight). Touch: the reveal wanders slowly.
+- Publishing from this cloud session was blocked by the permission classifier; needs Gift's explicit OK. Publishing puts /home-b and /home-b-2 live (unlinked); the real Home is untouched.
