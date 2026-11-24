@@ -737,3 +737,10 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 
 ## 23 Nov 2026: grid stronger by 0.2 (published 65c04384a)
 - Strokes: base 0.30 (light 0.32), drawn 0.75; case studies opacity 0.8. Kept the logo thread's phone logo rules.
+
+## 24 Nov 2026: grid moves on its own, end-of-page fade, email letter fill (published 06bbbeb63)
+- Grid no longer follows scroll. Each rail draws its maze with the Web Animations API (stroke-dashoffset, linear, 42px/s desktop, 28px/s phone, 16–60s), the dot rides it with CSS `offset-path`; then rests 2.6s, fades 1.4s and starts a new random route. Started once per #g-grid (`__gRun`); restarts on width change. Reduced motion: static full route.
+- Phone rails centred at 0 / 36 / 64 / 100% of the width (bands 30% wide), so the outer two run half off screen.
+- Strokes 0.1 lower: drawn 0.65, base 0.20 (light 0.22), case studies 0.7.
+- "05 Contact" gets a gradient to #0A0A09; "06 Footer" is #0A0A09. Home footer border removed on the canvas.
+- Email: `setupEmailFill` wraps each letter in `.g-ch` (opacity 0.22); hover lights them one by one (min(180ms, 3.6s/n) a step), leave dims them back from the last lit. Touch: fills when 60% in view.

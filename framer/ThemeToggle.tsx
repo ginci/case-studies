@@ -540,6 +540,15 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
   ${NEXT}::after { top: 80px; margin-top: 0; right: 20px; width: 56px; height: 56px; background-size: 22px; }
 }
 
+/* ---------- End of page: from the Contact heading down the gradient fades out, so the footer reads as the end ---------- */
+${N("05 Contact")} { background-image: linear-gradient(to bottom, rgba(10, 10, 9, 0) 0%, rgba(10, 10, 9, 0.7) 35%, rgba(10, 10, 9, 0.94) 65%, #0A0A09 100%); }
+${N("06 Footer")} { background-color: #0A0A09; }
+
+/* ---------- Contact email: dim until hovered, then lights up one letter at a time (setupEmailFill) ---------- */
+.g-ch { opacity: 0.22; transition: opacity 0.35s ease; }
+.g-ch.g-on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .g-ch { transition: none; } }
+
 /* ---------- Texture: grain + vertical grid lines that grow with scroll ---------- */
 #g-grain {
   position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: 0.035;
@@ -553,18 +562,18 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
    theme, and (through the page-wide invert) a darker tint on the light theme. */
 #g-grid { position: fixed !important; inset: 0; z-index: 0 !important; padding: 0 !important; margin: 0 !important; max-width: none !important;
   pointer-events: none; opacity: 1; mix-blend-mode: overlay; --g-ink: 255, 255, 255; }
-html:has(${N("Case study page")}) #g-grid { opacity: 0.8; }
+html:has(${N("Case study page")}) #g-grid { opacity: 0.7; }
 /* Each rail is a maze route of straight runs and right-angle turns (new on every visit), drawn in as the page scrolls. */
 #g-grid svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 #g-grid path { fill: none; stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linecap: square; stroke-linejoin: miter; }
-#g-grid path.g-base { stroke: rgba(var(--g-ink), 0.30); }
-#g-grid path.g-draw { stroke: rgba(var(--g-ink), 0.75); }
-${LIGHT} #g-grid path.g-base { stroke: rgba(var(--g-ink), 0.32); }
+#g-grid path.g-base { stroke: rgba(var(--g-ink), 0.20); }
+#g-grid path.g-draw { stroke: rgba(var(--g-ink), 0.65); }
+${LIGHT} #g-grid path.g-base { stroke: rgba(var(--g-ink), 0.22); }
 #g-grid s {
-  position: absolute; left: -2px; top: -2px; width: 5px; height: 5px; border-radius: 50%;
+  position: absolute; left: 0; top: 0; width: 5px; height: 5px; border-radius: 50%;
   background: rgba(var(--g-ink), 0.6);
   box-shadow: 0 0 6px 1px rgba(var(--g-ink), 0.4), 0 0 22px 5px rgba(var(--g-ink), 0.12);
-  transform: translate(var(--g-x, 0px), var(--g-y, 0px)); opacity: var(--g-o, 0); transition: opacity 0.3s ease;
+  offset-anchor: 50% 50%; offset-rotate: 0deg; opacity: 0; /* rides the line's path (offset-path set in JS) */
 }
 @media (prefers-reduced-motion: no-preference) {
   #g-grid s { animation: g-pulse 2.8s ease-in-out infinite; }
@@ -1184,6 +1193,42 @@ function setupPhotoHover() {
     window.addEventListener("scroll", hide, { passive: true })
 }
 
+// Contact email: letters sit at low opacity; hovering lights them up one after another (whole address in under 4s);
+// leaving turns them back down one after another from the last lit letter. Touch screens: lights up when in view.
+function setupEmailFill() {
+    if (typeof document === "undefined") return
+    const host = document.querySelector<HTMLElement>('[data-framer-name^="Email ("]')
+    if (!host || host.querySelector(".g-ch")) return
+    const walker = document.createTreeWalker(host, NodeFilter.SHOW_TEXT)
+    const texts: Text[] = []
+    while (walker.nextNode()) { const t = walker.currentNode as Text; if (t.data.trim()) texts.push(t) }
+    if (!texts.length) return
+    const chars: HTMLElement[] = []
+    texts.forEach((t) => {
+        const frag = document.createDocumentFragment()
+        for (const ch of Array.from(t.data)) { const sp = document.createElement("span"); sp.className = "g-ch"; sp.textContent = ch; frag.appendChild(sp); chars.push(sp) }
+        t.replaceWith(frag)
+    })
+    const step = Math.min(180, 3600 / chars.length)
+    let lit = 0, target = 0, timer: any = null
+    const tick = () => {
+        if (lit === target) { timer = null; return }
+        if (lit < target) chars[lit++].classList.add("g-on")
+        else chars[--lit].classList.remove("g-on")
+        timer = setTimeout(tick, step)
+    }
+    const go = (to: number) => { target = to; if (!timer) tick() }
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    if (fine) {
+        host.addEventListener("mouseenter", () => go(chars.length))
+        host.addEventListener("mouseleave", () => go(0))
+        host.addEventListener("focusin", () => go(chars.length))
+        host.addEventListener("focusout", () => go(0))
+    } else if (typeof IntersectionObserver !== "undefined") {
+        new IntersectionObserver((es) => es.forEach((e) => go(e.isIntersecting ? chars.length : 0)), { threshold: 0.6 }).observe(host)
+    } else chars.forEach((c) => c.classList.add("g-on"))
+}
+
 function setupTOC() {
     const items = Array.from(
         document.querySelectorAll<HTMLElement>('[data-framer-name^="TOC / "]')
@@ -1352,47 +1397,77 @@ function setupFX() {
         }
         return pts
     }
-    const lens = [0, 0, 0, 0]
-    let builtW = 0, builtH = 0
-    const build = () => {
-        const w = window.innerWidth, h = window.innerHeight
-        if (w === builtW && h === builtH) return
-        builtW = w; builtH = h
-        svgEl.setAttribute("viewBox", `0 0 ${w} ${h}`)
-        const band = w * 0.2
-        const cell = Math.max(30, Math.min(84, band / 3.4)) // long runs: ~84px cells at 1440, 30px on phones
+    // Motion: the lines travel on their own, independent of scrolling (one slow, steady pace, no per-scroll work).
+    // Each rail draws its route, rests, fades, then starts a new random route. The leading point rides the path with
+    // CSS offset-path, so the browser animates both without any per-frame script.
+    const PAUSE = 2600, FADE = 1400
+    const routeFor = (i: number, w: number, h: number) => {
+        const phone = w < 810
+        // Desktop: rails at 20/40/60/80%. Phone: two near the middle, two on the edges (half in, half off screen).
+        const centre = phone ? [0, 0.36, 0.64, 1][i] : 0.2 + 0.2 * i
+        const band = phone ? w * 0.3 : w * 0.2
+        const cell = Math.max(30, Math.min(84, band / 3.4))
         const cols = Math.max(3, Math.round(band / cell))
         const rows = Math.max(4, Math.round(h / cell) + 1)
         const stepY = h / (rows - 1)
-        seeds.forEach((seed, i) => {
-            const rand = rng(seed)
-            const x0 = w * (0.2 + 0.2 * i) - ((cols - 1) * cell) / 2 // band centred on the rail's old column
-            let pts = maze(cols, rows, Math.floor(cols / 2), rand).map(([c, r]) => [x0 + c * cell, r * stepY])
-            if (i % 2 === 1) pts = pts.map(([x, y]) => [x, h - y]) // rails 2 and 4 start at the bottom
-            // keep only the corners
-            const keep = pts.filter((p, k) => k === 0 || k === pts.length - 1 ||
-                !((pts[k - 1][0] === p[0] && p[0] === pts[k + 1][0]) || (pts[k - 1][1] === p[1] && p[1] === pts[k + 1][1])))
-            const d = keep.map((p, k) => `${k ? "L" : "M"}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ")
-            bases[i].setAttribute("d", d); draws[i].setAttribute("d", d)
-            lens[i] = draws[i].getTotalLength()
-            draws[i].style.strokeDasharray = `${lens[i]} ${lens[i]}`
+        const x0 = w * centre - ((cols - 1) * cell) / 2
+        let pts = maze(cols, rows, Math.floor(cols / 2), rng((Math.random() * 2 ** 31) | 0)).map(([c, r]) => [x0 + c * cell, r * stepY])
+        if (i % 2 === 1) pts = pts.map(([x, y]) => [x, h - y]) // rails 2 and 4 travel from the bottom up
+        const keep = pts.filter((p, k) => k === 0 || k === pts.length - 1 ||
+            !((pts[k - 1][0] === p[0] && p[0] === pts[k + 1][0]) || (pts[k - 1][1] === p[1] && p[1] === pts[k + 1][1])))
+        return keep.map((p, k) => `${k ? "L" : "M"}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ")
+    }
+    const g = grid as any
+    if (!g.__gRun) {
+        g.__gRun = true
+        let size = ""
+        const anims: Animation[] = []
+        const timers: any[] = []
+        const run = (i: number, delay: number) => {
+            const w = window.innerWidth, h = window.innerHeight
+            const d = routeFor(i, w, h)
+            const base = bases[i], draw = draws[i], dot = dots[i]
+            base.setAttribute("d", d); draw.setAttribute("d", d)
+            const len = draw.getTotalLength()
+            draw.style.strokeDasharray = `${len} ${len}`
+            dot.style.setProperty("offset-path", `path("${d}")`)
+            base.style.opacity = draw.style.opacity = "1"
+            if (reduce) { draw.style.strokeDashoffset = "0"; dot.style.opacity = "0"; return }
+            const speed = w < 810 ? 28 : 42 // px per second: slow and calm
+            const dur = Math.min(60000, Math.max(16000, (len / speed) * 1000))
+            const opts: KeyframeAnimationOptions = { duration: dur, delay, easing: "linear", fill: "both" }
+            const a1 = draw.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], opts)
+            const a2 = dot.animate([{ offsetDistance: "0%", opacity: 0 }, { offsetDistance: "1%", opacity: 1, offset: 0.01 },
+                { offsetDistance: "99%", opacity: 1, offset: 0.99 }, { offsetDistance: "100%", opacity: 0 }], opts)
+            anims.push(a1, a2)
+            a1.finished.then(() => {
+                timers.push(setTimeout(() => {
+                    const f1 = base.animate([{ opacity: 1 }, { opacity: 0 }], { duration: FADE, fill: "forwards" })
+                    const f2 = draw.animate([{ opacity: 1 }, { opacity: 0 }], { duration: FADE, fill: "forwards" })
+                    anims.push(f1, f2)
+                    f1.finished.then(() => { if (g.__gSize === size) { a1.cancel(); a2.cancel(); f1.cancel(); f2.cancel(); run(i, 400) } }).catch(() => {})
+                }, PAUSE))
+            }).catch(() => {})
+        }
+        const start = () => {
+            size = `${window.innerWidth}x${window.innerHeight}`
+            g.__gSize = size
+            anims.splice(0).forEach((a) => a.cancel())
+            timers.splice(0).forEach((t) => clearTimeout(t))
+            svgEl.setAttribute("viewBox", `0 0 ${window.innerWidth} ${window.innerHeight}`)
+            svgEl.setAttribute("preserveAspectRatio", "none")
+            for (let i = 0; i < 4; i++) run(i, 300 + i * 1800)
+        }
+        start()
+        let rt: any = null
+        window.addEventListener("resize", () => {
+            clearTimeout(rt)
+            rt = setTimeout(() => { if (`${window.innerWidth}x${window.innerHeight}` !== size && Math.abs(window.innerWidth - parseInt(size)) > 40) start() }, 300)
         })
     }
     gridUpdate = () => {
         placeGrid()
-        build()
-        const vh = window.innerHeight
         const y = window.scrollY
-        const max = document.documentElement.scrollHeight - vh
-        const p = reduce || max <= 0 ? 1 : Math.min(1, Math.max(0, y / max))
-        draws.forEach((path, i) => {
-            const q = Math.min(1, Math.max(0, (p - i * 0.04) / 0.88))
-            path.style.strokeDashoffset = (lens[i] * (1 - q)).toFixed(1)
-            const pt = path.getPointAtLength(lens[i] * q)
-            dots[i].style.setProperty("--g-x", pt.x.toFixed(1) + "px")
-            dots[i].style.setProperty("--g-y", pt.y.toFixed(1) + "px")
-            dots[i].style.setProperty("--g-o", q > 0.002 && q < 0.998 ? "1" : "0")
-        })
         const top = document.querySelector<HTMLElement>(
             '[data-framer-name="01 Hero"], [data-framer-name="Header"], [data-framer-name="Shelf header"]'
         )
@@ -1490,6 +1565,7 @@ function setupFX() {
     setupTOC()
     setupReveal()
     setupPhotoHover()
+    setupEmailFill()
 
     // CMS lists and page changes add layers after first paint: re-run (debounced).
     if (!watcher && typeof MutationObserver !== "undefined") {
@@ -1501,6 +1577,7 @@ function setupFX() {
                 setupTOC()
                 setupReveal()
                 setupPhotoHover()
+                setupEmailFill()
                 gridUpdate && gridUpdate()
             }, 120)
         })
