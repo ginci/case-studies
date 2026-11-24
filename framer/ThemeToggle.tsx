@@ -463,10 +463,10 @@ ${N("Statement (word reveal on scroll)")} p { font-size: 26px !important; }
 
 /* Nav "Get in touch" button: at rest it shows the label and the swapping call/calendar icon. While the nav is the
    floating pill the label folds away and it becomes the round icon button; the icons keep swapping. */
-#main ${N("Nav (fixed)")} ${S("CTA / Email")} > ${N("Email me")} { display: block; max-width: 140px !important; min-width: 0 !important; overflow: hidden; white-space: nowrap;
+:is(#main, body) ${N("Nav (fixed)")} ${S("CTA / Email")} > ${N("Email me")} { display: block; max-width: 140px !important; min-width: 0 !important; overflow: hidden; white-space: nowrap;
   transition: max-width 0.7s ${NAVEASE}, opacity 0.45s ease, margin 0.7s ${NAVEASE}; }
 ${N("Nav (fixed)")} ${S("CTA / Email")} { transition: padding 0.7s ${NAVEASE}, gap 0.7s ${NAVEASE} !important; }
-html[data-g-scrolled] #main ${N("Nav (fixed)")} ${S("CTA / Email")} > ${N("Email me")} { max-width: 0 !important; opacity: 0 !important; margin-right: -8px !important; }
+html[data-g-scrolled] :is(#main, body) ${N("Nav (fixed)")} ${S("CTA / Email")} > ${N("Email me")} { max-width: 0 !important; opacity: 0 !important; margin-right: -8px !important; }
 html[data-g-scrolled] ${N("Nav (fixed)")} ${S("CTA / Email")} { padding-left: 12px !important; padding-right: 12px !important; }
 
 /* A very light blur band at the top of the screen, behind the floating nav. Only while the nav floats. */
