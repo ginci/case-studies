@@ -107,7 +107,6 @@ ${N("01 Hero")} ${N("Lede")} { animation: g-lede-in 0.7s ease 0.15s both; }
 @media (max-width: 809px) {
   ${S("Background shader")} { display: none !important; }
   #g-grain { display: none !important; }
-  html[data-g-scrolled] ${N("Nav (fixed)")} { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background-color: rgba(11, 11, 10, 0.97) !important; }
 }
 
 /* Availability pill above the headline: soft pulse on the dot */
@@ -227,13 +226,16 @@ ${ROW}::after {
 }
 
 ${ROW} ${N("Name")} * { color: #F4F3EE !important; }
+/* Home lists: no line under each project, one hairline between "Featured work / All projects" and the list */
+${N("Hero index")} ${ROW}::after, ${S("03 Work")} ${ROW}::after { display: none; }
+${N("Hero index")} ${N("Work list")}, ${S("03 Work")} ${N("Work list")} { border-top: 1px solid #2A2A27 !important; }
+${N("Selected work")} * { font-size: 12px !important; letter-spacing: 0.02em !important; }
 ${ROW} ${N("Arrow")} * { color: #85847E !important; }
 
 ${N("Accent swatch")}, ${N("Next accent swatch")}, ${N("Preview swatch")} { pointer-events: none !important; }
 
 /* ---------- Contact: socials sit with the email, not the footer ---------- */
 ${N("Email underline")} { width: min(1170px, 100%) !important; transform-origin: left center; transform: scaleX(0); background-color: #F4F3EE !important; }
-${N("05 Contact")}:has(${S("Email (")}:hover) ${N("Email underline")} { transform: scaleX(1); }
 ${S("Email (")} { cursor: pointer; }
 ${N("Socials")} a, ${N("Socials")} [data-framer-name] { cursor: pointer; }
 ${N("Socials")} *:hover { color: #F4F3EE !important; }
@@ -313,7 +315,7 @@ ${N("04 About")}, ${N("04 About")} > *, ${N("04 About")} > * > * { overflow: vis
 
 /* Light theme: the scrolled nav pill is pure white (black before the page-wide invert). */
 html[data-ginci-theme="light"][data-g-scrolled] ${N("Nav (fixed)")} {
-  background-color: #000 !important; border-color: rgba(244, 243, 238, 0.14) !important;
+  background-color: rgba(0, 0, 0, 0.42) !important; border-color: rgba(244, 243, 238, 0.14) !important;
   box-shadow: 0 12px 40px rgba(255, 255, 255, 0.10) !important;
 }
 
@@ -329,9 +331,16 @@ ${N("Now line")} > p::before {
   vertical-align: 1px; background: #F4F3EE; box-shadow: 0 0 8px 1px rgba(244, 243, 238, 0.55);
 }
 ${S("Back to top")} {
-  cursor: pointer; padding: 10px 18px !important; border: 1px solid rgba(244, 243, 238, 0.18);
-  border-radius: 999px;
+  cursor: pointer; padding: 0 !important; border: 1px solid rgba(244, 243, 238, 0.18);
+  border-radius: 50%; width: 44px !important; height: 44px !important; min-width: 44px; flex-shrink: 0;
+  display: flex !important; align-items: center; justify-content: center; position: relative; overflow: hidden;
 }
+/* icon only: the words stay for screen readers, the arrow is drawn on top */
+${S("Back to top")} > * { opacity: 0 !important; position: absolute !important; }
+${S("Back to top")}::after { content: ""; width: 16px; height: 16px; background-color: #F4F3EE;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 13V3M3.5 7.5 8 3l4.5 4.5'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 13V3M3.5 7.5 8 3l4.5 4.5'/%3E%3C/svg%3E") center / contain no-repeat; }
+${S("Back to top")}:hover::after, ${S("Back to top")}:focus-visible::after { background-color: #121211; }
 ${S("Back to top")} * { color: #F4F3EE !important; }
 ${S("Back to top")}:hover, ${S("Back to top")}:focus-visible { background-color: #F4F3EE; outline: none; }
 ${S("Back to top")}:hover *, ${S("Back to top")}:focus-visible * { color: #121211 !important; }
@@ -346,9 +355,10 @@ html[data-g-scrolled] ${N("Nav (fixed)")} {
   top: 14px !important; max-width: var(--g-pill-w, calc(min(100%, 1200px) - 192px)) !important; /* shrinks inward: 16px inside the 80px content margins */
   border-radius: 32px !important; padding: 10px 10px 10px 24px !important;
   margin-bottom: calc(var(--g-nav-pad, 64px) - 20px) !important; /* keeps the page from shifting while the nav shrinks */
-  background-color: rgba(11, 11, 10, 0.92) !important; border-color: rgba(244, 243, 238, 0.12) !important;
-  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  /* glass: the page shows through, blurred and a little richer, with a faint light edge */
+  background-color: rgba(24, 24, 22, 0.38) !important; border-color: rgba(244, 243, 238, 0.14) !important;
+  backdrop-filter: blur(20px) saturate(1.6) !important; -webkit-backdrop-filter: blur(20px) saturate(1.6) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
 }
 
 /* ---------- Motion (only when the visitor allows it) ---------- */
@@ -358,12 +368,13 @@ html[data-g-scrolled] ${N("Nav (fixed)")} {
   ${ROW} ${N("Name")} *, ${ROW} ${N("Arrow")} * { transition: color 0.3s ease; }
   ${ROW} ${N("Arrow")} { transition: transform 0.4s ${EASE}; }
 
-  ${N("Email underline")} { transition: transform 0.7s ${EASE}; }
   ${NEXT}::after { transition: background-color 0.35s ease, border-color 0.35s ease, transform 0.45s ${EASE}; }
   ${NEXT} ${N("Next title")} { transition: transform 0.6s ${EASE}; }
   ${NEXT} ${N("Next title")} * { transition: color 0.35s ease; }
   ${S("TOC / ")}::before { transition: opacity 0.3s ease; }
   ${S("Back to top")} { transition: background-color 0.3s ease; }
+  ${S("Back to top")}::after { transition: background-color 0.3s ease, transform 0.4s ${EASE}; }
+  ${S("Back to top")}:hover::after { transform: translateY(-2px); }
   ${S("Back to top")} * { transition: color 0.3s ease; }
   ${N("Nav (fixed)")} {
     transition: max-width 0.6s ${NAVEASE}, top 0.6s ${NAVEASE}, border-radius 0.6s ${NAVEASE}, padding 0.6s ${NAVEASE}, margin 0.6s ${NAVEASE},
@@ -510,11 +521,9 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 
 @media (min-width: 810px) and (max-width: 1199px) { html[data-g-scrolled] ${N("Nav (fixed)")} { max-width: calc(100% - 96px) !important; } } /* tablet: 16px inside the 32px margins */
 
-/* Home hero: desktop and tablet follow the canvas height (Gift set 80.25vh). On phones it fills the screen below the nav
-   with content at the bottom, so "More about me" rests 68px above the edge, clear of the "Made in Framer" badge. */
+/* Home hero on phones: follows its content (no longer stretched to the screen with "More about me" pinned to the bottom). */
 @media (max-width: 809px) {
-  ${N("Home V2 / Index (dark)")} ${N("01 Hero")} { height: auto !important; min-height: calc(100vh - var(--g-nav-h, 70px)) !important;
-    min-height: calc(100svh - var(--g-nav-h, 70px)) !important; justify-content: flex-end !important; }
+  ${N("Home V2 / Index (dark)")} ${N("01 Hero")} { height: auto !important; min-height: 0 !important; justify-content: flex-start !important; padding-top: 56px !important; }
 }
 
 
@@ -540,12 +549,16 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
   ${NEXT}::after { top: 80px; margin-top: 0; right: 20px; width: 56px; height: 56px; background-size: 22px; }
 }
 
-/* ---------- End of page: from the Contact heading down the gradient fades out, so the footer reads as the end ---------- */
-${N("05 Contact")} { background-image: linear-gradient(to bottom, rgba(10, 10, 9, 0) 0%, rgba(10, 10, 9, 0.7) 35%, rgba(10, 10, 9, 0.94) 65%, #0A0A09 100%); }
-${N("06 Footer")} { background-color: #0A0A09; }
+/* ---------- End of page: from the Contact heading down, the page eases into the colour behind the Contact heading
+   (the shader's deep teal), so the bottom never goes black. Eased stops, no visible band. ---------- */
+${N("05 Contact")} { background-image: linear-gradient(to bottom, rgba(20, 32, 31, 0) 0%, rgba(20, 32, 31, 0.04) 14%, rgba(20, 32, 31, 0.12) 26%,
+  rgba(20, 32, 31, 0.25) 38%, rgba(20, 32, 31, 0.42) 50%, rgba(20, 32, 31, 0.6) 62%, rgba(20, 32, 31, 0.77) 74%, rgba(20, 32, 31, 0.9) 86%, #14201F 100%); }
+${N("06 Footer")} { background-color: #14201F; position: relative; }
+/* Footer: a hairline above the copyright and the back-to-top button, inside the content margins */
+${N("06 Footer")}::before { content: ""; position: absolute; top: 0; left: var(--g-fl, 0); right: var(--g-fr, 0); height: 1px; background: rgba(244, 243, 238, 0.12); pointer-events: none; }
 
 /* ---------- Contact email: dim until hovered, then lights up one letter at a time (setupEmailFill) ---------- */
-.g-ch { opacity: 0.22; transition: opacity 0.35s ease; }
+.g-ch { opacity: 0.34; transition: opacity 0.3s ease; }
 .g-ch.g-on { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .g-ch { transition: none; } }
 
@@ -743,6 +756,24 @@ export function withStoryToggle(Component: any): ComponentType {
     })
 }
 
+// About statement: the words blur up into place every time "More about me" opens (Framer's own reveal runs once on
+// load, while the section is still closed). Closing clears it so the next open plays it again.
+let aboutAnims: Animation[] = []
+function playAboutWords(open: boolean) {
+    if (typeof document === "undefined") return
+    aboutAnims.forEach((a) => a.cancel()); aboutAnims = []
+    if (!open || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    const st = document.querySelector('[data-framer-name^="Statement"]')
+    if (!st) return
+    const words = Array.from(st.querySelectorAll<HTMLElement>("span")).filter((w) => w.style.display === "inline-block" && (w.textContent || "").trim())
+    const per = Math.min(28, 1800 / Math.max(1, words.length))
+    words.forEach((w, i) => {
+        aboutAnims.push(w.animate(
+            [{ opacity: 0, filter: "blur(10px)", transform: "translateY(10px)" }, { opacity: 1, filter: "blur(0px)", transform: "none" }],
+            { duration: 700, delay: 180 + i * per, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "both" }))
+    })
+}
+
 // ---------- About: collapsed under the hero, opened by "More about me" ----------
 // Apply to the "More about me" chip. Toggles the "04 About" section and swaps
 // the chip's word More/Less.
@@ -767,6 +798,7 @@ export function withAboutToggle(Component: any): ComponentType {
                     }).replace(/[↓↑]/, open ? "↑" : "↓")
                 n = walker.nextNode()
             }
+            playAboutWords(open)
             if (open) {
                 const sec = document.querySelector('[data-framer-name="04 About"]')
                 sec && sec.querySelectorAll("[data-g-rv]").forEach((k) => k.setAttribute("data-g-in", ""))
@@ -1209,15 +1241,42 @@ function setupEmailFill() {
         for (const ch of Array.from(t.data)) { const sp = document.createElement("span"); sp.className = "g-ch"; sp.textContent = ch; frag.appendChild(sp); chars.push(sp) }
         t.replaceWith(frag)
     })
-    const step = Math.min(180, 3600 / chars.length)
-    let lit = 0, target = 0, timer: any = null
-    const tick = () => {
-        if (lit === target) { timer = null; return }
-        if (lit < target) chars[lit++].classList.add("g-on")
-        else chars[--lit].classList.remove("g-on")
-        timer = setTimeout(tick, step)
+    // Medium pace: the whole address in about 1.5s. One clock drives both the letters and the underline: the line's
+    // edge glides along under the letters as they light up (and back as they dim), so the two always move together.
+    const step = Math.min(110, 1500 / chars.length)
+    const line = document.querySelector<HTMLElement>('[data-framer-name="Email underline"]')
+    let pos = 0, target = 0, raf = 0, last = 0, lit = 0
+    let edges: number[] = [], lineW = 0
+    const measure = () => {
+        if (!line) return
+        const tw = Math.round(host.getBoundingClientRect().width)
+        if (tw && Math.abs(line.offsetWidth - tw) > 1) line.style.setProperty("width", tw + "px", "important")
+        line.style.setProperty("transition", "none", "important")
+        const left = line.getBoundingClientRect().left
+        lineW = line.offsetWidth
+        edges = chars.map((c) => c.getBoundingClientRect().right - left)
     }
-    const go = (to: number) => { target = to; if (!timer) tick() }
+    const paint = () => {
+        const n = Math.max(0, Math.min(chars.length, Math.ceil(pos - 0.0001)))
+        while (lit < n) chars[lit++].classList.add("g-on")
+        while (lit > n) chars[--lit].classList.remove("g-on")
+        if (!line || !lineW) return
+        const i = Math.floor(pos), f = pos - i
+        const a = i <= 0 ? 0 : edges[Math.min(i, edges.length) - 1], z = i >= edges.length ? lineW : edges[i]
+        const x = pos >= chars.length ? lineW : a + (z - a) * f
+        line.style.setProperty("transform", `scaleX(${Math.max(0, Math.min(1, x / lineW)).toFixed(4)})`, "important")
+    }
+    const frame = (now: number) => {
+        const dt = Math.min(120, now - last); last = now
+        const d = dt / step
+        pos = target > pos ? Math.min(target, pos + d) : Math.max(target, pos - d)
+        paint()
+        raf = pos !== target ? requestAnimationFrame(frame) : 0
+    }
+    const go = (to: number) => {
+        target = to
+        if (!raf) { if (pos === 0) measure(); last = performance.now(); raf = requestAnimationFrame(frame) }
+    }
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches
     if (fine) {
         host.addEventListener("mouseenter", () => go(chars.length))
@@ -1471,11 +1530,14 @@ function setupFX() {
         const top = document.querySelector<HTMLElement>(
             '[data-framer-name="01 Hero"], [data-framer-name="Header"], [data-framer-name="Shelf header"]'
         )
-        if (top) {
-            const r = top.getBoundingClientRect()
-            const start = Math.max(0, r.top + r.height * 0.75)
+        // Lines begin 16px under the nav and run to the end of the page.
+        const navBox = document.querySelector<HTMLElement>('[data-framer-name="Nav (fixed)"]')
+        if (top && navBox) {
+            const start = Math.max(0, navBox.getBoundingClientRect().bottom + 16)
             grid!.style.clipPath = `inset(${start.toFixed(0)}px 0 0 0)`
         } else grid!.style.clipPath = ""
+        const foot = document.querySelector<HTMLElement>('[data-framer-name="06 Footer"]')
+        if (foot) { const cs = getComputedStyle(foot); foot.style.setProperty("--g-fl", cs.paddingLeft); foot.style.setProperty("--g-fr", cs.paddingRight) }
         // Hysteresis: the nav gets shorter when it becomes a pill, which shifts the page a little.
         // Separate on/off points stop that shift from flipping the state back (the "stuck halfway" nav).
         const html = document.documentElement

@@ -750,3 +750,13 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Photo variant: copy of Home B (`eX41MCiol`, Framer named it /home-b-2; the API can't rename paths). Hero index hidden on all breakpoints; new code component `HeroPortrait.tsx` (code file PHwTd9y) placed as first child of 01 Hero ("Hero portrait", absolute: desktop right 0, top/bottom 0, 56% wide; tablet 70% × 560; phone 100% × 440). Desktop Content max-width 600.
 - HeroPortrait: resting duotone (grayscale + shader-colour "color" blend, 0.3 opacity, closest-side feathered mask) + a cursor-following soft circle revealing the photo (lightly tinted so it isn't a white spotlight). Touch: the reveal wanders slowly.
 - Publishing from this cloud session was blocked by the permission classifier; needs Gift's explicit OK. Publishing puts /home-b and /home-b-2 live (unlinked); the real Home is untouched.
+
+## 24 Nov 2026 (afternoon): footer, nav, lists, About replay, pixel photo reveal (uploaded, NOT published)
+- Footer: Contact → footer now eases (9 stops) into #14201F, the shader teal behind the Contact heading, instead of near-black; footer bg #14201F; hairline above copyright via `06 Footer::before` (left/right = footer padding, set in gridUpdate as --g-fl/--g-fr). Back to top is a 44px round icon button (text kept for screen readers, arrow drawn with a CSS mask).
+- Email: rest opacity 0.34; one rAF clock drives letters and the underline (line width set to the address width, edge follows the last lit letter); whole address ≈1.5s. The old `:has(:hover)` underline rule is gone.
+- Nav pill: glass (rgba(24,24,22,.38), blur 20 saturate 1.6, faint inset highlight) on every page and on phones; light theme rgba(0,0,0,.42) before the invert.
+- Home lists (Hero index, 03 Work): no line under each row; one hairline on top of the Work list. "Selected work" label 12px like "All projects".
+- Grid: clip starts 16px under the nav's bottom edge.
+- About: `playAboutWords()` re-runs the word blur-up on every open (Framer's own reveal ran once while closed).
+- Phone home hero: no longer min-height 100vh / flex-end; height auto, 56px top padding.
+- HeroPortrait: circle reveal replaced by a canvas pixel reveal (block of colour → photo per square, random + distance order, 1.1s in / 0.9s out). Touch: IntersectionObserver loop (reveal 1.3s, hold 1.8s, hide 1.1s, rest 1.4s), tap restarts, stops off screen. Control "Pixel size" (16) replaces "Reveal size".
