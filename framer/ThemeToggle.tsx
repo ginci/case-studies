@@ -527,6 +527,16 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 @media (max-width: 809px) {
   ${N("Home V2 / Index (dark)")} ${N("01 Hero")} { height: auto !important; min-height: 0 !important; justify-content: flex-start !important; padding-top: 56px !important; }
 }
+/* Phone hero with the photo (Home B photo version): the hero fills the screen below the nav. The photo takes the space
+   between the nav and the text; the text and "More about me" sit at the bottom. */
+@media (max-width: 809px) {
+  ${N("01 Hero")}:has(> ${N("Hero portrait")}) { display: flex !important; flex-direction: column !important; justify-content: flex-start !important;
+    height: auto !important; min-height: calc(100vh - var(--g-nav-h, 70px)) !important; min-height: calc(100svh - var(--g-nav-h, 70px)) !important;
+    padding-top: 8px !important; padding-bottom: 68px !important; }
+  ${N("01 Hero")} > ${N("Hero portrait")} { position: relative !important; inset: auto !important; order: -1; flex: 1 1 auto !important;
+    width: 100% !important; height: auto !important; min-height: 260px !important; margin-bottom: 8px; }
+  ${N("01 Hero")} > ${N("Hero portrait")} > * { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
+}
 
 
 /* ---------- Phone (up to 809) ---------- */

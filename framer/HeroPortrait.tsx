@@ -4,8 +4,7 @@ import { addPropertyControls, ControlType } from "framer"
 // Gift's photo, woven into the hero background. At rest it is a faint duotone in the shader's colours, a soft square
 // whose edges break up into pixels, so it reads as part of the page's fabric. Hovering the word "Gift" tears that fabric
 // into coarse pixels and resolves them into the real photo; moving off "Gift" runs it backwards, so the photo pixelates
-// back into the background. Touch screens: plays on its own while on screen (reveal, hold, hide, rest, repeat); a tap
-// restarts it; it stops when scrolled away.
+// back into the background. Touch screens: tap "Gift" or the photo to reveal it, tap again to hide it.
 
 const DEFAULT_IMG = "https://framerusercontent.com/images/WdZdO386BLTzVBtQgoYDpSSrZ2s.jpg"
 // pixel sizes (css px) the picture passes through on its way from fabric to photo
@@ -204,29 +203,18 @@ export default function HeroPortrait(props: {
                 document.removeEventListener("focusin", over); document.removeEventListener("focusout", out)
             })
         } else {
-            // Touch: loop while on screen. Reveal 1.4s, hold 1.8s, hide 1.2s, rest 1.6s.
-            let timers: any[] = [], visible = false
-            const clear = () => { timers.forEach(clearTimeout); timers = [] }
-            const cycle = () => {
-                clear()
-                if (!visible) return
-                animate(1, 1400)
-                timers.push(setTimeout(() => animate(0, 1200), 1400 + 1800))
-                timers.push(setTimeout(cycle, 1400 + 1800 + 1200 + 1600))
-            }
-            const io = new IntersectionObserver((es) => es.forEach((e) => {
-                visible = e.isIntersecting
-                if (visible) cycle()
-                else { clear(); cancelAnimationFrame(raf); raf = 0; P = 0; to = 0; draw() }
-            }), { threshold: 0.35 })
-            io.observe(el)
-            const tap = (e: PointerEvent) => {
+            // Touch: tapping "Gift" (or the photo) reveals it; tapping again pixelates it back. Scrolling it off screen
+            // returns it to the background.
+            const tap = (e: Event) => {
+                const pe = e as PointerEvent
                 const b = el.getBoundingClientRect()
-                const inBox = e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom
-                if (visible && (inBox || onTrigger(e.target))) { cancelAnimationFrame(raf); raf = 0; P = 0; to = 0; draw(); cycle() }
+                const inBox = pe.clientX >= b.left && pe.clientX <= b.right && pe.clientY >= b.top && pe.clientY <= b.bottom
+                if (onTrigger(e.target) || inBox) animate(to === 1 ? 0 : 1, 1300)
             }
-            window.addEventListener("pointerdown", tap, { passive: true })
-            cleanups.push(() => { io.disconnect(); clear(); window.removeEventListener("pointerdown", tap) })
+            window.addEventListener("click", tap, { passive: true })
+            const io = new IntersectionObserver((es) => es.forEach((e) => { if (!e.isIntersecting && to === 1) animate(0, 900) }), { threshold: 0.1 })
+            io.observe(el)
+            cleanups.push(() => { io.disconnect(); window.removeEventListener("click", tap) })
         }
         return () => {
             cancelAnimationFrame(raf); ro?.disconnect(); cleanups.forEach((c) => c())
