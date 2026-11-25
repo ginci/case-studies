@@ -39,7 +39,7 @@ ${LIGHT} body { background: transparent; }
 /* Slide-in reveals start off to the side: never let them cause sideways scroll. */
 #main { overflow-x: clip; }
 ${LIGHT} { filter: invert(1) hue-rotate(180deg); background: #EDEDEE; }
-${LIGHT} img, ${LIGHT} video, ${LIGHT} picture { filter: invert(1) hue-rotate(180deg); }
+${LIGHT} img, ${LIGHT} video, ${LIGHT} picture, ${LIGHT} [data-framer-name="Hero portrait"] canvas { filter: invert(1) hue-rotate(180deg); }
 /* The logo artwork is an SVG image fill ("Logo art"): let it invert with the page so it turns dark in light mode. */
 ${LIGHT} [data-framer-name="Logo art"] img { filter: none !important; }
 /* Phone: smaller logo (Gift 23 Nov). 60x30 on desktop/tablet, 48x24 on phones. */

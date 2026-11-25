@@ -3,7 +3,7 @@ const fs = require("fs")
   const hb = await require("harfbuzzjs")
   const buf = fs.readFileSync("font/PlaywriteAR.ttf")
   const face = hb.createFace(hb.createBlob(buf), 0), font = hb.createFont(face), upem = face.upem
-  const lines = ["Product designer.", "Fintech & AI.", "Idea to prototype."]
+  const lines = ["Product designer.", "Design that ships.", "Idea to prototype."]
   const out = []
   for (const text of lines) {
     const b = hb.createBuffer(); b.addText(text); b.guessSegmentProperties(); hb.shape(font, b); const gl = b.json(); b.destroy()
