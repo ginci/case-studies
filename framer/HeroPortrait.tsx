@@ -233,9 +233,9 @@ HeroPortrait.defaultProps = { rest: 0.32, edge: 16, speed: 1, position: "50% 30%
 
 addPropertyControls(HeroPortrait, {
     image: { type: ControlType.ResponsiveImage, title: "Photo" },
-    rest: { type: ControlType.Number, title: "Resting opacity", min: 0, max: 1, step: 0.02 },
-    edge: { type: ControlType.Number, title: "Edge pixel", min: 6, max: 40, step: 1, unit: "px" },
-    speed: { type: ControlType.Number, title: "Speed", min: 0.4, max: 2.5, step: 0.1 },
-    position: { type: ControlType.String, title: "Focus (x y)" },
-    trigger: { type: ControlType.String, title: "Hover trigger (CSS)" },
+    rest: { type: ControlType.Number, title: "Resting opacity", min: 0, max: 1, step: 0.02, defaultValue: 0.32 },
+    edge: { type: ControlType.Number, title: "Edge pixel", min: 6, max: 40, step: 1, unit: "px", defaultValue: 16 },
+    speed: { type: ControlType.Number, title: "Speed", min: 0.4, max: 2.5, step: 0.1, defaultValue: 1 },
+    position: { type: ControlType.String, title: "Focus (x y)", defaultValue: "50% 30%" },
+    trigger: { type: ControlType.String, title: "Hover trigger (CSS)", defaultValue: "[data-g-photo]" },
 })
