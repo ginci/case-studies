@@ -429,6 +429,22 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 
 /* Hero: photo on hover over "Gift" (built by setupPhotoHover) */
 [data-g-photo] { cursor: default; text-decoration: underline dotted rgba(244, 243, 238, 0.45); text-underline-offset: 4px; }
+/* "Gift" invites a hover: dotted underline, a light sweep across the letters, and a "hover me" tag whose pointer is part of the tag.
+   The tag hides for good once someone hovers or taps "Gift" (27 Nov). */
+[data-g-photo="on"] { position: relative; cursor: pointer; text-decoration-color: rgba(244, 243, 238, 0.7);
+  background: linear-gradient(100deg, #F4F3EE 42%, #A8E6D9 50%, #F4F3EE 58%) 100% 0 / 250% 100% no-repeat;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: g-gift-sweep 4.5s ease-in-out 1.4s infinite; }
+@keyframes g-gift-sweep { 0%, 55% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+.g-gift-tag { position: fixed; left: 0; top: 0; transform: translate(-50%, calc(-100% - 10px)); z-index: 40; pointer-events: none; white-space: nowrap;
+  font: 500 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; -webkit-text-fill-color: #121211; color: #121211;
+  background: #F4F3EE; padding: 6px 9px 6px 10px; border-radius: 999px; box-shadow: 0 6px 18px -6px rgba(0,0,0,.5);
+  opacity: 0; animation: g-tag-in .5s ease-out 1.2s forwards, g-tag-bob 2.4s ease-in-out 1.7s infinite; transition: opacity .25s ease; }
+.g-gift-tag::after { content: ""; position: absolute; left: 50%; top: 100%; width: 9px; height: 9px; background: inherit; border-radius: 0 0 2px 0;
+  transform: translate(-50%, -55%) rotate(45deg); }
+@keyframes g-tag-in { to { opacity: 1; } }
+@keyframes g-tag-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4px; } }
+.g-gift-tag.g-seen, .g-gift-tag.g-gone { opacity: 0 !important; animation: none; }
+@media (prefers-reduced-motion: reduce) { [data-g-photo="on"] { animation: none; } .g-gift-tag { animation: g-tag-in .01s 1.2s forwards; } }
 [data-framer-name^="Hover photo"] { position: absolute !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important; overflow: hidden !important; }
 #g-photo { position: fixed; z-index: 60; width: 200px; height: 250px; border-radius: 14px; overflow: hidden; pointer-events: none;
   background: #121211; box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(244,243,238,.12);
@@ -1197,6 +1213,13 @@ function photoSource(): string {
     const m = bg && bg.match(/url\("?(.*?)"?\)/)
     return m ? m[1] : ""
 }
+let giftTag: HTMLElement | null = null, giftTarget: HTMLElement | null = null
+function placeGiftTag() {
+    if (!giftTag) return
+    const r = giftTarget && giftTarget.isConnected ? giftTarget.getBoundingClientRect() : null
+    giftTag.classList.toggle("g-gone", !r || !r.width)
+    if (r) { giftTag.style.left = r.left + r.width / 2 + "px"; giftTag.style.top = r.top + "px" }
+}
 function setupPhotoHover() {
     const lede = document.querySelector('[data-framer-name="Lede"]')
     if (!lede) return
@@ -1209,6 +1232,19 @@ function setupPhotoHover() {
     }
     if (target.getAttribute("data-g-photo") === "on") return
     target.setAttribute("data-g-photo", "on")
+    // "Hover me" tag. It lives in <body>: the text frames clip anything drawn above "Gift". It follows the current "Gift" across page swaps.
+    giftTarget = target
+    if (!giftTag) {
+        const tag = giftTag = document.createElement("span"); tag.className = "g-gift-tag"; tag.setAttribute("aria-hidden", "true")
+        tag.textContent = window.matchMedia("(hover: hover) and (pointer: fine)").matches ? "Hover me" : "Tap me"
+        document.body.appendChild(tag)
+        let q = 0; const later = () => { if (!q) q = requestAnimationFrame(() => { q = 0; placeGiftTag() }) }
+        window.addEventListener("scroll", later, { passive: true }); window.addEventListener("resize", later)
+        try { if (sessionStorage.getItem("g-gift-seen")) tag.classList.add("g-seen") } catch {}
+    }
+    const mark = () => { giftTag?.classList.add("g-seen"); try { sessionStorage.setItem("g-gift-seen", "1") } catch {} }
+    target.addEventListener("pointerenter", mark); target.addEventListener("click", mark)
+    placeGiftTag(); setTimeout(placeGiftTag, 800)
     if (!photoCard) {
         photoCard = document.createElement("div"); photoCard.id = "g-photo"; photoCard.setAttribute("aria-hidden", "true")
         const im = document.createElement("img"); im.alt = ""; im.decoding = "async"; photoCard.appendChild(im)
