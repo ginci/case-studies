@@ -119,6 +119,7 @@ export default function Folders(props: { folders: Folder[]; accent: string; colu
     const compact = s < 0.95
     return (
         <div ref={grid} className="g-folders" style={{ ...props.style, display: "grid", gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`, gap, width: "100%", maxWidth: cols > 2 ? "none" : 760, margin: "0 auto" }}>
+            <style>{`@media (max-width: 809px) { .g-folders .g-fi > * { zoom: .75 } .g-folders > a { padding: 16px 4px 12px !important; gap: 6px !important } }`}</style>
             {folders.map((f, i) => {
                 const open = fine && hover === i
                 return (
@@ -129,7 +130,7 @@ export default function Folders(props: { folders: Folder[]; accent: string; colu
                         style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: compact ? 8 : 14, padding: compact ? "24px 6px 16px" : "40px 16px 26px", borderRadius: compact ? 16 : 20, minWidth: 0,
                             textDecoration: "none", color: "inherit", background: open ? "rgba(244,243,238,0.04)" : "transparent", cursor: props.comingSoon ? "default" : "pointer",
                             transition: "background-color .3s ease", outlineOffset: 2 }}>
-                        <div style={{ zoom: s }}><FolderIcon f={f} open={open} accent={accent} reduce={reduce} /></div>
+                        <div className="g-fi" style={{ zoom: s }}><FolderIcon f={f} open={open} accent={accent} reduce={reduce} /></div>
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, marginTop: 6 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                 <span style={{ font: `500 ${compact ? 14 : 16}px/1.2 Outfit, sans-serif`, color: "#F4F3EE", whiteSpace: "nowrap" }}>{f.title}</span>

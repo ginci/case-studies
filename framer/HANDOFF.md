@@ -764,3 +764,8 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - Revised again (15:10): HeroPortrait keeps the blended duotone at rest, as a square with pixel-torn edges (cell mask), and pixelates fabric → photo on "Gift" hover. The nav label rules now use `:is(#main, body)`. See /mnt/project-files/handoff/session-handoff-2026-11-24.md.
 - 24 Nov 19:10: fixed "Gift hover not triggering": the first animation frame could run with a rAF time slightly before t0, giving a negative progress → invalid pixel level → drawImage threw and the animation died. Progress is now clamped. HeroPortrait also wraps "Gift" itself when the site script has not (e.g. Framer preview).
 - 24 Nov 19:20: phone photo is tap-to-toggle (tap "Gift" or the photo; hides when scrolled away). Phone hero with a "Hero portrait" child fills the screen below the nav (CSS :has rule): photo fills the space under the nav, text and "More about me" at the bottom.
+
+## 27 Nov 2026 (uploaded to Framer, NOT published)
+- **HeroPortrait edge pixels (PHwTd9y):** `buildMask` also builds an eroded copy of the cell mask (`inner`/`innerBig`: weakest alpha within 2 cells). `draw()` lays the real photo only inside it (`realIn`), so the torn outer cells stay in duotone/page colours and the photo eases into them.
+- **Folders (Gj3I0QJ):** phones only (`max-width: 809px`): icon wrapper `.g-fi` children zoom .75, card padding 16/4/12, gap 6. Icon 144 → 108px on iPhone 13.
+- **Made in Framer badge:** phone photo hero padding-bottom 20 → 60px so "More about me" clears the free-plan badge. Revert to 20 if the plan is upgraded.

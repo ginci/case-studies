@@ -532,7 +532,7 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 @media (max-width: 809px) {
   ${N("01 Hero")}:has(> ${N("Hero portrait")}) { display: flex !important; flex-direction: column !important; justify-content: flex-start !important;
     height: calc(100vh - var(--g-nav-h, 70px)) !important; height: calc(100svh - var(--g-nav-h, 70px)) !important; min-height: 0 !important;
-    padding-top: 8px !important; padding-bottom: 20px !important; } /* exactly one screen: "More about me" rests on the bottom edge */
+    padding-top: 8px !important; padding-bottom: 60px !important; } /* one screen; "More about me" sits 60px up so the free-plan "Made in Framer" badge clears it (27 Nov) */
   ${N("01 Hero")} > ${N("Hero portrait")} { position: relative !important; inset: auto !important; order: -1; flex: 1 1 0 !important;
     width: 100% !important; height: auto !important; min-height: 96px !important; margin-bottom: 8px; } /* the photo takes whatever space is left */
   ${N("01 Hero")} > ${N("Hero portrait")} > * { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }

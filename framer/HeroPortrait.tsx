@@ -38,7 +38,7 @@ export default function HeroPortrait(props: {
         img.decoding = "async"
         img.src = src
         const mk = () => document.createElement("canvas")
-        const real = mk(), duo = mk(), mix = mk(), small = mk(), mask = mk(), maskBig = mk()
+        const real = mk(), duo = mk(), mix = mk(), small = mk(), mask = mk(), maskBig = mk(), inner = mk(), innerBig = mk(), realIn = mk()
         let W = 0, H = 0, dpr = 1, cols = 0, rows = 0, ready = false, seed = 1
         let P = 0, from = 0, to = 0, t0 = 0, dur = 1, raf = 0, lastLevel = -1
 
@@ -60,6 +60,25 @@ export default function HeroPortrait(props: {
                 id.data[(y * cols + x) * 4 + 3] = Math.round(a * 255)
             }
             m.putImageData(id, 0, 0)
+            // Eroded copy (2 cells): the real photo shows only inside it; the torn outer cells stay page-coloured duotone.
+            const R = 2
+            inner.width = cols; inner.height = rows
+            const ic = inner.getContext("2d")!
+            const iid = ic.createImageData(cols, rows)
+            for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+                let v = 255 // graded: the weakest cell within R, so the photo eases out into the duotone before the torn cells
+                for (let dy = -R; dy <= R && v; dy++) for (let dx = -R; dx <= R; dx++) {
+                    const X = x + dx, Y = y + dy
+                    v = X < 0 || Y < 0 || X >= cols || Y >= rows ? 0 : Math.min(v, id.data[(Y * cols + X) * 4 + 3])
+                    if (!v) break
+                }
+                iid.data[(y * cols + x) * 4 + 3] = v
+            }
+            ic.putImageData(iid, 0, 0)
+            innerBig.width = canvas.width; innerBig.height = canvas.height
+            const ib = innerBig.getContext("2d")!
+            ib.imageSmoothingEnabled = false
+            ib.drawImage(inner, 0, 0, cols, rows, 0, 0, cols * cell * dpr, rows * cell * dpr)
             maskBig.width = canvas.width; maskBig.height = canvas.height
             const mb = maskBig.getContext("2d")!
             mb.imageSmoothingEnabled = false
@@ -117,15 +136,21 @@ export default function HeroPortrait(props: {
             if (!ready) return
             // P: 0 = fabric (duotone), 0.5 = coarsest pixels, 1 = photo. Colour swaps while the pixels are big.
             const swap = Math.max(0, Math.min(1, (P - 0.38) / 0.24))
-            const mc = mix.getContext("2d")!
-            mc.globalAlpha = 1; mc.drawImage(duo, 0, 0)
-            if (swap > 0) { mc.globalAlpha = swap; mc.drawImage(real, 0, 0); mc.globalAlpha = 1 }
             P = Math.max(0, Math.min(1, P))
             const k = 1 - Math.abs(P - 0.5) * 2 // 0 at the ends, 1 in the middle
             const li = Math.max(0, Math.min(LEVELS.length - 1, Math.floor(k * LEVELS.length)))
             if (li !== lastLevel) { // re-tear the border at each step while it moves
                 lastLevel = li
                 buildMask(li === 0 ? seed : seed + li * 7919 + (P > 0.5 ? 1 : 0), li / LEVELS.length)
+            }
+            const mc = mix.getContext("2d")!
+            mc.globalAlpha = 1; mc.drawImage(duo, 0, 0)
+            if (swap > 0) { // real photo only inside the eroded mask
+                if (realIn.width !== cw || realIn.height !== ch) { realIn.width = cw; realIn.height = ch }
+                const rc = realIn.getContext("2d")!
+                rc.globalCompositeOperation = "source-over"; rc.clearRect(0, 0, cw, ch); rc.drawImage(real, 0, 0)
+                rc.globalCompositeOperation = "destination-in"; rc.drawImage(innerBig, 0, 0); rc.globalCompositeOperation = "source-over"
+                mc.globalAlpha = swap; mc.drawImage(realIn, 0, 0); mc.globalAlpha = 1
             }
             const block = LEVELS[li] * dpr
             ctx.globalAlpha = rest + (0.96 - rest) * ease(Math.min(1, P / 0.7))
