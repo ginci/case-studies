@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react"
 import { addPropertyControls, ControlType } from "framer"
 
-// "Listening to" pill. Sits beside the "Available" pill at the same height. Folded, it is a round button with
+// "Vibing to" / "Vibed to" pill. Sits beside the "Available" pill at the same height. Folded, it is a round button with
 // music bars moving up and down; hover, focus or tap unfolds it to show the track; leaving folds it back. Click opens the track. Live data comes from Last.fm (connect Spotify to Last.fm,
 // then set the username and a read-only API key). Until then it shows the fallback track, or "Not playing right now".
 
@@ -18,6 +18,9 @@ export default function NowPlaying(props: Props) {
     const [room, setRoom] = useState(360)
     useEffect(() => {
         if (!open || !root.current) return
+        // Phones: the "Creating" pill steps aside while this is open, so the track gets the whole status row.
+        const row = window.innerWidth < 810 ? (root.current.closest('[data-framer-name="Status row"]') as HTMLElement | null) : null
+        if (row) { row.setAttribute("data-g-np-open", ""); setRoom(Math.max(28, Math.floor(row.getBoundingClientRect().width))); return () => row.removeAttribute("data-g-np-open") }
         const left = root.current.getBoundingClientRect().left
         setRoom(Math.max(28, Math.min(360, Math.floor(window.innerWidth - left - 20))))
     }, [open])
@@ -47,7 +50,7 @@ export default function NowPlaying(props: Props) {
 
     // Framer passes the measured (folded, 28px) width/height in style; drop them so the pill can unfold.
     const { width: _w, height: _h, ...rest } = (props.style || {}) as any
-    const label = track?.live ? "Listening to" : track ? "Last played" : ""
+    const label = track?.live ? "Vibing to" : track ? "Vibed to" : ""
     const text = track ? `${track.title}${track.artist ? " · " + track.artist : ""}` : "Not playing right now"
     const href = track?.url || link || undefined
     // Desktop (mouse): hover opens, leaving closes. Touch: tap toggles; while open, tapping the track opens it.
@@ -88,7 +91,8 @@ a.g-np-text { color: inherit; text-decoration: none; } a.g-np-text:hover { text-
 .g-np-label { color: #85847E; }
 .g-np-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1 1 auto; max-width: 240px; }
 .g-np-label { flex: 0 0 auto; }
-@media (max-width: 809px) { .g-np-text { max-width: none; } }
+@media (max-width: 809px) { .g-np-text { max-width: none; }
+  [data-g-np-open] > :not(:has(.g-np)) { display: none !important; } }
 @media (prefers-reduced-motion: reduce) { .g-np, .g-np-more { transition: none; } }
 `}</style>
             <span className="g-np-bars" aria-hidden="true"><i /><i /><i /></span>

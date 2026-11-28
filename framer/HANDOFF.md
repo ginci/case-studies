@@ -781,3 +781,6 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - Desktop photo height now runs from the top of the screen to the status row + 16px (`sizeHeroPhoto()` sets `--g-photo-h`), so only its torn edge reaches the tags. Live: photo 0–602, status row at 586.
   - The Gift tag no longer hides for the whole session. It hides while hovering "Gift" (returns 1.6s after leaving) or for 6s after a tap.
   - Note: the photo's size and position come from site CSS, so the Framer canvas can't edit them.
+- **28 Nov (uploaded, NOT published):**
+  - The "Tap me / Hover me" tag starts after 6s (was 1.2s), so the headline draws and can be read first. Its loop is 4.5s.
+  - NowPlaying (`dwtG0tF`): the labels are now "Vibing to" (live) and "Vibed to" (last played). On phones, the "Creating" pill hides while the track pill is open (`data-g-np-open` on the Status row), and the pill gets the full row width. Before this, the track text got 5px on phones.

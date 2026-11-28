@@ -438,7 +438,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 .g-gift-tag { position: fixed; left: 0; top: 0; transform: translate(-50%, calc(-100% - 10px)); z-index: 40; pointer-events: none; white-space: nowrap;
   font: 500 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; -webkit-text-fill-color: #121211; color: #121211;
   background: #F4F3EE; padding: 6px 9px 6px 10px; border-radius: 999px; box-shadow: 0 6px 18px -6px rgba(0,0,0,.5);
-  opacity: 0; animation: g-tag-pulse 3s ease-in-out 1.2s infinite; transition: opacity .25s ease; }
+  opacity: 0; animation: g-tag-pulse 4.5s ease-in-out 6s infinite; /* starts after the headline has drawn and there's been time to read */ transition: opacity .25s ease; }
 .g-gift-tag::after { content: ""; position: absolute; left: 50%; top: 100%; width: 9px; height: 9px; background: inherit; border-radius: 0 0 2px 0;
   transform: translate(-50%, -55%) rotate(45deg); }
 @keyframes g-tag-pulse { 0% { opacity: 0; translate: 0 3px; } 25%, 65% { opacity: 1; translate: 0 0; } 90%, 100% { opacity: 0; translate: 0 -2px; } } /* fades in and out on a loop */
