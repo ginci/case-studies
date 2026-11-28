@@ -772,3 +772,8 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - **"Gift" hover prompt (ThemeToggle):** a pill tag ("Hover me" on desktop, "Tap me" on touch screens) with its pointer built in sits above "Gift" and bobs gently. "Gift" gets a dotted underline and a light teal sweep across the letters every ~4.5s. The tag is appended to `<body>` (`position: fixed`, `placeGiftTag()` on scroll/resize) because the text frames clip anything above "Gift". It hides for good after the first hover or tap (sessionStorage `g-gift-seen`).
 - **28 Nov: PUBLISHED (deploy 8303ff657)** with everything above (photo edge, folders, badge clearance, Gift tag).
 - **Phone headline:** the live "/" is page `augiA20Il` (not the 76/56/34 instance, which is on a draft page and stays at 34). Live phone instance `a0zL8FVCIxzEJQ1G0t`: width 63% → 100%, fontSize 24 → 32 (about 311px of the 326px column). Set in Framer, NOT yet published.
+- **28 Nov (uploaded, NOT published):**
+  - Phone headline (`a0zL8FVCIxzEJQ1G0t`) 32 → 34.
+  - "Tap me / Hover me" tag now fades in and out on a 3s loop (`g-tag-pulse`) instead of staying on.
+  - Phone photo hero: the photo runs edge to edge (`100vw`, `margin-left: calc(50% - 50vw)`), straight under the nav (padding-top 0). Bottom padding is back to 20px, so "More about me" rests on the bottom edge again. The free-plan badge covers it until the Framer plan is upgraded (Gift's choice).
+  - Desktop (≥1200): the photo spans the full width and starts at the top of the screen, level with the nav (top −nav height, height hero + nav). Tablet unchanged.

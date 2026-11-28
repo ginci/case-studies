@@ -438,13 +438,12 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 .g-gift-tag { position: fixed; left: 0; top: 0; transform: translate(-50%, calc(-100% - 10px)); z-index: 40; pointer-events: none; white-space: nowrap;
   font: 500 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; -webkit-text-fill-color: #121211; color: #121211;
   background: #F4F3EE; padding: 6px 9px 6px 10px; border-radius: 999px; box-shadow: 0 6px 18px -6px rgba(0,0,0,.5);
-  opacity: 0; animation: g-tag-in .5s ease-out 1.2s forwards, g-tag-bob 2.4s ease-in-out 1.7s infinite; transition: opacity .25s ease; }
+  opacity: 0; animation: g-tag-pulse 3s ease-in-out 1.2s infinite; transition: opacity .25s ease; }
 .g-gift-tag::after { content: ""; position: absolute; left: 50%; top: 100%; width: 9px; height: 9px; background: inherit; border-radius: 0 0 2px 0;
   transform: translate(-50%, -55%) rotate(45deg); }
-@keyframes g-tag-in { to { opacity: 1; } }
-@keyframes g-tag-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4px; } }
+@keyframes g-tag-pulse { 0% { opacity: 0; translate: 0 3px; } 25%, 65% { opacity: 1; translate: 0 0; } 90%, 100% { opacity: 0; translate: 0 -2px; } } /* fades in and out on a loop */
 .g-gift-tag.g-seen, .g-gift-tag.g-gone { opacity: 0 !important; animation: none; }
-@media (prefers-reduced-motion: reduce) { [data-g-photo="on"] { animation: none; } .g-gift-tag { animation: g-tag-in .01s 1.2s forwards; } }
+@media (prefers-reduced-motion: reduce) { [data-g-photo="on"] { animation: none; } .g-gift-tag { animation: none; opacity: 1; } }
 [data-framer-name^="Hover photo"] { position: absolute !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important; overflow: hidden !important; }
 #g-photo { position: fixed; z-index: 60; width: 200px; height: 250px; border-radius: 14px; overflow: hidden; pointer-events: none;
   background: #121211; box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(244,243,238,.12);
@@ -548,10 +547,16 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
 @media (max-width: 809px) {
   ${N("01 Hero")}:has(> ${N("Hero portrait")}) { display: flex !important; flex-direction: column !important; justify-content: flex-start !important;
     height: calc(100vh - var(--g-nav-h, 70px)) !important; height: calc(100svh - var(--g-nav-h, 70px)) !important; min-height: 0 !important;
-    padding-top: 8px !important; padding-bottom: 60px !important; } /* one screen; "More about me" sits 60px up so the free-plan "Made in Framer" badge clears it (27 Nov) */
+    padding-top: 0 !important; padding-bottom: 20px !important; } /* exactly one screen: "More about me" rests on the bottom edge, teasing the page below (28 Nov) */
   ${N("01 Hero")} > ${N("Hero portrait")} { position: relative !important; inset: auto !important; order: -1; flex: 1 1 0 !important;
-    width: 100% !important; height: auto !important; min-height: 96px !important; margin-bottom: 8px; } /* the photo takes whatever space is left */
+    width: 100vw !important; max-width: none !important; align-self: flex-start !important; margin-left: calc(50% - 50vw) !important;
+    height: auto !important; min-height: 96px !important; margin-bottom: 8px; } /* edge to edge, straight under the nav; takes whatever height is left */
   ${N("01 Hero")} > ${N("Hero portrait")} > * { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
+}
+/* Desktop: the photo spans the full screen width and starts at the top of the screen, level with the nav (28 Nov) */
+@media (min-width: 1200px) {
+  ${N("01 Hero")} > ${N("Hero portrait")} { left: 0 !important; right: 0 !important; width: 100% !important; transform: none !important;
+    top: calc(-1 * var(--g-nav-h, 106px)) !important; height: calc(100% + var(--g-nav-h, 106px)) !important; bottom: auto !important; }
 }
 
 
