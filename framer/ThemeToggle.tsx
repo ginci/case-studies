@@ -430,7 +430,7 @@ ${ROW}:hover ${N("Arrow")} { transform: translateX(10px); }
 /* Hero: photo on hover over "Gift" (built by setupPhotoHover) */
 [data-g-photo] { cursor: default; text-decoration: underline dotted rgba(244, 243, 238, 0.45); text-underline-offset: 4px; }
 /* "Gift" invites a hover: dotted underline, a light sweep across the letters, and a "hover me" tag whose pointer is part of the tag.
-   The tag hides for good once someone hovers or taps "Gift" (27 Nov). */
+   The tag steps aside while the photo shows and returns after (28 Nov). */
 [data-g-photo="on"] { position: relative; cursor: pointer; text-decoration-color: rgba(244, 243, 238, 0.7);
   background: linear-gradient(100deg, #F4F3EE 42%, #A8E6D9 50%, #F4F3EE 58%) 100% 0 / 250% 100% no-repeat;
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: g-gift-sweep 4.5s ease-in-out 1.4s infinite; }
@@ -553,10 +553,10 @@ html[data-g-scrolled] #g-topblur { opacity: 1; }
     height: auto !important; min-height: 96px !important; margin-bottom: 8px; } /* edge to edge, straight under the nav; takes whatever height is left */
   ${N("01 Hero")} > ${N("Hero portrait")} > * { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
 }
-/* Desktop: the photo spans the full screen width and starts at the top of the screen, level with the nav (28 Nov) */
+/* Desktop: the photo spans the full screen width, from the top of the screen down to just above the status tags (--g-photo-h, set by sizeHeroPhoto) */
 @media (min-width: 1200px) {
   ${N("01 Hero")} > ${N("Hero portrait")} { left: 0 !important; right: 0 !important; width: 100% !important; transform: none !important;
-    top: calc(-1 * var(--g-nav-h, 106px)) !important; height: calc(100% + var(--g-nav-h, 106px)) !important; bottom: auto !important; }
+    top: calc(-1 * var(--g-nav-h, 106px)) !important; height: calc(var(--g-photo-h, 480px) + var(--g-nav-h, 106px)) !important; bottom: auto !important; }
 }
 
 
@@ -1219,7 +1219,16 @@ function photoSource(): string {
     return m ? m[1] : ""
 }
 let giftTag: HTMLElement | null = null, giftTarget: HTMLElement | null = null
+// Desktop hero photo: from the top of the screen down to just above the "Creating" / listening tags (only its torn edge reaches them).
+function sizeHeroPhoto() {
+    const hero = [...document.querySelectorAll('[data-framer-name="01 Hero"]')].find((e) => e.getBoundingClientRect().width) as HTMLElement | undefined
+    const row = hero?.querySelector('[data-framer-name="Status row"]')
+    if (!hero || !row || !hero.querySelector('[data-framer-name="Hero portrait"]')) return
+    const h = row.getBoundingClientRect().top - hero.getBoundingClientRect().top + 16 // + nav height is added in CSS
+    if (h > 0) document.documentElement.style.setProperty("--g-photo-h", Math.round(h) + "px")
+}
 function placeGiftTag() {
+    sizeHeroPhoto()
     if (!giftTag) return
     const r = giftTarget && giftTarget.isConnected ? giftTarget.getBoundingClientRect() : null
     giftTag.classList.toggle("g-gone", !r || !r.width)
@@ -1245,10 +1254,13 @@ function setupPhotoHover() {
         document.body.appendChild(tag)
         let q = 0; const later = () => { if (!q) q = requestAnimationFrame(() => { q = 0; placeGiftTag() }) }
         window.addEventListener("scroll", later, { passive: true }); window.addEventListener("resize", later)
-        try { if (sessionStorage.getItem("g-gift-seen")) tag.classList.add("g-seen") } catch {}
     }
-    const mark = () => { giftTag?.classList.add("g-seen"); try { sessionStorage.setItem("g-gift-seen", "1") } catch {} }
-    target.addEventListener("pointerenter", mark); target.addEventListener("click", mark)
+    // the tag steps aside while the photo is showing and comes back afterwards
+    let back: any = 0
+    const away = () => { clearTimeout(back); giftTag?.classList.add("g-seen") }
+    const ret = (ms: number) => { clearTimeout(back); back = setTimeout(() => giftTag?.classList.remove("g-seen"), ms) }
+    target.addEventListener("pointerenter", away); target.addEventListener("pointerleave", () => ret(1600))
+    target.addEventListener("click", (e) => { if ((e as PointerEvent).pointerType !== "mouse") { away(); ret(6000) } })
     placeGiftTag(); setTimeout(placeGiftTag, 800)
     if (!photoCard) {
         photoCard = document.createElement("div"); photoCard.id = "g-photo"; photoCard.setAttribute("aria-hidden", "true")

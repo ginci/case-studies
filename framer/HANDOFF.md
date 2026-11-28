@@ -777,3 +777,7 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
   - "Tap me / Hover me" tag now fades in and out on a 3s loop (`g-tag-pulse`) instead of staying on.
   - Phone photo hero: the photo runs edge to edge (`100vw`, `margin-left: calc(50% - 50vw)`), straight under the nav (padding-top 0). Bottom padding is back to 20px, so "More about me" rests on the bottom edge again. The free-plan badge covers it until the Framer plan is upgraded (Gift's choice).
   - Desktop (≥1200): the photo spans the full width and starts at the top of the screen, level with the nav (top −nav height, height hero + nav). Tablet unchanged.
+- **28 Nov: PUBLISHED (deploy d22b9eeb8).** Includes the 28 Nov batch above, plus:
+  - Desktop photo height now runs from the top of the screen to the status row + 16px (`sizeHeroPhoto()` sets `--g-photo-h`), so only its torn edge reaches the tags. Live: photo 0–602, status row at 586.
+  - The Gift tag no longer hides for the whole session. It hides while hovering "Gift" (returns 1.6s after leaving) or for 6s after a tap.
+  - Note: the photo's size and position come from site CSS, so the Framer canvas can't edit them.
