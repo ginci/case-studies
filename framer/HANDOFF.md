@@ -784,3 +784,4 @@ Inspired by lanrefadire.com (patterns recreated in our own code and visual langu
 - **28 Nov (uploaded, NOT published):**
   - The "Tap me / Hover me" tag starts after 6s (was 1.2s), so the headline draws and can be read first. Its loop is 4.5s.
   - NowPlaying (`dwtG0tF`): the labels are now "Vibing to" (live) and "Vibed to" (last played). On phones, the "Creating" pill hides while the track pill is open (`data-g-np-open` on the Status row), and the pill gets the full row width. Before this, the track text got 5px on phones.
+- **28 Nov: PUBLISHED (deploy 341e4619d).** The Vibing/Vibed to labels, the full-row track on phones and the 6s Gift tag delay are live and checked on iPhone 13.
